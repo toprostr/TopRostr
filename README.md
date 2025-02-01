@@ -1,5 +1,5 @@
 ## Hi there 👋
-
+TopRostr is looking to streamline the College Recruiting process by leveraging AI, for both Coaches and Athletes.
 <!--
 **toprostr/TopRostr** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
