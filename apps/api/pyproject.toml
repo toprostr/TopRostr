@@ -5,3 +5,13 @@ requires-python = ">=3.13"
 dependencies = [
     "fastapi[standard]>=0.142.2",
 ]
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.414",
+    "pytest>=9.1.1",
+    "ruff>=0.16.10",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
