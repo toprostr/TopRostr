@@ -1024,6 +1024,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "httpx" },
     { name = "pyright" },
     { name = "pytest" },
     { name = "ruff" },
@@ -1034,6 +1035,7 @@ requires-dist = [{ name = "fastapi", extras = ["standard"], specifier = ">=0.142
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "pyright", specifier = ">=1.1.414" },
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "ruff", specifier = ">=0.16.10" },
