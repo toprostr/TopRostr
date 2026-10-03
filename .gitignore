@@ -1,0 +1,43 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# uv / packaging
+.python-version
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Frontend (when added)
+node_modules/
+web/dist/
+web/.next/
+web/out/
+
+# Local model / ML caches (do not commit weights)
+.ollama/
+*.gguf
+
+# Docker / local data
+postgres-data/
+*.log

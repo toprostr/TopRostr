@@ -1,5 +1,7 @@
 ## Hi there 👋
-TopRostr is looking to streamline the College Recruiting process by leveraging AI, for both Coaches and Athletes.
+TopRostr is a queryable recruiting inbox for college coaches (structured extract, filter on fit—not AI detection). Athlete-facing features are later.
+
+Planning artifacts: [docs/README.md](docs/README.md)
 <!--
 **toprostr/TopRostr** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 

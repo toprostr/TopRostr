@@ -1,0 +1,40 @@
+Background:
+I am Alejandro Suarez, currently a software engineer with 1 year of experience building Java, Springboot, Webflux, AWS.
+the purpose of this project is to learn how to build a ai side project. 
+I am targeting roles for python development as a software engineer 2, 
+and believe this is the best way to gain practal experience. 
+Everything in the project is new, use the tone of mentoring/teaching with every response, 
+provide links to documentation, and discuss trade offs of this approach.
+
+Project:
+    Planning artifacts live in docs/ (product, business plan, stack, MVP, architecture).
+    If docs/ and this file disagree, docs/ wins. Original brainstorm remains in Ideas below.
+
+Ideas:
+I find an ai ide extremely productive, but why can't coaches leverage the idea of an ai entrgrated env as a tool?
+
+one stop shop platform that allows gsuite, microsoft 365, maybe hudl, ios, to interact with ai
+in a simple interface, similar to ai ides or cli guis but with a platform easy to use interface
+
+i would like to have the platform be suggestive heavy. What I mean is that open chat format takes some adjusting that i am not confident coaches will do, I want a more structure graud railed manager. 
+
+Considerations:
+- how would operating cost be strucutred? Not very sure about tokenomics
+- Price per customer 
+- How to standardize it for coaches of all sports
+- make it feel familar with strong enhancements performance wise
+    - faster research 
+    - building emails
+    - calendars
+    - recruiting processes
+    - meal orders
+    - flight schedules
+    - game schedules
+    - players performance
+    - notes 
+    - etc
+- what would be my tech stack given my background and the project, and the indusrty
+- Get to a MVP 1 fully working and tested demo
+
+
+
