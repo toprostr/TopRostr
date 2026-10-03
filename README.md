@@ -1,18 +1,28 @@
-## Hi there 👋
-TopRostr is a queryable recruiting inbox for college coaches (structured extract, filter on fit—not AI detection). Athlete-facing features are later.
+# TopRostr
 
-Planning artifacts: [docs/README.md](docs/README.md)
-<!--
-**toprostr/TopRostr** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+AI-powered recruiting tools for college soccer coaches.
 
-Here are some ideas to get you started:
+TopRostr aims to help coaches process and organize recruiting correspondence directly from their existing email workflows.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## MVP 1
+
+The initial product consists of:
+
+- Gmail integration with coach-initiated email processing.
+- AI-assisted athlete information extraction.
+- Structured athlete profiles.
+- A lightweight recruiting dashboard.
+
+## Technology
+
+Python, FastAPI, PostgreSQL, and an LLM API.
+
+## Project Documentation
+
+- [Product Requirements](docs/01-product/PRD.md)
+- [Technical Requirements](docs/02-technical/TECHNICAL_REQUIREMENTS.md)
+- [System Architecture](docs/02-technical/SYSTEM_ARCHITECTURE.md)
+
+## Status
+
+Early development — Sprint 0.
