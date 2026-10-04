@@ -1,98 +1,58 @@
-# TopRostr
-## Product Requirements Document (PRD)
+# TopRostr — Product Requirements
+**Version:** POC v0.1 (Revised)
 
-**Version:** 1.1  
-**Status:** Initial MVP Definition  
-**Target Market:** College Soccer Recruiting
+**Tagline:** Less time managing recruiting. More time winning.
 
----
+## Vision
 
-## 1. Problem Statement
+TopRostr is an AI-native recruiting workspace for college soccer coaches. It simplifies the process of reviewing prospective athletes and turns coaching decisions into organized recruiting actions.
 
-Athletes are increasingly leveraging AI-assisted tools to generate, personalize, and scale recruiting outreach to college programs.
+Rather than recreating feature-heavy recruiting platforms, TopRostr uses a clean, card-based experience with AI handling repetitive administrative work behind the scenes.
 
-As the barrier to sending recruiting emails decreases, coaches face the potential for greater volumes of incoming communication, making it harder to efficiently identify and review relevant prospective athletes.
+## Core Product Experience
 
-**Core Question:**
+TopRostr has two primary views:
 
-*Athletes are leveraging AI to scale their recruiting outreach. How are coaches keeping up?*
+### 1. Recruit Review
 
-**The Opportunity:**
+A focused, one-athlete-at-a-time evaluation experience.
 
-Equip college soccer coaches with AI-powered tools that help them process, organize, and navigate recruiting interest at scale, without adding complexity to their existing workflows.
+- Athlete information collected through a questionnaire.
+- Structured athlete cards with academic and playing information.
+- Embedded highlight reels where supported.
+- Coaching notes and recruiting history.
+- Quick decisions: Interested, Review Later, and Pass.
+- AI-assisted interpretation of informal coaching notes.
 
-## 2. Target Users
+The coach remains responsible for evaluating talent and making recruiting decisions.
 
-**Primary Users:** College soccer coaches (Head Coaches and Assistant Coaches).
+### 2. Recruiting Tracker
 
-TopRostr will initially focus exclusively on college soccer recruiting, with the potential to expand into other collegiate sports in the future.
+An automatically maintained view of the program's recruiting activity, organized across three independent dimensions:
 
-The product should prioritize ease of use, minimal onboarding, and integration with coaches' existing recruiting workflows.
+| Dimension | Purpose |
+|---|---|
+| Interest | Which athletes the program wants to pursue |
+| Engagement | Camp invitations and other recruiting interactions |
+| Next Actions | Follow-ups, film requests, and outstanding tasks |
 
-## 3. Product Goals
+TopRostr uses structured application logic to maintain accurate lists. AI helps interpret context, identify proposed actions, prepare communication drafts, and reduce manual administration.
 
-1. **Save Time:** Reduce the manual effort required to process incoming recruiting outreach.
-2. **Improve Organization:** Help coaches identify and organize prospective athletes based on their program's recruiting needs.
-3. **Minimize Friction:** Introduce AI into existing coaching workflows without requiring coaches to learn prompting or adopt complicated new software.
+## Key AI Interaction
 
-## 4. MVP Scope & Core Features
+A coach might write:
 
-TopRostr MVP 1 will be an AI-powered email companion for college soccer coaches, integrating directly with their existing recruiting inbox.
+*Interested. Invite to summer camp and ask for updated full-game footage.*
 
-### Core Features
+TopRostr interprets the note and proposes:
 
-1. **Email Integration:** Integrate TopRostr with one supported email client, initially targeting Gmail.
-2. **Manual Email Processing:** Coaches open a recruiting email and initiate TopRostr's processing functionality.
-3. **AI Information Extraction:** Extract relevant athlete information, including name, position, graduation year, club, academic information, and film links.
-4. **Athlete Profiles:** Generate structured, reviewable profiles from incoming correspondence.
-5. **Recruiting Organization:** Allow coaches to save, filter, and organize athletes based on program-specific recruiting criteria.
-6. **Recruit Review:** Provide access to original correspondence, extracted information, and submitted film links.
+- Mark athlete Interested.
+- Add athlete to the summer camp list.
+- Create a full-game footage request.
+- Prepare a personalized communication draft.
 
-### Product Interfaces
+The coach confirms proposed changes before they are executed.
 
-**Gmail Sidebar (Primary Entry Point)**
+## POC Scope
 
-Coaches initiate email analysis, review extracted athlete information, correct inaccuracies, and save athlete profiles directly from Gmail.
-
-**Lightweight Web Dashboard (Recruiting Workspace)**
-
-Coaches access saved athlete profiles, filter recruiting information, review correspondence, and manage their recruiting records.
-
-### Out of Scope (MVP 1)
-
-- Athlete-facing accounts or a recruiting marketplace.
-- Continuous automatic inbox monitoring.
-- Automated recruiting decisions or athletic ability scoring.
-- AI film analysis.
-- Automated outbound recruiting communication.
-- Native mobile application.
-- Complex third-party recruiting CRM integrations.
-
-### Primary MVP Workflow
-
-Coach Opens Email → Initiates TopRostr → AI Extracts Information → Coach Reviews Profile → Saves Recruit → Recruit Available in Web Dashboard.
-
-## 5. Success Criteria & Validation
-
-Validate MVP 1 with 3–5 college soccer coaches.
-
-### Success Criteria
-
-1. **Efficiency:** Reduce the time required to process incoming recruiting correspondence.
-2. **Accuracy:** Reliably extract athlete information without fabricating missing details.
-3. **Usability:** Provide an intuitive experience requiring minimal onboarding.
-4. **Adoption:** Determine whether coaches would voluntarily incorporate TopRostr into their recruiting workflow.
-
-### Validation Method
-
-Compare the time required to review and organize realistic recruiting emails with and without TopRostr, and collect direct feedback from participating coaches.
-
-**Primary Success Indicator:**
-
-Coaches voluntarily choose to use TopRostr when processing recruiting correspondence rather than relying exclusively on their previous workflow.
-
----
-
-## Product Vision
-
-**TopRostr aims to eliminate repetitive recruiting administration so college coaches can spend more time evaluating athletes and less time managing information.**
+Demonstrate the complete athlete questionnaire → Recruit Review → Recruiting Tracker workflow, including

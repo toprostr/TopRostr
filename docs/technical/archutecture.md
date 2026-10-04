@@ -1,72 +1,60 @@
 # TopRostr — System Architecture
-
-**Version:** 0.1 | **Status:** Draft
+**Version:** POC v0.1 (Revised)
 
 ## Overview
 
-TopRostr will use a Python/FastAPI backend shared by two interfaces:
+TopRostr uses a modular Python/FastAPI backend serving a lightweight web application.
 
-- **Gmail Add-on:** Process recruiting emails, review extracted information, and save recruits.
-- **Web Dashboard:** View, filter, and manage saved athletes.
+The two primary experiences—Recruit Review and Recruiting Tracker—operate on the same athlete records and recruiting activity data.
 
-We'll use a modular monolith for MVP 1 to keep development and deployment simple.
+## High-Level Flow
 
-## Tech Stack
-
-| Component | Technology |
-|---|---|
-| Backend | Python, FastAPI |
-| Gmail Integration | Google Workspace Add-on (HTTP runtime) |
-| Dashboard | Jinja2, HTMX, Tailwind |
-| Database | PostgreSQL, SQLAlchemy, Alembic |
-| AI | OpenAI API, Pydantic |
-| Testing | pytest |
-| Infrastructure | Docker, GitHub Actions |
-
-## Architecture
-
-```mermaid
-flowchart TD
-    A[Gmail Add-on] --> C[FastAPI Backend]
-    B[Web Dashboard] --> C
-    C --> D[(PostgreSQL)]
-    C --> E[OpenAI API]
-    C --> F[Gmail API]
+```text
+            Athlete Questionnaire
+                     |
+                     v
+               FastAPI Backend
+                     |
+                     v
+                PostgreSQL
+                     |
+             +-------+-------+
+             |               |
+             v               v
+       Recruit Review   Recruiting Tracker
+             |               ^
+             |               |
+       Coach Decisions       |
+       & Informal Notes      |
+             |               |
+             v               |
+         AI Service          |
+             |               |
+             v               |
+      Proposed Actions       |
+             |               |
+             v               |
+       Coach Approval -------+
 ```
 
-## Core Workflow
+## Responsibilities
 
-1. Coach opens an email and clicks **Analyze Recruit** in Gmail.
-2. FastAPI retrieves the selected email using authorized Gmail access.
-3. The LLM extracts athlete information into a validated Pydantic model.
-4. TopRostr checks for an existing athlete record.
-5. Coach reviews and confirms the extracted information.
-6. The athlete is saved to PostgreSQL and becomes available in the dashboard.
+**Pydantic Schemas:** Validate athlete submissions, API responses, and structured AI proposals.
 
-## Backend Modules
+**Recruiting Service:** Manages interest, engagement, and outstanding actions through deterministic Python logic.
 
-- `auth` — Authentication and program-level access.
-- `gmail` — Add-on requests and email retrieval.
-- `extraction` — LLM processing and validation.
-- `athletes` — Athlete profiles and duplicate handling.
-- `recruiting` — Filtering and organization.
-- `db` — Persistence and migrations.
+**AI Service:** Interprets notes and prepares summaries, proposed actions, and communication drafts. It does not independently execute recruiting decisions.
 
-## Key Decisions
+**Database:** Persists athletes, coaching observations, recruiting activities, and task state.
 
-- Email processing is manual; no continuous inbox monitoring.
-- Coaches must confirm extracted information before saving.
-- Missing athlete information remains unknown.
-- Gmail and the dashboard share the same backend and database.
-- Use minimum necessary Gmail permissions.
-- Start with synthetic data and establish privacy controls before processing real athlete correspondence.
-- No microservices, vector databases, or agent frameworks for MVP 1.
+**Frontend:** Jinja2 and HTMX provide responsive athlete cards and recruiting trackers without requiring a separate JavaScript application.
 
-## Open Questions
+## Initial Data Model Direction
 
-- Gmail authorization and add-on deployment requirements.
-- How to associate multiple emails with an existing athlete.
-- Database schema and data retention policy.
-- Hosting provider.
+The existing `AthleteCreate`, `AthleteResponse`, and `RecruitingStatus` schemas remain the starting point for TR-009.
 
-The Gmail integration will be validated through a small technical proof of concept before implementing the complete application.
+Future development will introduce separate models for engagement activities and recruiting tasks. Camp invitations and follow-ups should not become additional values in one oversized status enum.
+
+## Future Integrations
+
+Gmail, Outlook, spreadsheet imports, and additional intake methods may be introduced later. All should connect to the same underlying recruiting workflow.
