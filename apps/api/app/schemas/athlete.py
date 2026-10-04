@@ -9,6 +9,7 @@ class RecruitingStatus(StrEnum):
     INTERESTED = "interested"
     PASSED = "passed"
 
+
 class AthleteCreate(BaseModel):
     first_name: str
     last_name: str
@@ -18,6 +19,7 @@ class AthleteCreate(BaseModel):
     club_team: str
     gpa: float | None = Field(default=None, ge=0, le=5.0)
     highlight_reel_url: HttpUrl | None = None
+
 
 class AthleteResponse(AthleteCreate):
     id: int
