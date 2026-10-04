@@ -1,5 +1,7 @@
-from pydantic import BaseModel, Field, EmailStr, HttpUrl
 from enum import StrEnum
+
+from pydantic import BaseModel, EmailStr, Field, HttpUrl
+
 
 class RecruitingStatus(StrEnum):
     NEW = "new"

@@ -1,8 +1,8 @@
+import pytest
+from pydantic import ValidationError
+
 from app.schemas.athlete import AthleteCreate, AthleteResponse, RecruitingStatus
 
-import pytest
-
-from pydantic import ValidationError
 
 def test_athletecreate_with_valid_succeeds():
     athlete = AthleteCreate(
@@ -20,7 +20,7 @@ def test_athletecreate_with_valid_succeeds():
 
 def test_athletecreate_with_invalid_email_fails():
     with pytest.raises(ValidationError):
-      athlete = AthleteCreate(
+        AthleteCreate(
         first_name= "Alejandro",
         last_name= "Suarez",
         email= "alesuarezgmail.com",
@@ -31,7 +31,7 @@ def test_athletecreate_with_invalid_email_fails():
 
 def test_athletecreate_with_invlaid_gpa_fails():
     with pytest.raises(ValidationError):
-         athlete = AthleteCreate(
+        AthleteCreate(
         first_name= "Alejandro",
         last_name= "Suarez",
         email= "alesuarezgmail.com",
@@ -43,7 +43,7 @@ def test_athletecreate_with_invlaid_gpa_fails():
 
 def test_athletecreate_with_invalid_grad_year_fails():
     with pytest.raises(ValidationError):
-        athlete = AthleteCreate(
+        AthleteCreate(
         first_name= "Alejandro",
         last_name= "Suarez",
         email= "alesuarezgmail.com",
