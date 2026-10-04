@@ -1,34 +1,37 @@
+
 name: API CI
 
 on:
   pull_request:
     branches: [main]
+
 jobs:
   api-checks:
     runs-on: ubuntu-latest
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v4
-    
-  - name: Install uv
-    uses: astral-sh/setup-uv@v6
 
-  - name: Install dependencies
-    working-directory: apps/api
-    run: uv sync --locked
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  - name: Ruff lint
-    working-directory: apps/api
-    run: uv run ruff check .
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
 
-  - name: Ruff formatting
-    working-directory: apps/api
-    run: uv run ruff format --check .
+      - name: Install dependencies
+        working-directory: apps/api
+        run: uv sync --locked
 
-  - name: Pyright
-    working-directory: apps/api
-    run: uv run pyright
+      - name: Ruff lint
+        working-directory: apps/api
+        run: uv run ruff check .
 
-  - name: Run tests
-    working-directory: apps/api
-    run: uv run pytest -v
+      - name: Ruff formatting
+        working-directory: apps/api
+        run: uv run ruff format --check .
+
+      - name: Pyright
+        working-directory: apps/api
+        run: uv run pyright
+
+      - name: Run tests
+        working-directory: apps/api
+        run: uv run pytest -v
