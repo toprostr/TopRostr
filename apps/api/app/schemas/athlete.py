@@ -1,13 +1,23 @@
 from enum import StrEnum
 
-from pydantic import BaseModel, EmailStr, Field, HttpUrl
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, HttpUrl
 
 
 class RecruitingStatus(StrEnum):
-    NEW = "new"
-    REVIEWING = "reviewing"
+    """Stored recruiting state, including athletes the coach has not decided on."""
+
+    UNREVIEWED = "unreviewed"
     INTERESTED = "interested"
-    PASSED = "passed"
+    REVIEW_LATER = "review_later"
+    PASS = "pass"
+
+
+class RecruitingDecision(StrEnum):
+    """The three decisions a coach can make from Recruit Review."""
+
+    INTERESTED = "interested"
+    REVIEW_LATER = "review_later"
+    PASS = "pass"
 
 
 class AthleteCreate(BaseModel):
@@ -22,5 +32,13 @@ class AthleteCreate(BaseModel):
 
 
 class AthleteResponse(AthleteCreate):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
-    status: RecruitingStatus = RecruitingStatus.NEW
+    location: str | None = None
+    notes: str | None = None
+    status: RecruitingStatus = RecruitingStatus.UNREVIEWED
+
+
+class AthleteStatusUpdate(BaseModel):
+    status: RecruitingDecision

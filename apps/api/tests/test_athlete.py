@@ -57,7 +57,7 @@ def test_athletecreate_with_invalid_grad_year_fails():
         )
 
 
-def test_create_athlete_response_defaults_to_new_status():
+def test_create_athlete_response_defaults_to_unreviewed_status():
     athlete = AthleteResponse(
         id=1,
         first_name="Jordan",
@@ -68,4 +68,6 @@ def test_create_athlete_response_defaults_to_new_status():
         club_team="Example FC",
     )
 
-    assert athlete.status == RecruitingStatus.NEW
+    assert athlete.status == RecruitingStatus.UNREVIEWED
+    assert athlete.location is None
+    assert athlete.notes is None

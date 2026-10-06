@@ -25,8 +25,8 @@ TopRostr is built as a Python-first, modular backend.
 
 - **Backend:** Python 3.13, FastAPI, Pydantic
 - **Dependency management:** uv
-- **Database (planned):** PostgreSQL, SQLAlchemy, Alembic
-- **Frontend (planned):** Jinja2, HTMX, Tailwind CSS
+- **Database (POC):** SQLite, SQLAlchemy, Alembic. PostgreSQL remains the planned production database.
+- **Frontend (POC):** Jinja2, HTMX, Tailwind CSS, served by FastAPI
 - **Integration (planned):** Gmail / Google Workspace Add-on
 - **AI (planned):** LLM-based structured athlete information extraction
 - **Code quality:** Ruff, Pyright, pytest
@@ -48,11 +48,17 @@ From the repository root:
 ```bash
 cd apps/api
 uv sync --locked
+uv run alembic upgrade head
+uv run python -m app.seed
 uv run uvicorn app.main:app --reload
 ```
 
-Once running, the API is available at:
+`app.seed` inserts about eight fictional demo recruits. Run it again any time; athletes that are already stored are left alone, so recruiting decisions stay put. `uv run python -m app.seed --reset` replaces only those demo athletes.
 
+Once running, the app is available at:
+
+- Recruit Review: http://127.0.0.1:8000/
+- Recruiting Tracker: http://127.0.0.1:8000/tracker
 - Health check: http://127.0.0.1:8000/health
 - Interactive API documentation: http://127.0.0.1:8000/docs
 
