@@ -7,7 +7,11 @@ dependencies = [
     "email-validator>=2.3.0",
     "fastapi[standard]>=0.142.2",
     "sqlalchemy>=2.1.3",
+    "toprostr-extraction",
 ]
+
+[tool.uv.sources]
+toprostr-extraction = { path = "../extraction", editable = true }
 
 [dependency-groups]
 dev = [

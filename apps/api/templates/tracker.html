@@ -1,7 +1,7 @@
 {#- Recruiting Tracker.
     Context: athletes (every AthleteResponse, ordered by id), active="tracker",
     status_filter ("interested" | "review_later" | "pass" | "all"; default "interested").
-    Engagement and Next action stay as placeholders until a coach confirms AI suggestions. -#}
+    Engagement and Next action show the confirmed suggestion, or the placeholder until then. -#}
 {% extends "base.html" %}
 {% from "partials/status_badge.html" import status_badge %}
 {% block title %}Tracker · TopRostr{% endblock %}
@@ -59,12 +59,11 @@
                 <td class="px-5 font-medium tabular-nums {% if athlete.gpa is none %}text-muted{% endif %}">{{ "%.1f"|format(athlete.gpa) if athlete.gpa is not none else "—" }}</td>
                 <td class="px-5">{{ status_badge(status) }}</td>
               </tr>
-              {#- PRD tracker dimensions. Copy stays the placeholder until #43 confirms a value. -#}
               <tr class="border-t-0">
                 <td colspan="7" class="px-5 pb-4 pt-0">
                   <div class="flex flex-wrap gap-x-8 gap-y-1 text-sm">
-                    <p class="text-muted"><span class="tr-label mr-2">Engagement</span>Not tracked yet</p>
-                    <p class="text-muted"><span class="tr-label mr-2">Next action</span>No action set</p>
+                    <p class="{% if athlete.engagement %}text-chalk{% else %}text-muted{% endif %}"><span class="tr-label mr-2">Engagement</span>{{ athlete.engagement or "Not tracked yet" }}</p>
+                    <p class="{% if athlete.next_action %}text-chalk{% else %}text-muted{% endif %}"><span class="tr-label mr-2">Next action</span>{{ athlete.next_action or "No action set" }}</p>
                   </div>
                 </td>
               </tr>

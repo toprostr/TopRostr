@@ -37,6 +37,8 @@ class AthleteResponse(AthleteCreate):
     id: int
     location: str | None = None
     notes: str | None = None
+    engagement: str | None = None
+    next_action: str | None = None
     status: RecruitingStatus = RecruitingStatus.UNREVIEWED
 
 

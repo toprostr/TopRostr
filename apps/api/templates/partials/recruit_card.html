@@ -1,7 +1,8 @@
-{#- Recruit card (hero + notes + decisions). Rendered by review.html AND returned by
-    POST /athletes/{id}/decision (existing route renders "partials/athlete_card.html": point it here or rename this file).
-    Context: athlete (AthleteResponse), optional just_saved (bool), optional feature_ai_strip (bool, default off), optional ai_actions (list[str]).
-    Globals used (already registered in app/routers/pages.py): positions, status_labels, youtube_embed_url. -#}
+{#- Recruit card (hero + notes + decisions + AI confirm strip).
+    Rendered by review.html and returned by the decision, suggestion, and confirm routes.
+    Context: athlete (AthleteResponse), optional just_saved, suggestions, draft_notes,
+    suggestion_message, suggestions_saved.
+    Globals: positions, status_labels, youtube_embed_url. -#}
 {% from "partials/status_badge.html" import status_badge %}
 {% set status = athlete.status.value if athlete.status.value is defined else athlete.status %}
 {% set full_name = athlete.first_name ~ " " ~ athlete.last_name %}
@@ -50,26 +51,66 @@
   {# ---------- Notes + decisions: ONE form so notes are sent with the decision ---------- #}
   <form hx-post="/athletes/{{ athlete.id }}/decision" hx-target="#recruit-card" hx-swap="outerHTML" class="flex flex-col gap-8">
     <div class="flex flex-col gap-2">
+      {% set note_text = draft_notes if (draft_notes is defined and draft_notes is not none) else (athlete.notes or "") %}
       <label for="notes-{{ athlete.id }}" class="tr-label">Coach notes</label>
       <textarea id="notes-{{ athlete.id }}" name="notes" rows="3"
         class="w-full resize-none rounded-xl border border-line bg-raised/60 px-4 py-3.5 text-[15px] leading-relaxed text-chalk placeholder:text-muted focus:border-lime/50 focus:outline-none focus:ring-4 focus:ring-lime/10"
-        placeholder="What stood out? What do you need to see next?">{{ athlete.notes or "" }}</textarea>
+        placeholder="What stood out? What do you need to see next?">{{ note_text }}</textarea>
 
-      {% if feature_ai_strip %}
-        {# PLACEHOLDER — not wired in Sprint 1. Rendered only when feature_ai_strip is truthy (default: off). #}
-        <div class="mt-1 flex items-center gap-4 rounded-xl border border-lime/20 bg-gradient-to-r from-lime/[0.09] via-white/[0.03] to-white/[0.02] py-2.5 pl-4 pr-2.5 backdrop-blur" data-ai-strip>
-          <span class="flex items-center gap-2 whitespace-nowrap text-sm font-medium text-lime">
-            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.8 5.2L18 10l-5.2 1.8L11 17l-1.8-5.2L4 10l5.2-1.8z" fill="#A9D15A"/><path d="M19 14l.8 2 2 .8-2 .8L19 20l-.8-2-2-.8 2-.8z" fill="#A9D15A"/></svg>Suggested
-          </span>
+      {% if suggestions_saved %}
+        <p class="text-sm font-medium text-lime" role="status">Saved to your tracker.</p>
+      {% endif %}
+
+      <div class="mt-1 flex flex-wrap items-center gap-4 rounded-xl border border-lime/20 bg-gradient-to-r from-lime/[0.09] via-white/[0.03] to-white/[0.02] py-2.5 pl-4 pr-2.5 backdrop-blur" data-ai-strip>
+        <span class="flex items-center gap-2 whitespace-nowrap text-sm font-medium text-lime">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.8 5.2L18 10l-5.2 1.8L11 17l-1.8-5.2L4 10l5.2-1.8z" fill="#A9D15A"/><path d="M19 14l.8 2 2 .8-2 .8L19 20l-.8-2-2-.8 2-.8z" fill="#A9D15A"/></svg>Suggested
+        </span>
+        {% if suggestions %}
+          {% set interest = suggestions.interest.value if suggestions.interest.value is defined else suggestions.interest %}
+          {% set interest_labels = {"interested": "Mark interested", "review_later": "Review later", "pass": "Pass"} %}
           <div class="flex flex-1 flex-wrap gap-1.5">
-            {% for action in ai_actions | default(["Mark interested", "Add to summer camp list", "Request full-game footage", "Prepare communication draft"]) %}
-              <span class="inline-flex h-7 items-center gap-1.5 whitespace-nowrap rounded-full border border-line bg-white/[0.05] px-2.5 text-[13px] text-chalk-dim">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A9D15A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>{{ action }}
-              </span>
+            {% if interest %}
+              <label class="inline-flex h-7 items-center gap-1.5 whitespace-nowrap rounded-full border border-line bg-white/[0.05] px-2.5 text-[13px] text-chalk-dim">
+                <input type="checkbox" name="apply_interest" value="{{ interest }}" checked class="accent-lime" />
+                {{ interest_labels.get(interest, interest) }}
+              </label>
+            {% endif %}
+            {% if suggestions.engagement %}
+              <label class="inline-flex h-7 items-center gap-1.5 whitespace-nowrap rounded-full border border-line bg-white/[0.05] px-2.5 text-[13px] text-chalk-dim">
+                <input type="checkbox" name="engagement" value="{{ suggestions.engagement }}" checked class="accent-lime" />
+                {{ suggestions.engagement }}
+              </label>
+            {% endif %}
+            {% for action in suggestions.next_actions %}
+              <label class="inline-flex h-7 items-center gap-1.5 whitespace-nowrap rounded-full border border-line bg-white/[0.05] px-2.5 text-[13px] text-chalk-dim">
+                <input type="checkbox" name="next_actions" value="{{ action }}" checked class="accent-lime" />
+                {{ action }}
+              </label>
             {% endfor %}
           </div>
-          <button type="button" disabled class="inline-flex h-9 items-center whitespace-nowrap rounded-[10px] bg-lime px-4 text-sm font-semibold text-lime-ink shadow-btn">Confirm</button>
-        </div>
+          <button type="button"
+            hx-post="/athletes/{{ athlete.id }}/suggestions/confirm"
+            hx-include="closest form"
+            hx-target="#recruit-card"
+            hx-swap="outerHTML"
+            class="inline-flex h-9 items-center whitespace-nowrap rounded-[10px] bg-lime px-4 text-sm font-semibold text-lime-ink shadow-btn">Confirm</button>
+          <button type="button"
+            hx-get="/athletes/{{ athlete.id }}/card"
+            hx-target="#recruit-card"
+            hx-swap="outerHTML"
+            class="inline-flex h-9 items-center whitespace-nowrap rounded-[10px] border border-line-strong bg-raised px-3 text-sm font-medium text-chalk">Dismiss</button>
+        {% else %}
+          <p class="flex-1 text-[13px] text-muted">Nothing is saved until you confirm.</p>
+          <button type="button"
+            hx-post="/athletes/{{ athlete.id }}/suggestions"
+            hx-include="closest form"
+            hx-target="#recruit-card"
+            hx-swap="outerHTML"
+            class="inline-flex h-9 items-center whitespace-nowrap rounded-[10px] bg-lime px-4 text-sm font-semibold text-lime-ink shadow-btn">Suggest</button>
+        {% endif %}
+      </div>
+      {% if suggestion_message %}
+        <p class="text-sm text-chalk-dim" role="alert" data-suggestion-message>{{ suggestion_message }}</p>
       {% endif %}
     </div>
 

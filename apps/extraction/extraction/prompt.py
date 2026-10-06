@@ -33,3 +33,25 @@ def render_user_message(message: ExtractionInput) -> str:
         "Body:\n"
         f"{message.body}"
     )
+
+
+SUGGESTION_SYSTEM_PROMPT = """You interpret one coach's note about an athlete already on their board.
+
+Return interest, engagement, and next_actions. These are suggestions the coach will confirm. You do not apply them.
+
+Rules:
+- Use only the note. If a decision or task is missing, leave that field null or empty.
+- interest is interested, review_later, or pass only when the note states that decision. Otherwise null.
+- engagement is one short label for a recruiting interaction to record, such as a camp invitation. Otherwise null.
+- next_actions is a list of short task labels, or an empty list.
+- Do not contact anyone. Do not produce a message. A label is a task for the coach, not an action you take.
+- Do not score, rank, or evaluate talent.
+- Do not invent a task the note does not support.
+- Keep each label under 80 characters.
+"""
+
+
+def render_note(notes: str) -> str:
+    """Show the coach's note without adding facts."""
+
+    return f"Interpret the coach's note below.\n\n{notes}"

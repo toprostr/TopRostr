@@ -20,6 +20,8 @@ class Athlete(Base):
     highlight_reel_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     location: Mapped[str | None] = mapped_column(String(120), nullable=True)
     notes: Mapped[str | None] = mapped_column(String(2000), nullable=True)
+    engagement: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    next_action: Mapped[str | None] = mapped_column(String(500), nullable=True)
     status: Mapped[str] = mapped_column(
         String(32),
         default="unreviewed",

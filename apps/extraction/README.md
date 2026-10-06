@@ -69,6 +69,8 @@ That test spends API credits. `uv run pytest -m "not manual"` skips it even if a
 | `extraction/fake.py` | Deterministic extractor for tests and for dev with no key. |
 | `extraction/openai_extractor.py` | OpenAI Responses `parse` client. |
 | `extraction/factory.py` | Fake when no key is set, OpenAI when a key is set. |
+| `extraction/suggestions.py` | Coach-note suggestions: interest, engagement, next actions. |
+| `extraction/openai_suggester.py` | OpenAI suggester. Same key rule as extraction. |
 | `tests/fixtures/recruiting_emails.json` | Synthetic emails and the expected fake results. |
 
 Fixtures cover a complete email, missing fields, messy formatting, several film links, no athlete info, a very short email, invalid values, a subject-only email, and an email with two addresses where guessing would be wrong.

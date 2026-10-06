@@ -67,9 +67,42 @@ def set_recruiting_status(
     athlete = db.get(Athlete, athlete_id)
     if athlete is None:
         raise AthleteNotFoundError(athlete_id)
+    cleaned_notes = _clean_notes(notes) if notes is not None else None
     athlete.status = status
     if notes is not None:
-        athlete.notes = _clean_notes(notes)
+        athlete.notes = cleaned_notes
+    db.commit()
+    db.refresh(athlete)
+    return athlete
+
+
+def save_confirmed_suggestions(
+    db: Session,
+    athlete_id: int,
+    *,
+    notes: str | None,
+    interest: str | None,
+    engagement: str | None,
+    next_action: str | None,
+) -> Athlete:
+    """Save the suggestions a coach checked.
+
+    ``None`` means "leave the stored value alone", so an unchecked box does
+    not clear a decision, an engagement, or a next action. This function does
+    not interpret the note and does not contact anyone.
+    """
+    athlete = db.get(Athlete, athlete_id)
+    if athlete is None:
+        raise AthleteNotFoundError(athlete_id)
+    cleaned_notes = _clean_notes(notes) if notes is not None else None
+    if interest is not None:
+        athlete.status = interest
+    if engagement is not None:
+        athlete.engagement = engagement
+    if next_action is not None:
+        athlete.next_action = next_action
+    if notes is not None:
+        athlete.notes = cleaned_notes
     db.commit()
     db.refresh(athlete)
     return athlete

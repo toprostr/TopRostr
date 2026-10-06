@@ -43,7 +43,7 @@ The project prioritizes a simple architecture and incremental development.
 
 ### Run the API locally
 
-From the repository root:
+Run Alembic, the seed, uvicorn, and pytest from `apps/api`. Alembic looks for `alembic.ini` in the current directory and does not find it from the repository root. The same working directory is what the app and the seed use for `apps/api/toprostr.db`.
 
 ```bash
 cd apps/api
@@ -55,6 +55,14 @@ uv run uvicorn app.main:app --reload
 
 `app.seed` inserts about eight fictional demo recruits. Run it again any time; athletes that are already stored are left alone, so recruiting decisions stay put. `uv run python -m app.seed --reset` replaces only those demo athletes.
 
+Coach-note suggestions use the fake suggester unless `OPENAI_API_KEY` is set. Copy the example file and put the key on that one line:
+
+```bash
+cp .env.example .env
+```
+
+`apps/api/.env` is gitignored and holds only `OPENAI_API_KEY`. Do not put `DATABASE_URL` in that file. Alembic is the only code that reads `DATABASE_URL` today. Setting it there would not change the app's database, and loading it into the environment would point Alembic at a different file than the app and the seed. Leave it unset so all three share `apps/api/toprostr.db`. An empty key, or no `.env` file, keeps suggestions on the fake suggester. Tests do not call OpenAI.
+
 Once running, the app is available at:
 
 - Recruit Review: http://127.0.0.1:8000/
@@ -64,9 +72,16 @@ Once running, the app is available at:
 
 ### Run tests
 
-From `apps/api`:
+From `apps/api` (not the repository root):
 
 ```bash
+uv run pytest -v
+```
+
+The extraction package has its own checks. From `apps/extraction`:
+
+```bash
+uv sync --locked
 uv run pytest -v
 ```
 
