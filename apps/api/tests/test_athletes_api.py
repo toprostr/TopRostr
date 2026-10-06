@@ -8,6 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from alembic import command
+from app.athletes import STATUS_LABELS
 from app.db import Base, get_db
 from app.main import app
 from app.models.athlete import Athlete
@@ -87,7 +88,7 @@ def test_seeded_athletes_load(
     page = client.get("/")
     assert page.status_code == 200
     assert "Maya Ellison" in page.text
-    assert "Recruit Review" in page.text
+    assert "Recruit review" in page.text
     assert "https://www.youtube-nocookie.com/embed/2zmXjwXyNQA" in page.text
     assert all(
         athlete["highlight_reel_url"] == "https://www.youtube.com/watch?v=2zmXjwXyNQA"
@@ -96,7 +97,7 @@ def test_seeded_athletes_load(
 
     tracker_page = client.get("/tracker")
     assert tracker_page.status_code == 200
-    assert "No interested athletes yet" in tracker_page.text
+    assert "No “Interested” recruits yet" in tracker_page.text
 
 
 def test_recruiting_decisions_persist_and_drive_the_tracker(
@@ -169,7 +170,7 @@ def test_review_page_decision_updates_the_card(
     )
     assert response.status_code == 200
     assert "Saved" in response.text
-    assert "now in Recruiting Tracker" in response.text
+    assert "Added to your tracker" in response.text
 
     tracker = client.get("/api/v1/tracker").json()
     assert tracker[0]["id"] == athlete_id
@@ -189,6 +190,96 @@ def test_invalid_status_is_rejected(
 
     unchanged = client.get("/api/v1/athletes").json()
     assert unchanged[0]["status"] == "unreviewed"
+
+
+def test_review_later_label_is_sentence_case() -> None:
+    assert STATUS_LABELS["review_later"] == "Review later"
+
+
+def test_decision_post_saves_notes(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    athlete_id = _add_athlete(session_factory, notes="Old note")
+    response = client.post(
+        f"/athletes/{athlete_id}/decision",
+        data={"status": "review_later", "notes": "  Calm in possession.  "},
+    )
+    assert response.status_code == 200
+    assert "Calm in possession." in response.text
+
+    stored = client.get("/api/v1/athletes").json()
+    assert stored[0]["notes"] == "Calm in possession."
+    assert stored[0]["status"] == "review_later"
+
+    cleared = client.post(
+        f"/athletes/{athlete_id}/decision",
+        data={"status": "pass", "notes": "   "},
+    )
+    assert cleared.status_code == 200
+    assert client.get("/api/v1/athletes").json()[0]["notes"] is None
+
+
+def test_decision_post_renders_recruit_card(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    athlete_id = _add_athlete(session_factory)
+    response = client.post(
+        f"/athletes/{athlete_id}/decision", data={"status": "interested"}
+    )
+    assert response.status_code == 200
+    assert 'id="recruit-card"' in response.text
+    assert 'hx-target="#recruit-card"' in response.text
+    assert 'id="athlete-' not in response.text
+
+
+def test_tracker_lists_all_athletes_and_filters_by_status(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    interested_id = _add_athlete(
+        session_factory,
+        email="filter-interested@example.com",
+        first_name="Elena",
+        status="interested",
+    )
+    later_id = _add_athlete(
+        session_factory,
+        email="filter-later@example.com",
+        first_name="Jonah",
+        last_name="Hale",
+        status="review_later",
+    )
+    passed_id = _add_athlete(
+        session_factory,
+        email="filter-pass@example.com",
+        first_name="Luis",
+        last_name="Ortega",
+        status="pass",
+    )
+
+    default_page = client.get("/tracker")
+    assert "Elena Ellison" in default_page.text
+    assert "Jonah Hale" not in default_page.text
+    assert "Luis Ortega" not in default_page.text
+
+    everyone = client.get("/tracker?status=all")
+    assert "Elena Ellison" in everyone.text
+    assert "Jonah Hale" in everyone.text
+    assert "Luis Ortega" in everyone.text
+
+    later = client.get("/tracker?status=review_later")
+    assert "Jonah Hale" in later.text
+    assert "Elena Ellison" not in later.text
+
+    passed = client.get("/tracker?status=pass")
+    assert "Luis Ortega" in passed.text
+    assert "Elena Ellison" not in passed.text
+
+    unknown = client.get("/tracker?status=maybe")
+    assert "Elena Ellison" in unknown.text
+    assert "Jonah Hale" not in unknown.text
+
+    listed = {athlete["id"] for athlete in client.get("/api/v1/athletes").json()}
+    assert {interested_id, later_id, passed_id} <= listed
 
 
 def test_missing_athlete_returns_404(client: TestClient) -> None:

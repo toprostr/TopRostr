@@ -98,10 +98,31 @@ def test_review_card_embeds_youtube_and_uses_placeholder_otherwise(
     finally:
         session_generator.close()
 
-    page = client.get("/").text
-    assert f'data-src="{EMBED}"' in page
-    assert 'href="https://example.com/film/jonah-hale"' not in page
-    assert page.count("Film not available") == 2
+    # Recruit review shows one unreviewed athlete at a time. Decide on the
+    # current card, then load `/` again to reach the next film state.
+    maya = client.get("/").text
+    assert f'data-src="{EMBED}"' in maya
+    assert "YouTube · plays inline" in maya
+    assert "Film hosted externally" not in maya
+    assert "No film yet" not in maya
+
+    maya_id = 1
+    decided = client.post(f"/athletes/{maya_id}/decision", data={"status": "pass"})
+    assert decided.status_code == 200
+
+    jonah = client.get("/").text
+    assert "Film hosted externally" in jonah
+    assert 'href="https://example.com/film/jonah-hale"' in jonah
+    assert "youtube-nocookie.com/embed" not in jonah
+    assert "<iframe" not in jonah
+
+    decided = client.post("/athletes/2/decision", data={"status": "pass"})
+    assert decided.status_code == 200
+
+    luis = client.get("/").text
+    assert "No film yet" in luis
+    assert "youtube-nocookie.com/embed" not in luis
+    assert "example.com/film" not in luis
 
 
 def test_reset_stores_the_demo_film_url(tmp_path: Path) -> None:

@@ -1,16 +1,41 @@
+{#- Recruit Review — one athlete at a time. Drop-in for apps/api/templates/review.html.
+    Works with the EXISTING route context: athletes (list[AthleteResponse], ordered by id), active="review".
+    Current athlete = first athlete whose status is "unreviewed". -#}
 {% extends "base.html" %}
-{% block title %}Recruit Review · TopRostr{% endblock %}
+{% block title %}Recruit review · TopRostr{% endblock %}
+
+{# Queue progress lives in the page header (below), not the nav. #}
+
 {% block content %}
-  {% if athletes %}
-    <div class="board">
-      {% for athlete in athletes %}
-        {% include "partials/athlete_card.html" %}
-      {% endfor %}
+  {% set queue = athletes | selectattr("status", "equalto", "unreviewed") | list %}
+  {% if queue %}
+    {% set athlete = queue[0] %}
+    {% set done = athletes|length - queue|length %}
+    <div class="mb-8 flex items-end justify-between gap-6">
+      <div>
+        <p class="text-[28px] font-semibold leading-tight tracking-[-0.03em]">Recruit review</p>
+        <p class="mt-1 text-[15px] text-muted">One athlete at a time. Your decision saves instantly.</p>
+      </div>
+      <div class="flex items-center gap-3 pb-1 text-[13px]">
+        <span class="text-muted">Athlete <span class="font-semibold text-chalk tabular-nums">{{ done + 1 }}</span> of {{ athletes|length }}</span>
+        <span class="h-1.5 w-40 overflow-hidden rounded-full bg-white/[0.07]"><span class="block h-full rounded-full bg-lime" style="width: {{ ((done / athletes|length) * 100) | round(1) }}%"></span></span>
+        <span class="text-muted tabular-nums">{{ queue|length }} left</span>
+      </div>
     </div>
+    {% include "partials/recruit_card.html" %}
+  {% elif athletes %}
+    <section class="mx-auto mt-16 flex max-w-lg flex-col items-center rounded-2xl border border-line bg-surface px-10 py-14 text-center shadow-card">
+      <span class="grid h-11 w-11 place-items-center rounded-full bg-lime/10 ring-1 ring-inset ring-lime/25">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A9D15A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </span>
+      <h1 class="mt-5 text-[28px] font-semibold tracking-[-0.03em]">Queue clear</h1>
+      <p class="mt-2 text-[15px] text-muted">All {{ athletes|length }} recruits have a decision. Interested athletes are waiting in your tracker.</p>
+      <a href="/tracker" class="mt-7 inline-flex h-10 items-center rounded-[10px] bg-lime px-4 text-sm font-semibold text-lime-ink shadow-btn">Open tracker</a>
+    </section>
   {% else %}
-    <div class="empty">
-      <h2 class="name">The board is empty</h2>
-      <p>Seed the demo roster from <code>apps/api</code> with <code>uv run python -m app.seed</code>.</p>
-    </div>
+    <section class="mx-auto mt-16 flex max-w-lg flex-col items-center rounded-2xl border border-dashed border-line-strong px-10 py-14 text-center">
+      <h1 class="text-[28px] font-semibold tracking-[-0.03em]">No recruits yet</h1>
+      <p class="mt-2 text-[15px] text-muted">Seed the demo roster from <code class="rounded-md bg-raised px-1.5 py-0.5 text-[13px] text-chalk-dim">apps/api</code> with <code class="rounded-md bg-raised px-1.5 py-0.5 text-[13px] text-chalk-dim">uv run python -m app.seed</code>.</p>
+    </section>
   {% endif %}
 {% endblock %}

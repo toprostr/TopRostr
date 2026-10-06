@@ -1,0 +1,37 @@
+{#- Highlight reel box. Context: athlete. Uses youtube_embed_url() global (app/film.py).
+    3 states: YouTube URL -> click-to-load facade (playFilm() in base.html) | other URL (e.g. Hudl) -> link card | null -> empty state. -#}
+{% set embed_url = youtube_embed_url(athlete.highlight_reel_url) %}
+{% set film_url = athlete.highlight_reel_url | string if athlete.highlight_reel_url else none %}
+<div class="relative aspect-video w-full overflow-hidden rounded-xl border border-line bg-reel" data-film>
+  <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.05),transparent_65%)]"></div>
+  <svg class="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 720 405" preserveAspectRatio="none" fill="none" stroke="#FFFFFF" stroke-opacity=".05" stroke-width="1.5" aria-hidden="true">
+    <line x1="360" y1="0" x2="360" y2="405"/><circle cx="360" cy="202" r="92"/><rect x="-2" y="102" width="110" height="200" rx="2"/><rect x="612" y="102" width="110" height="200" rx="2"/>
+  </svg>
+  {% if embed_url %}
+    <span class="absolute left-4 top-4 inline-flex h-7 items-center rounded-full border border-line bg-black/30 px-3 text-xs font-medium text-chalk-dim backdrop-blur">Highlight reel</span>
+    <button type="button" onclick="playFilm(this)" data-src="{{ embed_url }}" data-title="Highlight film for {{ athlete.first_name }} {{ athlete.last_name }}"
+      class="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-lime shadow-btn ring-8 ring-lime/10 transition hover:scale-105"
+      aria-label="Play highlight film">
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 5.5v13l10.5-6.5z" fill="#1F2226"/></svg>
+    </button>
+    <span class="absolute bottom-4 left-4 text-xs font-medium text-muted">YouTube · plays inline</span>
+  {% elif film_url %}
+    <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 px-8 text-center">
+      <p class="text-lg font-semibold tracking-[-0.01em]">Film hosted externally</p>
+      <p class="max-w-md truncate text-sm text-muted">{{ film_url }}</p>
+      <a href="{{ film_url }}" target="_blank" rel="noopener noreferrer"
+         class="mt-3 inline-flex h-10 items-center gap-2 rounded-[10px] border border-line-strong bg-raised px-4 text-sm font-medium hover:border-lime/50 hover:text-lime">
+        Open film
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
+      </a>
+    </div>
+  {% else %}
+    <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 px-8 text-center">
+      <span class="mb-1 grid h-11 w-11 place-items-center rounded-full border border-line bg-white/[0.04]">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A3AAB5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/><path d="M3 3l18 18"/></svg>
+      </span>
+      <p class="text-lg font-semibold tracking-[-0.01em]">No film yet</p>
+      <p class="text-sm text-muted">Ask the athlete or club for a highlight reel.</p>
+    </div>
+  {% endif %}
+</div>

@@ -1,3 +1,5 @@
+{#- TopRostr base layout — "Sleek" direction: charcoal base, soft lime accent, Inter, rounded, subtle borders.
+    Drop-in for apps/api/templates/base.html (PR #29). Context: active = "review" | "tracker". Optional block nav_right. -#}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,45 +8,78 @@
     <title>{% block title %}TopRostr{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/static/app.css" />
-    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      function toggleFilm(button) {
-        const root = button.closest("[data-film]");
-        const panel = root.querySelector("[data-film-panel]");
-        const frame = panel.querySelector("iframe");
-        const play = root.querySelector(".poster-btn");
-        const willOpen = panel.hasAttribute("hidden");
-        if (willOpen) {
-          if (!frame.getAttribute("src")) {
-            frame.src = frame.dataset.src;
-          }
-          panel.hidden = false;
-          root.classList.add("is-open");
-          if (play) play.setAttribute("aria-expanded", "true");
-          return;
-        }
-        panel.hidden = true;
-        frame.removeAttribute("src");
-        root.classList.remove("is-open");
-        if (play) play.setAttribute("aria-expanded", "false");
-      }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              pitch: "#2A2D33",                                   // page background
+              surface: "#30343A",                                 // cards / panels (layer 1)
+              raised: "#3A3E45",                                  // inputs, secondary buttons, chips (layer 2)
+              reel: "#1E2125",                                    // video area
+              line: { DEFAULT: "rgba(255,255,255,0.08)", strong: "rgba(255,255,255,0.14)" }, // 1px borders
+              chalk: { DEFAULT: "#F2F4F7", dim: "#D3D7DE" },      // primary / secondary text
+              muted: "#A3AAB5",                                   // labels, meta text
+              lime: { DEFAULT: "#A9D15A", ink: "#1F2226" },       // accent / text on lime
+              blaze: "#E07A4F",                                   // Pass
+              gold: "#D6B456",                                    // Review later badge only
+            },
+            fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"] },
+            boxShadow: {
+              card: "inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 24px rgba(0,0,0,0.18)",
+              btn: "inset 0 1px 0 rgba(255,255,255,0.18), 0 1px 2px rgba(0,0,0,0.25)",
+            },
+          },
+        },
+      };
     </script>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <style>
+      body { font-feature-settings: "cv11", "ss01"; }
+      .htmx-request button { opacity: 0.55; }
+      .tr-label { font-size: 13px; font-weight: 500; color: #A3AAB5; letter-spacing: -0.005em; }
+    </style>
   </head>
-  <body>
-    <header class="nav">
-      <a class="logo" href="/"><span class="mark">TR</span>TopRostr</a>
-      <nav class="links">
-        <a href="/" class="{% if active == 'review' %}on{% endif %}">Recruit Review</a>
-        <a href="/tracker" class="{% if active == 'tracker' %}on{% endif %}">Tracker</a>
-      </nav>
+  <body class="min-h-screen bg-pitch font-sans text-chalk antialiased">
+    <header class="h-14 border-b border-line bg-pitch/80 backdrop-blur">
+      <div class="mx-auto flex h-full max-w-[1440px] items-center gap-8 px-12">
+        <a href="/" class="flex items-center gap-2.5 text-[15px] font-semibold tracking-[-0.01em]">
+          <span class="grid h-7 w-7 place-items-center rounded-lg bg-lime text-[13px] font-semibold text-lime-ink shadow-btn">T</span>
+          TopRostr
+        </a>
+        <nav class="flex items-center gap-1" aria-label="Primary">
+          {% for key, href, label in [("review", "/", "Recruit review"), ("tracker", "/tracker", "Tracker")] %}
+            <a href="{{ href }}"
+               class="flex h-8 items-center rounded-lg px-3 text-sm font-medium {% if active == key %}bg-white/[0.07] text-chalk{% else %}text-muted hover:text-chalk{% endif %}"
+               {% if active == key %}aria-current="page"{% endif %}>{{ label }}</a>
+          {% endfor %}
+        </nav>
+        <div class="flex-1"></div>
+        {% block nav_right %}{% endblock %}
+        {# Static placeholder: no coach/user model in Sprint 1. #}
+        <div class="grid h-8 w-8 place-items-center rounded-full border border-line bg-raised" title="Coach account (placeholder)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D3D7DE" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+        </div>
+      </div>
     </header>
-    <main class="page">
+    <main class="mx-auto max-w-[1440px] px-16 pb-16 pt-12">
       {% block content %}{% endblock %}
     </main>
+    <script>
+      // Click-to-load YouTube facade: nothing loads until the coach presses play.
+      function playFilm(button) {
+        const root = button.closest("[data-film]");
+        const frame = document.createElement("iframe");
+        frame.src = button.dataset.src + "?autoplay=1&rel=0";
+        frame.title = button.dataset.title || "Highlight film";
+        frame.className = "absolute inset-0 h-full w-full";
+        frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        frame.allowFullscreen = true;
+        frame.referrerPolicy = "strict-origin-when-cross-origin";
+        root.replaceChildren(frame);
+      }
+    </script>
   </body>
 </html>

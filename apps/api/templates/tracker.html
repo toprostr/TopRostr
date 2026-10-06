@@ -1,43 +1,84 @@
+{#- Recruiting Tracker.
+    Context: athletes (every AthleteResponse, ordered by id), active="tracker",
+    status_filter ("interested" | "review_later" | "pass" | "all"; default "interested").
+    Engagement and Next action stay as placeholders until a coach confirms AI suggestions. -#}
 {% extends "base.html" %}
-{% block title %}Recruiting Tracker · TopRostr{% endblock %}
+{% from "partials/status_badge.html" import status_badge %}
+{% block title %}Tracker · TopRostr{% endblock %}
+
 {% block content %}
-  <div class="page-head">
-    <p class="label">Tracker</p>
-    <h1 class="name">Interested</h1>
+  {% set f = status_filter | default("interested") %}
+  {% set tabs = [("interested", "Interested"), ("review_later", "Review later"), ("pass", "Pass"), ("all", "All")] %}
+  {% set rows = athletes if f == "all" else (athletes | selectattr("status", "equalto", f) | list) %}
+
+  <div class="flex items-end justify-between gap-6">
+    <div>
+      <h1 class="text-[32px] font-semibold leading-tight tracking-[-0.03em]">Recruiting tracker</h1>
+      <p class="mt-1 text-[15px] text-muted">{{ athletes|length }} recruits · decisions are saved from Recruit review</p>
+    </div>
   </div>
 
-  {% if athletes %}
-    <div class="tracks">
-      {% for athlete in athletes %}
-        {% set status = athlete.status.value %}
-        <article class="track">
-          <div class="track-top">
-            <h2 class="name">{{ athlete.first_name }} {{ athlete.last_name }}</h2>
-            <span class="badge badge-{{ status }}">{{ status_labels[status] }}</span>
-          </div>
-          <p class="pos">
-            {{ positions.get(athlete.primary_position, athlete.primary_position) }}<i>/</i>Class of {{ athlete.graduation_year }}
-          </p>
-          <p class="club"><b>{{ athlete.club_team }}</b> · {{ athlete.location or "Location not listed" }}</p>
-          <div class="field">{% if athlete.notes %}{{ athlete.notes }}{% else %}No coach notes yet.{% endif %}</div>
-          <div class="meta">
-            <div>
-              <p class="label">Engagement</p>
-              <p>Not tracked yet</p>
-            </div>
-            <div>
-              <p class="label">Next Action</p>
-              <p>No action set</p>
-            </div>
-          </div>
-        </article>
+  <div id="tracker" class="mt-8">
+    <nav class="inline-flex gap-1 rounded-xl border border-line bg-white/[0.03] p-1" aria-label="Filter by status">
+      {% for key, label in tabs %}
+        {% set count = athletes|length if key == "all" else (athletes | selectattr("status", "equalto", key) | list | length) %}
+        <a href="/tracker?status={{ key }}" hx-get="/tracker?status={{ key }}" hx-target="#tracker" hx-select="#tracker" hx-swap="outerHTML" hx-push-url="true"
+           class="flex h-8 items-center gap-2 rounded-lg px-3 text-sm font-medium {% if key == f %}bg-raised text-chalk shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]{% else %}text-muted hover:text-chalk{% endif %}"
+           {% if key == f %}aria-current="page"{% endif %}>
+          {{ label }}<span class="text-xs tabular-nums {% if key == f %}text-lime{% else %}text-muted/70{% endif %}">{{ count }}</span>
+        </a>
       {% endfor %}
-    </div>
-  {% else %}
-    <div class="empty">
-      <h2 class="name">No interested athletes yet</h2>
-      <p>Mark a recruit as Interested and they will land here. Review Later and Pass stay off this list.</p>
-      <a href="/">Go to Recruit Review</a>
-    </div>
-  {% endif %}
+    </nav>
+
+    {% if rows %}
+      <div class="mt-5 overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+        <table class="w-full border-collapse text-left text-sm">
+          <thead>
+            <tr class="border-b border-line">
+              {% for h in ["Athlete", "Position", "Club", "Location", "Class", "GPA", "Status"] %}
+                <th scope="col" class="h-11 px-5 text-xs font-medium text-muted {% if h in ['Class', 'GPA'] %}w-[96px]{% endif %} {% if h == 'Status' %}w-[160px]{% endif %}">{{ h }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for athlete in rows %}
+              {% set status = athlete.status.value if athlete.status.value is defined else athlete.status %}
+              <tr class="h-16 border-t border-line first:border-t-0 hover:bg-white/[0.025]">
+                <td class="px-5">
+                  <div class="flex items-center gap-3">
+                    <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-line bg-raised text-xs font-medium text-chalk-dim">{{ athlete.first_name[0] }}{{ athlete.last_name[0] }}</span>
+                    <span class="text-[15px] font-medium tracking-[-0.01em]">{{ athlete.first_name }} {{ athlete.last_name }}</span>
+                  </div>
+                </td>
+                <td class="px-5">
+                  <span class="mr-2 inline-flex h-6 items-center rounded-md bg-white/[0.06] px-1.5 text-xs font-medium text-lime">{{ athlete.primary_position }}</span><span class="text-chalk-dim">{{ positions.get(athlete.primary_position, athlete.primary_position) }}</span>
+                </td>
+                <td class="px-5 text-chalk">{{ athlete.club_team }}</td>
+                <td class="px-5 text-muted">{{ athlete.location or "—" }}</td>
+                <td class="px-5 font-medium tabular-nums">{{ athlete.graduation_year }}</td>
+                <td class="px-5 font-medium tabular-nums {% if athlete.gpa is none %}text-muted{% endif %}">{{ "%.1f"|format(athlete.gpa) if athlete.gpa is not none else "—" }}</td>
+                <td class="px-5">{{ status_badge(status) }}</td>
+              </tr>
+              {#- PRD tracker dimensions. Copy stays the placeholder until #43 confirms a value. -#}
+              <tr class="border-t-0">
+                <td colspan="7" class="px-5 pb-4 pt-0">
+                  <div class="flex flex-wrap gap-x-8 gap-y-1 text-sm">
+                    <p class="text-muted"><span class="tr-label mr-2">Engagement</span>Not tracked yet</p>
+                    <p class="text-muted"><span class="tr-label mr-2">Next action</span>No action set</p>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      {% set f_label = (tabs | selectattr(0, "equalto", f) | first)[1] %}
+      <div class="mt-5 flex flex-col items-center rounded-2xl border border-dashed border-line-strong px-6 py-16 text-center">
+        <p class="text-xl font-semibold tracking-[-0.02em]">No “{{ f_label }}” recruits yet</p>
+        <p class="mt-2 max-w-md text-[15px] text-muted">Make a decision in Recruit review and athletes will show up here.</p>
+        <a href="/" class="mt-6 inline-flex h-10 items-center rounded-[10px] bg-lime px-4 text-sm font-semibold text-lime-ink shadow-btn">Go to Recruit review</a>
+      </div>
+    {% endif %}
+  </div>
 {% endblock %}

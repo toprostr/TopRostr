@@ -1,0 +1,15 @@
+{#- Status pill for RecruitingStatus values (app/schemas/athlete.py): unreviewed | interested | review_later | pass.
+    Labels come from the existing `status_labels` Jinja global (app/athletes.py STATUS_LABELS). -#}
+{% macro status_badge(status, size="sm") -%}
+  {%- set styles = {
+    "unreviewed": "bg-white/[0.06] text-chalk-dim ring-white/10",
+    "interested": "bg-lime/10 text-lime ring-lime/25",
+    "review_later": "bg-gold/10 text-gold ring-gold/25",
+    "pass": "bg-blaze/10 text-blaze ring-blaze/25",
+  } -%}
+  {%- set dots = {"unreviewed": "bg-muted", "interested": "bg-lime", "review_later": "bg-gold", "pass": "bg-blaze"} -%}
+  {%- set sizes = {"sm": "h-6 px-2.5 text-xs", "md": "h-7 px-3 text-[13px]"} -%}
+  <span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full font-medium ring-1 ring-inset {{ sizes[size] }} {{ styles.get(status, styles['unreviewed']) }}">
+    <span class="h-1.5 w-1.5 rounded-full {{ dots.get(status, 'bg-muted') }}"></span>{{ status_labels.get(status, status) }}
+  </span>
+{%- endmacro %}
