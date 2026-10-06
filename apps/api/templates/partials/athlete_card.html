@@ -1,85 +1,77 @@
-{% set avatar_colors = ['bg-emerald-800', 'bg-sky-800', 'bg-amber-700', 'bg-rose-800', 'bg-indigo-800', 'bg-teal-800', 'bg-orange-800', 'bg-cyan-800'] %}
 {% set status = athlete.status.value %}
-<article
-  id="athlete-{{ athlete.id }}"
-  class="flex flex-col rounded-3xl border border-black/5 bg-card p-5 shadow-[0_12px_40px_rgba(20,40,28,0.08)] {% if just_saved %}ring-2 ring-lime{% endif %}"
->
-  <div class="flex items-start gap-4">
-    <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-lg font-semibold text-white {{ avatar_colors[athlete.id % 8] }}">
-      {{ athlete.first_name[0] }}{{ athlete.last_name[0] }}
-    </div>
-    <div class="min-w-0 flex-1">
-      <div class="flex items-start justify-between gap-3">
-        <h2 class="font-display text-2xl leading-tight">{{ athlete.first_name }} {{ athlete.last_name }}</h2>
-        <span class="shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold
-          {% if status == 'interested' %}bg-emerald-100 text-emerald-800
-          {% elif status == 'review_later' %}bg-amber-100 text-amber-900
-          {% elif status == 'pass' %}bg-rose-100 text-rose-800
-          {% else %}bg-stone-200 text-stone-700{% endif %}">
-          {{ status_labels[status] }}
-        </span>
-      </div>
-      <p class="mt-1 text-sm text-ink/70">
-        <span class="mr-1 inline-flex rounded-full bg-ink px-2 py-0.5 text-xs font-semibold tracking-wide text-lime">{{ athlete.primary_position }}</span>
-        {{ positions.get(athlete.primary_position, athlete.primary_position) }}
-        · Class of {{ athlete.graduation_year }}
-        {% if athlete.gpa is not none %}· GPA {{ "%.1f"|format(athlete.gpa) }}{% endif %}
-      </p>
-    </div>
-  </div>
-
-  <p class="mt-4 text-sm font-medium">{{ athlete.club_team }}</p>
-  <p class="text-sm text-ink/60">{{ athlete.location or "Location not listed" }}</p>
-  <p class="mt-3 min-h-12 text-sm leading-relaxed text-ink/80">
-    {% if athlete.notes %}{{ athlete.notes }}{% else %}No coach notes yet.{% endif %}
-  </p>
-
-  <div class="mt-4" data-film>
-    {% set embed_url = youtube_embed_url(athlete.highlight_reel_url) %}
-    {% if embed_url %}
-      <button
-        type="button"
-        class="inline-flex items-center rounded-full border border-pitch/20 bg-pitch/10 px-3 py-1.5 text-sm font-semibold text-pitch hover:bg-pitch/15"
-        aria-expanded="false"
-        onclick="toggleFilm(this)"
-      >Watch film</button>
-      <div class="mt-3 hidden" data-film-panel hidden>
-        <div class="overflow-hidden rounded-2xl bg-black">
+{% set embed_url = youtube_embed_url(athlete.highlight_reel_url) %}
+<article id="athlete-{{ athlete.id }}" class="recruit{% if just_saved %} is-saved{% endif %}">
+  <div class="hero">
+    <div class="reel{% if embed_url %}{% else %} is-empty{% endif %}" data-film>
+      <svg class="pitch" viewBox="0 0 720 405" preserveAspectRatio="none" fill="none" stroke="#FFFFFF" stroke-opacity=".07" stroke-width="2" aria-hidden="true">
+        <line x1="360" y1="0" x2="360" y2="405"></line>
+        <circle cx="360" cy="202" r="92"></circle>
+        <rect x="-2" y="102" width="110" height="200"></rect>
+        <rect x="612" y="102" width="110" height="200"></rect>
+      </svg>
+      {% if embed_url %}
+        <button type="button" class="poster-btn" onclick="toggleFilm(this)" aria-expanded="false">
+          <span class="tag-row"><span class="tag">Highlight reel</span></span>
+          <span class="play" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#1F2226"></path></svg>
+          </span>
+          <span class="film-label">Watch film</span>
+        </button>
+        <div class="reel-frame" data-film-panel hidden>
           <iframe
-            class="aspect-video w-full"
             title="Highlight film for {{ athlete.first_name }} {{ athlete.last_name }}"
             data-src="{{ embed_url }}"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen
             referrerpolicy="strict-origin-when-cross-origin"
           ></iframe>
+          <button type="button" class="hide-film" onclick="toggleFilm(this)">Hide film</button>
         </div>
-      </div>
-    {% else %}
-      <span class="inline-flex items-center rounded-full bg-stone-200 px-3 py-1.5 text-sm font-medium text-stone-500">Film not available</span>
+      {% else %}
+        <span class="tag-row"><span class="tag">Highlight reel</span></span>
+        <span class="reel-missing">Film not available</span>
+      {% endif %}
+    </div>
+
+    <div class="id">
+      <span class="badge badge-{{ status }}">{{ status_labels[status] }}</span>
+      <h2 class="name">{{ athlete.first_name }} {{ athlete.last_name }}</h2>
+      <p class="pos">
+        {{ positions.get(athlete.primary_position, athlete.primary_position) }}<i>/</i>Class of {{ athlete.graduation_year }}
+      </p>
+      <p class="club"><b>{{ athlete.club_team }}</b> · {{ athlete.location or "Location not listed" }}</p>
+      {% if athlete.gpa is not none %}
+        <p class="gpa">{{ "%.1f"|format(athlete.gpa) }}<span>GPA</span></p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="label">Coach notes</div>
+    <div class="field">{% if athlete.notes %}{{ athlete.notes }}{% else %}No coach notes yet.{% endif %}</div>
+    {% if just_saved %}
+      <p class="saved">Saved · {{ status_labels[status] }}{% if status == 'interested' %} · now in Recruiting Tracker{% endif %}</p>
     {% endif %}
   </div>
 
-  {% if just_saved %}
-    <p class="mt-4 text-sm font-semibold text-pitch">Saved · {{ status_labels[status] }}{% if status == 'interested' %} · now in Recruiting Tracker{% endif %}</p>
-  {% endif %}
-
-  <div class="mt-4 grid grid-cols-3 gap-2">
-    {% for value, label in [('interested', 'Interested'), ('review_later', 'Review Later'), ('pass', 'Pass')] %}
+  <div class="decide">
+    {% for value, label, kind in [('pass', 'Pass', 'pass'), ('review_later', 'Review Later', 'later'), ('interested', 'Interested', 'yes')] %}
       <form
         hx-post="/athletes/{{ athlete.id }}/decision"
         hx-target="#athlete-{{ athlete.id }}"
         hx-swap="outerHTML"
       >
         <input type="hidden" name="status" value="{{ value }}" />
-        <button
-          type="submit"
-          class="w-full rounded-xl px-2 py-2 text-sm font-semibold
-            {% if status == value and value == 'interested' %}bg-pitch text-white
-            {% elif status == value and value == 'review_later' %}bg-amber-500 text-ink
-            {% elif status == value and value == 'pass' %}bg-rose-800 text-white
-            {% else %}border border-stone-300 bg-white text-ink hover:border-ink{% endif %}"
-        >{{ label }}</button>
+        <button type="submit" class="btn {{ kind }}{% if status == value %} is-on{% endif %}">
+          {% if kind == 'pass' %}
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+          {% elif kind == 'later' %}
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+          {% else %}
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"></path></svg>
+          {% endif %}
+          {{ label }}
+        </button>
       </form>
     {% endfor %}
   </div>

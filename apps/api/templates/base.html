@@ -7,77 +7,43 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&family=Outfit:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              ink: "#14281c",
-              pitch: "#1f7a4d",
-              lime: "#e4f57a",
-              paper: "#f3f1ea",
-              card: "#fffcf7",
-            },
-            fontFamily: {
-              display: ["Fraunces", "Georgia", "serif"],
-              sans: ["Outfit", "ui-sans-serif", "system-ui"],
-            },
-          },
-        },
-      };
-    </script>
+    <link rel="stylesheet" href="/static/app.css" />
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <script>
       function toggleFilm(button) {
         const root = button.closest("[data-film]");
         const panel = root.querySelector("[data-film-panel]");
         const frame = panel.querySelector("iframe");
+        const play = root.querySelector(".poster-btn");
         const willOpen = panel.hasAttribute("hidden");
         if (willOpen) {
           if (!frame.getAttribute("src")) {
             frame.src = frame.dataset.src;
           }
           panel.hidden = false;
-          panel.classList.remove("hidden");
-          button.setAttribute("aria-expanded", "true");
-          button.textContent = "Hide film";
+          root.classList.add("is-open");
+          if (play) play.setAttribute("aria-expanded", "true");
           return;
         }
         panel.hidden = true;
-        panel.classList.add("hidden");
         frame.removeAttribute("src");
-        button.setAttribute("aria-expanded", "false");
-        button.textContent = "Watch film";
+        root.classList.remove("is-open");
+        if (play) play.setAttribute("aria-expanded", "false");
       }
     </script>
-    <style>
-      .htmx-request button { opacity: 0.55; }
-    </style>
   </head>
-  <body class="min-h-screen bg-paper font-sans text-ink">
-    <header class="bg-ink text-white">
-      <div class="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <a href="/" class="font-display text-3xl tracking-tight text-lime">TopRostr</a>
-          <p class="text-sm text-white/70">College soccer recruiting desk</p>
-        </div>
-        <nav class="flex gap-2 rounded-full bg-white/10 p-1">
-          <a
-            href="/"
-            class="rounded-full px-4 py-2 text-sm font-semibold {% if active == 'review' %}bg-lime text-ink{% else %}text-white/80 hover:text-white{% endif %}"
-          >Recruit Review</a>
-          <a
-            href="/tracker"
-            class="rounded-full px-4 py-2 text-sm font-semibold {% if active == 'tracker' %}bg-lime text-ink{% else %}text-white/80 hover:text-white{% endif %}"
-          >Recruiting Tracker</a>
-        </nav>
-      </div>
+  <body>
+    <header class="nav">
+      <a class="logo" href="/"><span class="mark">TR</span>TopRostr</a>
+      <nav class="links">
+        <a href="/" class="{% if active == 'review' %}on{% endif %}">Recruit Review</a>
+        <a href="/tracker" class="{% if active == 'tracker' %}on{% endif %}">Tracker</a>
+      </nav>
     </header>
-    <main class="mx-auto max-w-6xl px-5 py-8">
+    <main class="page">
       {% block content %}{% endblock %}
     </main>
   </body>

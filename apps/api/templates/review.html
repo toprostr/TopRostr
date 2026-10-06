@@ -1,24 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Recruit Review · TopRostr{% endblock %}
 {% block content %}
-  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
-    <div>
-      <p class="text-xs font-semibold uppercase tracking-[0.18em] text-pitch">Recruit Review</p>
-      <h1 class="font-display text-4xl tracking-tight">Today's board</h1>
-    </div>
-    <p class="text-sm text-ink/60">{{ athletes|length }} fictional demo recruits · your decision is saved immediately</p>
-  </div>
-
   {% if athletes %}
-    <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+    <div class="board">
       {% for athlete in athletes %}
         {% include "partials/athlete_card.html" %}
       {% endfor %}
     </div>
   {% else %}
-    <div class="rounded-3xl border border-dashed border-ink/20 bg-card px-6 py-16 text-center">
-      <h2 class="font-display text-3xl">The board is empty</h2>
-      <p class="mx-auto mt-2 max-w-md text-ink/70">Seed the demo roster from <code>apps/api</code> with <code>uv run python -m app.seed</code>.</p>
+    <div class="empty">
+      <h2 class="name">The board is empty</h2>
+      <p>Seed the demo roster from <code>apps/api</code> with <code>uv run python -m app.seed</code>.</p>
     </div>
   {% endif %}
 {% endblock %}
