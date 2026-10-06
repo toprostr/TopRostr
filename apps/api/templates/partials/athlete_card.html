@@ -34,14 +34,27 @@
     {% if athlete.notes %}{{ athlete.notes }}{% else %}No coach notes yet.{% endif %}
   </p>
 
-  <div class="mt-4">
-    {% if athlete.highlight_reel_url %}
-      <a
-        href="{{ athlete.highlight_reel_url }}"
-        target="_blank"
-        rel="noopener"
+  <div class="mt-4" data-film>
+    {% set embed_url = youtube_embed_url(athlete.highlight_reel_url) %}
+    {% if embed_url %}
+      <button
+        type="button"
         class="inline-flex items-center rounded-full border border-pitch/20 bg-pitch/10 px-3 py-1.5 text-sm font-semibold text-pitch hover:bg-pitch/15"
-      >Watch film</a>
+        aria-expanded="false"
+        onclick="toggleFilm(this)"
+      >Watch film</button>
+      <div class="mt-3 hidden" data-film-panel hidden>
+        <div class="overflow-hidden rounded-2xl bg-black">
+          <iframe
+            class="aspect-video w-full"
+            title="Highlight film for {{ athlete.first_name }} {{ athlete.last_name }}"
+            data-src="{{ embed_url }}"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            referrerpolicy="strict-origin-when-cross-origin"
+          ></iframe>
+        </div>
+      </div>
     {% else %}
       <span class="inline-flex items-center rounded-full bg-stone-200 px-3 py-1.5 text-sm font-medium text-stone-500">Film not available</span>
     {% endif %}

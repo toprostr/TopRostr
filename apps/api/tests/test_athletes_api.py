@@ -88,6 +88,11 @@ def test_seeded_athletes_load(
     assert page.status_code == 200
     assert "Maya Ellison" in page.text
     assert "Recruit Review" in page.text
+    assert "https://www.youtube-nocookie.com/embed/2zmXjwXyNQA" in page.text
+    assert all(
+        athlete["highlight_reel_url"] == "https://www.youtube.com/watch?v=2zmXjwXyNQA"
+        for athlete in athletes
+    )
 
     tracker_page = client.get("/tracker")
     assert tracker_page.status_code == 200

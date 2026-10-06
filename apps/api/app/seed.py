@@ -17,6 +17,9 @@ from app.athletes import delete_athletes_by_email
 from app.db import SessionLocal
 from app.models.athlete import Athlete
 
+# One shared demo reel. Stored as a watch URL; the page converts it to an embed.
+DEMO_FILM_URL = "https://www.youtube.com/watch?v=2zmXjwXyNQA"
+
 # Fictional academy players. None of these are real people.
 DEMO_ATHLETES: list[dict[str, object]] = [
     {
@@ -28,7 +31,7 @@ DEMO_ATHLETES: list[dict[str, object]] = [
         "club_team": "Harbor City FC",
         "location": "San Diego, CA",
         "gpa": 3.8,
-        "highlight_reel_url": "https://example.com/film/maya-ellison",
+        "film_url": DEMO_FILM_URL,
         "notes": "Calm in possession. Want a second look at how she plays out of the back.",
         "status": "unreviewed",
     },
@@ -41,7 +44,7 @@ DEMO_ATHLETES: list[dict[str, object]] = [
         "club_team": "Northline Academy",
         "location": "Minneapolis, MN",
         "gpa": 3.4,
-        "highlight_reel_url": "https://example.com/film/jonah-hale",
+        "film_url": DEMO_FILM_URL,
         "notes": None,
         "status": "unreviewed",
     },
@@ -54,7 +57,7 @@ DEMO_ATHLETES: list[dict[str, object]] = [
         "club_team": "Lakeshore United",
         "location": "Chicago, IL",
         "gpa": 3.9,
-        "highlight_reel_url": "https://example.com/film/priya-shah",
+        "film_url": DEMO_FILM_URL,
         "notes": "Overlaps well in the attack. Ask about her spring league schedule.",
         "status": "unreviewed",
     },
@@ -67,7 +70,7 @@ DEMO_ATHLETES: list[dict[str, object]] = [
         "club_team": "Rio Vista SC",
         "location": "Austin, TX",
         "gpa": 3.2,
-        "highlight_reel_url": "https://example.com/film/luis-ortega",
+        "film_url": DEMO_FILM_URL,
         "notes": None,
         "status": "unreviewed",
     },
@@ -80,8 +83,8 @@ DEMO_ATHLETES: list[dict[str, object]] = [
         "club_team": "Cedar Ridge Academy",
         "location": "Portland, OR",
         "gpa": 3.7,
-        "highlight_reel_url": "https://example.com/film/elena-voss",
-        "notes": "Connects lines well. Film is a placeholder reel for the demo.",
+        "film_url": DEMO_FILM_URL,
+        "notes": "Connects lines well.",
         "status": "unreviewed",
     },
     {
@@ -93,7 +96,7 @@ DEMO_ATHLETES: list[dict[str, object]] = [
         "club_team": "Midlands United",
         "location": "Columbus, OH",
         "gpa": None,
-        "highlight_reel_url": None,
+        "film_url": DEMO_FILM_URL,
         "notes": None,
         "status": "unreviewed",
     },
@@ -106,7 +109,7 @@ DEMO_ATHLETES: list[dict[str, object]] = [
         "club_team": "Tidewater FC",
         "location": "Virginia Beach, VA",
         "gpa": 3.5,
-        "highlight_reel_url": "https://example.com/film/quinn-harper",
+        "film_url": DEMO_FILM_URL,
         "notes": None,
         "status": "unreviewed",
     },
@@ -119,11 +122,17 @@ DEMO_ATHLETES: list[dict[str, object]] = [
         "club_team": "Redwood Athletic",
         "location": "San Jose, CA",
         "gpa": 3.1,
-        "highlight_reel_url": None,
-        "notes": "Holds the ball up and finishes early. No film link on file yet.",
+        "film_url": DEMO_FILM_URL,
+        "notes": "Holds the ball up and finishes early.",
         "status": "unreviewed",
     },
 ]
+
+
+def _athlete_from_record(record: dict[str, object]) -> Athlete:
+    data = dict(record)
+    data["highlight_reel_url"] = data.pop("film_url")
+    return Athlete(**data)
 
 
 def seed_demo_athletes(db: Session, *, reset: bool = False) -> int:
@@ -141,7 +150,7 @@ def seed_demo_athletes(db: Session, *, reset: bool = False) -> int:
         existing = db.scalar(select(Athlete.id).where(Athlete.email == record["email"]))
         if existing is not None:
             continue
-        db.add(Athlete(**record))
+        db.add(_athlete_from_record(record))
         inserted += 1
     db.commit()
     return inserted

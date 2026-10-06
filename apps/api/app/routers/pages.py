@@ -16,6 +16,7 @@ from app.athletes import (
     set_recruiting_status,
 )
 from app.db import get_db
+from app.film import youtube_embed_url
 from app.models.athlete import Athlete
 from app.schemas.athlete import AthleteResponse, RecruitingDecision
 
@@ -23,6 +24,7 @@ TEMPLATES_DIR = Path(__file__).resolve().parents[2] / "templates"
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 templates.env.globals["positions"] = POSITION_LABELS
 templates.env.globals["status_labels"] = STATUS_LABELS
+templates.env.globals["youtube_embed_url"] = youtube_embed_url
 
 router = APIRouter(tags=["pages"])
 DbSession = Annotated[Session, Depends(get_db)]

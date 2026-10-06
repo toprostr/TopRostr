@@ -31,6 +31,29 @@
       };
     </script>
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script>
+      function toggleFilm(button) {
+        const root = button.closest("[data-film]");
+        const panel = root.querySelector("[data-film-panel]");
+        const frame = panel.querySelector("iframe");
+        const willOpen = panel.hasAttribute("hidden");
+        if (willOpen) {
+          if (!frame.getAttribute("src")) {
+            frame.src = frame.dataset.src;
+          }
+          panel.hidden = false;
+          panel.classList.remove("hidden");
+          button.setAttribute("aria-expanded", "true");
+          button.textContent = "Hide film";
+          return;
+        }
+        panel.hidden = true;
+        panel.classList.add("hidden");
+        frame.removeAttribute("src");
+        button.setAttribute("aria-expanded", "false");
+        button.textContent = "Watch film";
+      }
+    </script>
     <style>
       .htmx-request button { opacity: 0.55; }
     </style>
