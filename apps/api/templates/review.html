@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Recruit Review · TopRostr{% endblock %}
+{% block content %}
+  {% if athletes %}
+    <div class="board">
+      {% for athlete in athletes %}
+        {% include "partials/athlete_card.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty">
+      <h2 class="name">The board is empty</h2>
+      <p>Seed the demo roster from <code>apps/api</code> with <code>uv run python -m app.seed</code>.</p>
+    </div>
+  {% endif %}
+{% endblock %}

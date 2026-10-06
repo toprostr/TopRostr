@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Recruiting Tracker · TopRostr{% endblock %}
+{% block content %}
+  <div class="page-head">
+    <p class="label">Tracker</p>
+    <h1 class="name">Interested</h1>
+  </div>
+
+  {% if athletes %}
+    <div class="tracks">
+      {% for athlete in athletes %}
+        {% set status = athlete.status.value %}
+        <article class="track">
+          <div class="track-top">
+            <h2 class="name">{{ athlete.first_name }} {{ athlete.last_name }}</h2>
+            <span class="badge badge-{{ status }}">{{ status_labels[status] }}</span>
+          </div>
+          <p class="pos">
+            {{ positions.get(athlete.primary_position, athlete.primary_position) }}<i>/</i>Class of {{ athlete.graduation_year }}
+          </p>
+          <p class="club"><b>{{ athlete.club_team }}</b> · {{ athlete.location or "Location not listed" }}</p>
+          <div class="field">{% if athlete.notes %}{{ athlete.notes }}{% else %}No coach notes yet.{% endif %}</div>
+          <div class="meta">
+            <div>
+              <p class="label">Engagement</p>
+              <p>Not tracked yet</p>
+            </div>
+            <div>
+              <p class="label">Next Action</p>
+              <p>No action set</p>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty">
+      <h2 class="name">No interested athletes yet</h2>
+      <p>Mark a recruit as Interested and they will land here. Review Later and Pass stay off this list.</p>
+      <a href="/">Go to Recruit Review</a>
+    </div>
+  {% endif %}
+{% endblock %}
