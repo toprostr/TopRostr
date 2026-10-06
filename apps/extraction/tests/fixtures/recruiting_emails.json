@@ -1,0 +1,189 @@
+[
+  {
+    "id": "api_design_example",
+    "covers": "API design example: prose facts, sender used only because the athlete wrote in the first person, film and academics absent",
+    "input": {
+      "subject": "2028 GK - John Smith",
+      "sender": "john@example.com",
+      "body": "Coach, my name is John Smith. I am a 2028 goalkeeper playing for XYZ Academy..."
+    },
+    "expected": {
+      "name": "John Smith",
+      "email": "john@example.com",
+      "graduation_year": 2028,
+      "position": "goalkeeper",
+      "club": "XYZ Academy",
+      "film_url": null,
+      "academic_info": null
+    }
+  },
+  {
+    "id": "complete_labeled",
+    "covers": "complete email: every field is stated on its own line, and the sender is not the athlete",
+    "input": {
+      "subject": "Highlight film",
+      "sender": "parent@example.com",
+      "body": "Name: Sofia Alvarez\nEmail: sofia.alvarez@example.com\nGraduation Year: 2027\nPosition: CM\nClub: Lakeside United\nAcademics: 3.9 GPA, 1400 SAT\nFilm: https://www.hudl.com/video/sofia"
+    },
+    "expected": {
+      "name": "Sofia Alvarez",
+      "email": "sofia.alvarez@example.com",
+      "graduation_year": 2027,
+      "position": "CM",
+      "club": "Lakeside United",
+      "film_url": ["https://www.hudl.com/video/sofia"],
+      "academic_info": "3.9 GPA, 1400 SAT"
+    }
+  },
+  {
+    "id": "missing_fields",
+    "covers": "missing fields stay null",
+    "input": {
+      "subject": "Hello coach",
+      "sender": "sam@example.com",
+      "body": "My name is Sam Okonkwo. I play for Harbor City FC."
+    },
+    "expected": {
+      "name": "Sam Okonkwo",
+      "email": "sam@example.com",
+      "graduation_year": null,
+      "position": null,
+      "club": "Harbor City FC",
+      "film_url": null,
+      "academic_info": null
+    }
+  },
+  {
+    "id": "messy_formatting",
+    "covers": "messy formatting: irregular labels, spacing, and case",
+    "input": {
+      "subject": "film??",
+      "sender": "forwarded@example.com",
+      "body": "   NaMe :   Jordan   Lee\ne-mail :   Jordan.Lee@Example.com\ngrad year:   2026\n\nPOSITION : CB\n\nclub  :   Northside FC\n\nacademics: 3.7 GPA\n\nfilm : https://www.hudl.com/video/jordan   ,   https://youtu.be/abc123"
+    },
+    "expected": {
+      "name": "Jordan Lee",
+      "email": "Jordan.Lee@example.com",
+      "graduation_year": 2026,
+      "position": "CB",
+      "club": "Northside FC",
+      "film_url": [
+        "https://www.hudl.com/video/jordan",
+        "https://youtu.be/abc123"
+      ],
+      "academic_info": "3.7 GPA"
+    }
+  },
+  {
+    "id": "multiple_film_links",
+    "covers": "several film links",
+    "input": {
+      "subject": "Films",
+      "sender": "riley@example.com",
+      "body": "My name is Riley Chen. I am a 2025 winger playing for Metro SC. Highlights: https://www.hudl.com/video/one https://youtu.be/two https://vimeo.com/999"
+    },
+    "expected": {
+      "name": "Riley Chen",
+      "email": "riley@example.com",
+      "graduation_year": 2025,
+      "position": "winger",
+      "club": "Metro SC",
+      "film_url": [
+        "https://www.hudl.com/video/one",
+        "https://youtu.be/two",
+        "https://vimeo.com/999"
+      ],
+      "academic_info": null
+    }
+  },
+  {
+    "id": "no_athlete_info",
+    "covers": "no athlete info: a schedule note with a non-film link",
+    "input": {
+      "subject": "Practice moved to Thursday",
+      "sender": "office@riverside.edu",
+      "body": "Reminder: practice is at 4pm on the upper field. See https://riverside.edu/schedule for details."
+    },
+    "expected": {
+      "name": null,
+      "email": null,
+      "graduation_year": null,
+      "position": null,
+      "club": null,
+      "film_url": null,
+      "academic_info": null
+    }
+  },
+  {
+    "id": "malformed_short",
+    "covers": "malformed, very short email",
+    "input": {
+      "subject": "hi",
+      "sender": "nope",
+      "body": "hey"
+    },
+    "expected": {
+      "name": null,
+      "email": null,
+      "graduation_year": null,
+      "position": null,
+      "club": null,
+      "film_url": null,
+      "academic_info": null
+    }
+  },
+  {
+    "id": "invalid_values",
+    "covers": "malformed values: a bad email, an impossible year, and a film field that is not a link become null",
+    "input": {
+      "subject": "Recruit",
+      "sender": "coach@college.edu",
+      "body": "Name: Priya Shah\nEmail: priya-at-example\nGraduation Year: 1899\nPosition: CM\nClub: Valley SC\nFilm: not-a-link"
+    },
+    "expected": {
+      "name": "Priya Shah",
+      "email": null,
+      "graduation_year": null,
+      "position": "CM",
+      "club": "Valley SC",
+      "film_url": null,
+      "academic_info": null
+    }
+  },
+  {
+    "id": "subject_line_only",
+    "covers": "year, position, and name stated only in the subject; sender is not treated as the athlete email",
+    "input": {
+      "subject": "2029 ST - Chris Nguyen",
+      "sender": "chris@example.com",
+      "body": "Coach, thank you for your time at camp."
+    },
+    "expected": {
+      "name": "Chris Nguyen",
+      "email": null,
+      "graduation_year": 2029,
+      "position": "ST",
+      "club": null,
+      "film_url": null,
+      "academic_info": null
+    }
+  },
+  {
+    "id": "ambiguous_do_not_guess",
+    "covers": "two email addresses and no labeled athlete facts: do not pick one",
+    "input": {
+      "subject": "Recommendation",
+      "sender": "coach@highschool.edu",
+      "body": "Please consider Alex Morgan (alex.morgan@example.com) and also contact me at coach@highschool.edu."
+    },
+    "expected": {
+      "name": null,
+      "email": null,
+      "graduation_year": null,
+      "position": null,
+      "club": null,
+      "film_url": null,
+      "academic_info": null
+    }
+  }
+]
