@@ -4,6 +4,9 @@ name: API CI
 on:
   pull_request:
     branches: [main, feature/poc-1.0]
+    paths:
+      - "apps/api/**"
+      - ".github/workflows/api-ci.yml"
 
 jobs:
   api-checks:
