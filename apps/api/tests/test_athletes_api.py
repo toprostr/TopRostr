@@ -8,7 +8,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from alembic import command
-from app.athletes import STATUS_LABELS
+from app.athletes import (
+    STATUS_LABELS,
+    AthleteNotFoundError,
+    save_confirmed_suggestions,
+)
 from app.db import Base, get_db
 from app.main import app
 from app.models.athlete import Athlete
@@ -280,6 +284,179 @@ def test_tracker_lists_all_athletes_and_filters_by_status(
 
     listed = {athlete["id"] for athlete in client.get("/api/v1/athletes").json()}
     assert {interested_id, later_id, passed_id} <= listed
+
+
+def test_review_empty_states(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    empty = client.get("/")
+    assert empty.status_code == 200
+    assert "No recruits yet" in empty.text
+
+    athlete_id = _add_athlete(session_factory)
+    decided = client.post(
+        f"/athletes/{athlete_id}/decision", data={"status": "pass", "notes": "Seen"}
+    )
+    assert decided.status_code == 200
+
+    cleared = client.get("/")
+    assert cleared.status_code == 200
+    assert "Queue clear" in cleared.text
+    assert "Open tracker" in cleared.text
+
+
+def test_html_routes_404_when_the_athlete_is_missing(client: TestClient) -> None:
+    assert (
+        client.post("/athletes/999/decision", data={"status": "pass"}).status_code
+        == 404
+    )
+    assert client.get("/athletes/999/card").status_code == 404
+    assert (
+        client.post(
+            "/athletes/999/suggestions", data={"notes": "Interested"}
+        ).status_code
+        == 404
+    )
+    assert (
+        client.post(
+            "/athletes/999/suggestions/confirm", data={"notes": "Interested"}
+        ).status_code
+        == 404
+    )
+
+
+def test_decision_notes_longer_than_the_column_are_not_saved(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    athlete_id = _add_athlete(session_factory, notes="Keep this")
+    response = client.post(
+        f"/athletes/{athlete_id}/decision",
+        data={"status": "interested", "notes": "x" * 2001},
+    )
+
+    assert "Added to your tracker" not in response.text
+    stored = client.get("/api/v1/athletes").json()[0]
+    assert stored["status"] == "unreviewed"
+    assert stored["notes"] == "Keep this"
+
+
+@pytest.mark.skip(
+    reason=(
+        "BUG: notes over 2000 characters on a Recruit Review decision return "
+        "HTTP 422 JSON. HTMX only swaps the card on success, so the coach sees "
+        "no message. Confirming suggestions handles the same limit with HTTP 200 "
+        "and an inline 'Nothing was saved.' message."
+    )
+)
+def test_overlong_decision_notes_are_explained_on_the_card(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    athlete_id = _add_athlete(session_factory, notes="Keep this")
+    response = client.post(
+        f"/athletes/{athlete_id}/decision",
+        data={"status": "interested", "notes": "x" * 2001},
+    )
+
+    assert response.status_code == 200
+    assert 'id="recruit-card"' in response.text
+    assert "2000 characters" in response.text
+    assert "Nothing was saved." in response.text
+
+
+@pytest.mark.skip(
+    reason=(
+        "BUG: Recruit Review labels the card 'Athlete {decisions made + 1} of N'. "
+        "After a later athlete already has a decision, the first unreviewed "
+        "athlete is shown as athlete 2 of 2."
+    )
+)
+def test_review_progress_matches_the_athlete_on_screen(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    _add_athlete(session_factory, email="first@example.com", first_name="First")
+    second_id = _add_athlete(
+        session_factory,
+        email="second@example.com",
+        first_name="Second",
+        last_name="Athlete",
+    )
+    marked = client.patch(
+        f"/api/v1/athletes/{second_id}/status", json={"status": "pass"}
+    )
+    assert marked.status_code == 200
+
+    page = client.get("/")
+    assert page.status_code == 200
+    assert "First Ellison" in page.text
+    assert "Second Athlete" not in page.text
+    assert ">1</span> of 2" in page.text
+
+
+@pytest.mark.skip(
+    reason=(
+        "BUG: athletes.highlight_reel_url is an unconstrained string, but "
+        "AthleteResponse requires an HttpUrl. One non-URL value raises "
+        "ValidationError and returns HTTP 500 from Recruit Review, the tracker, "
+        "and GET /api/v1/athletes."
+    )
+)
+def test_review_survives_a_non_url_film_link(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    _add_athlete(
+        session_factory,
+        email="bad-film@example.com",
+        highlight_reel_url="not a url",
+    )
+
+    review = client.get("/")
+    tracker = client.get("/tracker?status=all")
+    listing = client.get("/api/v1/athletes")
+
+    assert review.status_code == 200
+    assert "Maya Ellison" in review.text
+    assert tracker.status_code == 200
+    assert listing.status_code == 200
+
+
+def test_status_patch_does_not_erase_notes(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    athlete_id = _add_athlete(session_factory, notes="Keep this")
+    response = client.patch(
+        f"/api/v1/athletes/{athlete_id}/status", json={"status": "interested"}
+    )
+
+    assert response.status_code == 200
+    assert response.json()["notes"] == "Keep this"
+    assert response.json()["status"] == "interested"
+
+
+def test_confirming_without_a_note_leaves_the_stored_note(
+    session_factory: sessionmaker[Session],
+) -> None:
+    athlete_id = _add_athlete(session_factory, notes="Keep this")
+    with session_factory() as session:
+        saved = save_confirmed_suggestions(
+            session,
+            athlete_id,
+            notes=None,
+            interest="review_later",
+            engagement=None,
+            next_action=None,
+        )
+        assert saved.notes == "Keep this"
+        assert saved.status == "review_later"
+
+        with pytest.raises(AthleteNotFoundError):
+            save_confirmed_suggestions(
+                session,
+                999,
+                notes=None,
+                interest=None,
+                engagement=None,
+                next_action=None,
+            )
 
 
 def test_missing_athlete_returns_404(client: TestClient) -> None:

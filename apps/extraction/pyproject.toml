@@ -15,6 +15,7 @@ dependencies = [
 dev = [
     "pyright>=1.1.414",
     "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
     "ruff>=0.16.10",
 ]
 
@@ -28,9 +29,18 @@ packages = ["extraction"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+addopts = "--cov=extraction --cov-branch --cov-report=term-missing --cov-fail-under=80"
 markers = [
     "manual: calls the live OpenAI API; skipped unless OPENAI_API_KEY is set",
 ]
+
+[tool.coverage.run]
+branch = true
+source = ["extraction"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
 
 [tool.pyright]
 pythonVersion = "3.13"

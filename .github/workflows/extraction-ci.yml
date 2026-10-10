@@ -1,6 +1,11 @@
 name: Extraction CI
 
 on:
+  pull_request:
+    branches: [main, feature/poc-1.0]
+    paths:
+      - "apps/extraction/**"
+      - ".github/workflows/extraction-ci.yml"
   push:
     branches: [feature/poc-1.0]
     paths:
@@ -36,6 +41,6 @@ jobs:
         working-directory: apps/extraction
         run: uv run pyright
 
-      - name: Run tests
+      - name: Run tests with coverage
         working-directory: apps/extraction
         run: uv run pytest -v
