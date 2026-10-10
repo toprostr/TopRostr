@@ -58,8 +58,8 @@ export default function WorkspaceSidebar({ navigation }) {
           key={item.id}
           className={`flex flex-col items-center gap-1 border-l-2 px-1 py-3 text-center text-xs leading-tight lg:flex-row lg:gap-3 lg:px-4 lg:text-left lg:text-sm ${
             item.active
-              ? 'border-gold bg-off-white/5 text-off-white'
-              : 'border-transparent text-brand-gray'
+              ? 'border-gold bg-white text-[#1C1C1E]'
+              : 'border-transparent text-[#1C1C1E]'
           }`}
         >
           <SidebarIcon id={item.id} />

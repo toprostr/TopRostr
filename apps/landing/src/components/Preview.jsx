@@ -12,7 +12,7 @@ export default function Preview() {
     <section
       id="preview"
       aria-labelledby="preview-heading"
-      className="relative px-5 py-16 md:px-8 md:py-28 lg:px-16 lg:py-36"
+      className="relative bg-[#292B31] px-5 py-16 md:px-8 md:py-28 lg:px-16 lg:py-36"
     >
       <div className="mx-auto w-full max-w-[1280px]">
         <p className="flex items-center gap-3 font-heading text-xs font-medium tracking-[0.18em] text-brand-gray">
