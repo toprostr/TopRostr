@@ -19,21 +19,36 @@ it('renders the PRD headline, both founders, and sized portraits', () => {
     }),
   ).toBeInTheDocument()
 
-  expect(screen.getByRole('heading', { level: 3, name: 'Alejandro Suarez' })).toBeInTheDocument()
+  const alejandro = screen.getByRole('heading', { level: 3, name: 'Alejandro Suarez' })
+  expect(alejandro).toHaveTextContent('Alejandro Suarez')
+  expect(alejandro.textContent).toBe('Alejandro Suarez')
+  expect(alejandro).toHaveClass('uppercase')
   expect(screen.getByText(alejandroPlaying)).toBeInTheDocument()
   expect(screen.getByText(alejandroToday)).toBeInTheDocument()
 
-  expect(screen.getByRole('heading', { level: 3, name: 'Jason Wallack' })).toBeInTheDocument()
+  const jason = screen.getByRole('heading', { level: 3, name: 'Jason Wallack' })
+  expect(jason).toHaveTextContent('Jason Wallack')
+  expect(jason.textContent).toBe('Jason Wallack')
+  expect(jason).toHaveClass('uppercase')
   expect(screen.getByText(jasonPlaying)).toBeInTheDocument()
   expect(screen.getByText(jasonToday)).toBeInTheDocument()
+
+  const roles = screen.getAllByText('Co-Founder')
+  expect(roles).toHaveLength(2)
+  for (const role of roles) {
+    expect(role.textContent).toBe('Co-Founder')
+    expect(role).toHaveClass('uppercase')
+  }
+
+  expect(screen.queryByText('Founders')).not.toBeInTheDocument()
 
   expect(screen.getAllByText(/We've lived the recruiting process/)).toHaveLength(1)
 
   for (const name of ['Alejandro Suarez', 'Jason Wallack']) {
     const portrait = screen.getByRole('img', { name: `${name}, co-founder` })
 
-    expect(portrait).toHaveAttribute('width', '300')
-    expect(portrait).toHaveAttribute('height', '400')
+    expect(portrait).toHaveAttribute('width', '250')
+    expect(portrait).toHaveAttribute('height', '332')
     expect(portrait).toHaveAttribute('loading', 'lazy')
   }
 

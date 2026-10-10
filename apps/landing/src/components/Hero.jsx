@@ -29,25 +29,28 @@ export default function Hero() {
       />
 
       <div className="relative mx-auto w-full max-w-[1280px] px-5 pt-16 pb-24 md:px-8 md:pt-28 md:pb-28 lg:px-16 lg:pt-32 lg:pb-32">
-        <div className="max-w-full lg:max-w-[42rem]">
-          <span className="mb-6 block h-px w-12 bg-gold" aria-hidden="true" />
-          <p className="font-heading text-sm font-semibold tracking-[0.16em] text-gold">
+        <div className="max-w-full">
+          <p className="font-heading text-[15px] font-bold text-gold">
             TECHNOLOGY BUILT FOR THE SIDELINE.
           </p>
           <h1 className="mt-6 max-w-full font-heading text-[clamp(2.25rem,7.2vw,6.5rem)] font-bold leading-[0.92] tracking-tight text-balance text-off-white">
-            EVERY ADVANTAGE MATTERS.
+            EVERY ADVANTAGE
+            {/* Inline display matches the block class so the accessible name keeps its space in jsdom. */}
+            <span className="block" style={{ display: 'block' }}>
+              MATTERS.
+            </span>
           </h1>
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-off-white md:text-[1.375rem] md:leading-normal">
+          <p className="mt-8 max-w-[950px] text-lg leading-relaxed text-off-white md:text-[1.375rem] md:leading-normal">
             Meet TopRostr. An AI-powered recruiting workspace built by former college players to
             help coaches spend less time managing recruiting and more time building winning
             programs.
           </p>
           <div className="mt-10">
-            <CTAButton />
+            <CTAButton size="hero" />
           </div>
         </div>
 
-        <p className="absolute right-5 bottom-6 font-heading text-[13px] font-semibold tracking-[0.14em] text-off-white md:right-8 md:bottom-8 lg:right-16">
+        <p className="absolute right-5 bottom-6 font-heading text-[14px] font-bold text-off-white md:right-8 md:bottom-8 lg:right-16">
           01 — THE ADVANTAGE
         </p>
       </div>

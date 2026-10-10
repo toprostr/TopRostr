@@ -7,15 +7,22 @@ const CTA_NAME = 'Join the Rostr — opens coach questionnaire in a new tab'
 it('renders the PRD hero copy over a decorative full-bleed still', () => {
   const { container } = render(<Hero />)
 
-  expect(screen.getByText('TECHNOLOGY BUILT FOR THE SIDELINE.')).toBeInTheDocument()
+  const kicker = screen.getByText('TECHNOLOGY BUILT FOR THE SIDELINE.')
+  expect(kicker).toHaveClass('text-[15px]', 'font-bold')
+  expect(kicker.className).not.toMatch(/tracking-/)
   const heading = screen.getByRole('heading', { level: 1, name: 'EVERY ADVANTAGE MATTERS.' })
   expect(heading).toHaveClass('text-[clamp(2.25rem,7.2vw,6.5rem)]', 'max-w-full')
+  expect(heading.querySelector('span.block')).toHaveTextContent('MATTERS.')
   expect(
     screen.getByText(
       'Meet TopRostr. An AI-powered recruiting workspace built by former college players to help coaches spend less time managing recruiting and more time building winning programs.',
     ),
   ).toBeInTheDocument()
-  expect(screen.getByText('01 — THE ADVANTAGE')).toBeInTheDocument()
+  const index = screen.getByText('01 — THE ADVANTAGE')
+  expect(index).toHaveClass('text-[14px]', 'font-bold')
+  expect(index.className).not.toMatch(/tracking-/)
+  expect(container.querySelector('.max-w-\\[950px\\]')).toBeTruthy()
+  expect(container.querySelector('.h-px.w-12')).not.toBeInTheDocument()
 
   const picture = container.querySelector('picture')
   const sources = picture.querySelectorAll('source')

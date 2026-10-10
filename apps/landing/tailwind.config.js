@@ -10,12 +10,12 @@ export default {
         gold: '#E8B931',
       },
       fontFamily: {
-        // The landing PRD names Manrope (wordmark). It does not name a second
-        // text face, so headings, wordmark, and body all use Manrope.
-        heading: ['Manrope', 'sans-serif'],
-        wordmark: ['Manrope', 'sans-serif'],
-        body: ['Manrope', 'sans-serif'],
-        sans: ['Manrope', 'sans-serif'],
+        // Figma sets text and headings in Inter. The wordmark is the SVG lockup,
+        // not live type, so the wordmark token uses the same face.
+        heading: ['Inter', 'sans-serif'],
+        wordmark: ['Inter', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
       },
     },
   },
