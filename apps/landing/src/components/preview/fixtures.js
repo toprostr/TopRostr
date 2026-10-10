@@ -91,7 +91,7 @@ export const workspaceFixture = {
     ],
   },
   assistant: {
-    name: 'TopRostr AI',
+    name: 'RostrAI',
     message: 'RostrAI',
     detail: 'Alex is a 2027 defender from TopRostr FC. His highlight reel and transcript are ready to review. He is currently unreviewed.',
     summarySections: [

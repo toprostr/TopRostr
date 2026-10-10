@@ -6,13 +6,13 @@ export const workspaceConcepts = [
   { id: 'inbox', label: 'Inbox', assistant },
   {
     id: 'calendar', label: 'Calendar',
-    description: 'Illustrative weekly calendar showing a coach call, a match to watch Alex, and a suggested match for Chris that has not been added. AI suggests events; the coach confirms them.',
+    description: 'Illustrative full-week calendar with recruiting calls, campus visits, training camps, practices, and games, plus a suggested match for Chris that has not been added. AI suggests events; the coach confirms them.',
     assistant: {
       ...assistant,
-      message: 'Saturday you can see Alex live. Want me to add Chris’s match Sunday?',
+      message: 'Alex’s campus visit is Thursday, 9–11 am. I can draft an itinerary with a campus tour, staff meeting, and facilities visit.',
       detail: null,
-      suggestions: [{ label: 'Add', emphasis: true }, { label: 'Not now', emphasis: false }],
-      contextChip: '@This week', cue: null,
+      suggestions: [{ label: 'Draft itinerary', emphasis: true }],
+      contextChip: '@RostrAI', cue: null,
     },
   },
   {
@@ -27,7 +27,7 @@ export const workspaceConcepts = [
         { name: 'Jack Brown', initials: 'JB', detail: 'GK · 2027 · Slammers FC', gpa: '3.6' },
       ],
       suggestions: [{ label: 'Filter to 2027 recruits', emphasis: true }, { label: 'Dismiss', emphasis: false }],
-      contextChip: '@Rostr', cue: null,
+      contextChip: '@RostrAI', cue: null,
     },
   },
   {
@@ -37,7 +37,7 @@ export const workspaceConcepts = [
       ...assistant,
       message: 'I draft replies and suggest next steps. I never send, save, or change a recruit’s status without you.',
       detail: 'Ask me what any setting does.',
-      suggestions: [], contextChip: '@Settings', cue: null,
+      suggestions: [], contextChip: '@RostrAI', cue: null,
     },
   },
 ]

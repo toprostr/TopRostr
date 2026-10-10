@@ -3,17 +3,11 @@ import PreviewIcon from './PreviewIcon.jsx'
 export default function AiPane({ assistant, decision }) {
   return (
     <div data-preview-pane="ai" className="order-2 flex min-w-0 flex-col border-t border-[#d9d9dd] bg-[#ebebed] @min-[1024px]:order-none @min-[1024px]:h-full @min-[1024px]:border-t-0 @min-[1024px]:border-l">
-      {decision ? null : <div className="flex h-[52px] items-center pr-[18px] pl-6">
-        <p className="preview-heading text-[15px] font-bold text-[#18181b]">AI</p>
-        <span className="ml-auto">
-          <PreviewIcon name="plus" />
-        </span>
-      </div>}
-      <div className={`flex flex-1 flex-col px-5 @min-[1024px]:px-6 ${decision ? 'pt-7' : 'pt-3'}`}>
+      <div className="flex flex-1 flex-col px-5 pt-7 @min-[1024px]:px-6">
         <div data-preview-step="ai-suggestion" className="preview-step">
           <p className="flex items-center gap-1.5 text-[12px] font-medium text-[#5f5f64]">
             <PreviewIcon name="sparkles" />
-            {decision ? 'RostrAI' : assistant.name}
+            {assistant.name}
           </p>
           {decision ? null : <p className="mt-2.5 text-[15px] leading-[22px] text-[#18181b]">{assistant.message}</p>}
           {assistant.detail ? <p className="mt-2.5 text-[15px] leading-[22px] text-[#18181b]">{assistant.detail}</p> : null}
@@ -39,7 +33,7 @@ export default function AiPane({ assistant, decision }) {
                 key={suggestion.label}
                 className={`preview-heading flex h-8 cursor-default items-center rounded-[8px] text-[13px] ${
                   suggestion.emphasis
-                    ? 'border border-[#d9d9dd] px-3.5 font-bold text-[#3a3a3d]'
+                    ? 'border border-gold bg-gold px-3.5 font-bold text-charcoal'
                     : 'px-2.5 font-medium text-[#5f5f64]'
                 }`}
               >

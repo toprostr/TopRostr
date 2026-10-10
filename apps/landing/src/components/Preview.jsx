@@ -42,6 +42,7 @@ export default function Preview() {
       className="relative overflow-hidden bg-[#292B31] py-12 md:py-16 lg:py-20"
     >
       <div className="mx-auto w-full max-w-[1240px] px-4 md:px-6 lg:px-8">
+        <p className="mb-5 text-center text-sm tracking-wide text-off-white/60">Workspace concepts</p>
         <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">{concept.label}, slide {slideIndex + 1} of {workspaceConcepts.length}</p>
         <div role="group" aria-label="Choose a workspace view" onKeyDown={onControlKeyDown}>
           <div ref={stageRef} className="concept-carousel" style={{ '--concept-scale': scale }}>

@@ -31,6 +31,7 @@ const ICONS = {
 export default function PreviewIcon({ name, scale = 1 }) {
   const icon = ICONS[name]
 
+
   return (
     <img
       src={icon.src}

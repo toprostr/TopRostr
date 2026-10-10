@@ -13,7 +13,12 @@ it.each(['inbox', 'calendar', 'rostr', 'settings'])('places the AI chat after th
   const ai = container.querySelector('[data-preview-pane="ai"]')
   expect(ai.parentElement.lastElementChild).toBe(ai)
   expect(ai.previousElementSibling).toBeTruthy()
-  expect(within(ai).getByText(view === 'inbox' ? '@RostrAI' : 'TopRostr AI')).toBeInTheDocument()
+  const topBar = container.querySelector('[data-preview-view]').firstElementChild
+  expect(topBar).toHaveClass('h-[88px]')
+  expect(topBar.querySelector('img[src="/brand/svg/mark-charcoal.svg"]')).toHaveAttribute('alt', 'TopRostr')
+  expect(within(topBar).getByLabelText('Coach profile')).toHaveClass('bg-gold')
+  expect(within(ai).getByText('@RostrAI')).toHaveClass('bg-gold')
+  expect(within(ai).getByText('RostrAI')).toBeInTheDocument()
 })
 
 it('starts on Inbox and cycles through all four concepts with wraparound', () => {
@@ -44,6 +49,10 @@ it.each([
   expect(mock.querySelector('button, a, input, select, textarea')).toBeNull()
   expect(screen.getByRole('group', { name: new RegExp(`^${label},`) })).toBeInTheDocument()
   expect(mock.querySelector('[data-preview-nav]').textContent).toContain(label)
+  if (label === 'Calendar') {
+    expect(within(mock).getByText('Google Calendar · Connected')).toBeInTheDocument()
+    expect(mock.querySelector('.calendar-event.bg-gold')).toBeTruthy()
+  }
   expect(container.querySelector('#preview figcaption').textContent).toMatch(/Illustrative/)
 })
 
@@ -130,7 +139,7 @@ it('uses TopRostr, the charcoal mark, and title-case fixtures', () => {
   const { mock } = renderMock()
   const topBar = mock.firstElementChild
 
-  expect(within(mock).getByText('TopRostr', hidden)).toBeInTheDocument()
+  expect(within(mock).getByAltText('TopRostr')).toBeInTheDocument()
   expect(within(mock).getByText('RostrAI', hidden)).toBeInTheDocument()
   expect(within(mock).getByText(workspaceFixture.assistant.detail, hidden)).toBeInTheDocument()
   for (const section of workspaceFixture.assistant.summarySections) {
@@ -140,9 +149,8 @@ it('uses TopRostr, the charcoal mark, and title-case fixtures', () => {
   expect(within(mock).getByText('@RostrAI', hidden)).toHaveClass('bg-gold')
   expect(mock.textContent).not.toMatch(/saves start/)
   expect(mock.textContent).not.toMatch(/TESSA QUILLFEATHER|HARBOR & PINE FC/)
-  expect(topBar.querySelector('img[src="/brand/svg/mark-charcoal.svg"]')).toBeNull()
+  expect(topBar.querySelector('img[src="/brand/svg/mark-charcoal.svg"]')).toHaveAttribute('alt', 'TopRostr')
   expect(mock.querySelector('.opacity-50')).toBeNull()
-  expect(topBar).toHaveTextContent('TopRostr')
   expect(topBar.querySelector('[data-preview-nav]')).toHaveTextContent('InboxCalendarRostrSettings')
   expect(topBar.lastElementChild).toHaveClass('justify-end')
   expect(within(topBar.lastElementChild).getByLabelText('Coach profile')).toHaveTextContent(workspaceFixture.organization.coachInitials)

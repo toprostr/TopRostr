@@ -21,7 +21,7 @@ export default function WorkspacePreview({ fixture, view = 'inbox' }) {
       data-preview-view={view}
       className="preview-step w-full min-w-0 overflow-hidden rounded-[10px] bg-[#f4f4f5] text-[#18181b] shadow-[0_16px_40px_rgba(0,0,0,0.18)]"
     >
-      <TopBar organization={organization} navigation={navigation.map(item => ({ ...item, active: item.id === view }))} leftAligned={view === 'inbox'} />
+      <TopBar organization={organization} navigation={navigation.map(item => ({ ...item, active: item.id === view }))} />
       <div className={`flex flex-col @min-[1024px]:grid @min-[1024px]:min-h-[844px] ${view === 'inbox' ? '@min-[1024px]:grid-cols-[minmax(232px,280fr)_minmax(0,760fr)_minmax(210px,400fr)]' : '@min-[1024px]:grid-cols-[minmax(0,1040fr)_minmax(210px,400fr)]'}`}>
         {view === 'inbox' ? <><MessageList inbox={inbox} /><AthleteDossier recruit={recruit} /></> : null}
         {view === 'calendar' ? <CalendarConcept /> : null}
