@@ -38,7 +38,7 @@ it('starts on Inbox and cycles through all four concepts with wraparound', () =>
 
 it.each([
   ['Calendar', 'October 5 – 11', 'Suggested · not added'],
-  ['Rostr', '6 active', 'Filter to 2027 recruits'],
+  ['Rostr', '12 active', 'Draft camp invitations'],
   ['Settings', 'Connected inbox', 'AI drafts replies — never sends'],
 ])('selects %s and renders its concept content without working product controls', (label, title, detail) => {
   const { container } = render(<Preview />)
