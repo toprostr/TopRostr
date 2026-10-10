@@ -77,23 +77,23 @@ Visual: clean two-profile composition on desktop; stacked portraits and bios on 
 
 ### 4.3 Product — “One Program. One Connected Workspace.”
 
-**Eyebrow:** `03 / THE TOPROSTR WORKSPACE` (renumber from the prior Figma draft as needed)  
-**Headline:** `ONE PROGRAM. ONE CONNECTED WORKSPACE.`  
-**Body:** `Your staff's recruiting context in one place, with AI working alongside you—not making decisions for you.`
+**Eyebrow:** `03 / THE TOPROSTR WORKSPACE`  
+**Headline:** `ONE PROGRAM.` / `ONE CONNECTED WORKSPACE.`  
+**Body:** `Your staff's recruiting context in one place, with AI working alongside you—not making decisions for you.` (final body text per the Figma)
 
-Build a **full-width, animated, illustrative React recreation** of the original Cursor-inspired product workspace, not a flat full-page screenshot. UI should communicate:
+The product preview is a full-width illustrative React mock of RostrAI 1.0 **06 · Inbox** (Figma `5dVtSjbqhdzFlCb7MgywSB`, node `21-2`), instead of the landing Figma's workspace card. It is not a flat screenshot and not a working product.
 
-1. **Organization context:** a sample program's workspace and staff environment.
-2. **Connected navigation:** Inbox, Rostr, Calendar, and Activity or equivalent.
-3. **Recruit work area:** sample athlete, film/notes/context, and coach decision controls.
-4. **Persistent AI assistance:** context-aware suggestion in a right-side panel.
-5. **Human control:** AI proposes/drafts; coach chooses. No autonomous sending, saving, talent scoring, or actual AI actions.
+- The AI pane is on the left and always open. It only proposes. In the sample it suggests `Jump to 1:42` and `Draft a reply`, and the message says the first save is at 1:42. Those two suggestions are the only AI proposals; stats do not carry an AI marker.
+- The top nav is Inbox / Calendar / Rostr / Settings, centered, with a profile bubble on the right. The bar reads **TopRostr** beside the Soft cut logo mark (`public/brand/svg/mark-charcoal.svg`, charcoal on the light-gray bar). The assistant label is `TopRostr AI`. Do not use the name RostrAI or a typed letter in place of the mark.
+- The palette is monochrome gray. Space Grotesk is for headings in the mock only.
+- Fixtures are fictional only, stored in normal case: Westmere College Women's Soccer, Lila Calder, Harbor & Pine FC, and Northline Desk in place of ECNL. No real programs or leagues. Names are not stored in uppercase.
+- There is no navigation sidebar and no staff list. Navigation is the centered top nav only.
+- The card footer reads `Illustrative product concept`. There is no second concept pill above the card.
+- Nothing in the mock is interactive. The coach-decides cue (`YOU REVIEW BEFORE ANY ACTION`) stays. The coach's choices are Pass / Review later / Interested, and nothing is saved until the coach chooses.
 
-Use explicitly fictional example data; do not imply it is a functioning product. Include a visible but discreet `Illustrative product concept` label.
+The mock ships **static** at launch. A 6–8 second follow-up, tracked in #48, is still planned: the workspace enters, the recruit context highlights, the AI suggestion reveals, the coach-approval cue appears, then a short rest, then the loop. That follow-up uses opacity and transform only. It starts when the section is in view and pauses when the section is offscreen. Reduced motion stays static, with every essential part visible.
 
-**Animation story (approximately 6–8 seconds):** workspace enters; recruit context highlights; AI suggestion reveals; coach-approval cue appears; rest briefly then loop. Favor opacity/transform only, not dramatic typewriter effects. Sequence begins when in viewport, pauses when offscreen, and respects `prefers-reduced-motion`. For users with reduced motion or unavailable animations, all essential information stays visible.
-
-**Mobile:** purpose-built vertical composition (recruit information followed by contextual AI suggestion). Do **not** scale down the full desktop workspace to illegible size. Tablet may condense the sidebar.
+**Mobile:** its own stacked layout, recruit first and then the AI pane. The top nav stays hidden on mobile. Do not scale the desktop workspace down until it is illegible. Tablet may drop the message list.
 
 ### 4.4 Final CTA — “This Time, We're Recruiting You.”
 
@@ -169,17 +169,20 @@ apps/landing/
       CTAButton.jsx
       Footer.jsx
       SectionContainer.jsx
+      preview/
+        WorkspacePreview.jsx
+        TopBar.jsx
+        AiPane.jsx
+        MessageList.jsx
+        AthleteDossier.jsx
+        PreviewIcon.jsx
+        fixtures.js
+        preview-steps.css
     sections/
       HeroSection.jsx
       FoundersSection.jsx
       ProductSection.jsx
       JoinRostrSection.jsx
-    product-preview/
-      WorkspacePreview.jsx
-      OrganizationHeader.jsx
-      WorkspaceSidebar.jsx
-      RecruitPanel.jsx
-      AIAssistantPanel.jsx
     config/site.js
     styles/animations.css
     App.jsx
@@ -234,3 +237,7 @@ The product preview can use local mock fixtures. Keep structure readable; do not
 6. Summarize files changed, commands to run, any missing assets or configuration, and test results. Never claim the Google Form is connected unless a real URL is supplied and checked.
 
 **Do not implement the TopRostr product itself. This task is solely the pre-launch marketing/validation landing page.**
+
+## Changelog
+
+- **Oct 10, 2026:** Section 4.3 now describes the approved static 06 · Inbox preview (TopRostr Soft cut mark, fictional fixtures, footer label), and the file list names `src/components/preview/`.
