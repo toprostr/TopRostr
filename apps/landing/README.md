@@ -83,9 +83,9 @@ Colors and fonts are in [`tailwind.config.js`](tailwind.config.js):
 | `off-white` | `#F2F2F2` | Text on charcoal |
 | `brand-gray` | `#D9DADD` | Final CTA band. Tailwind's `gray-100`–`gray-900` scale stays available. |
 | `gold` | `#E8B931` | Call-to-action button |
-| `font-heading`, `font-wordmark`, `font-body` | Manrope | The landing PRD names Manrope and no separate body face |
+| `font-heading`, `font-wordmark`, `font-body` | Inter | Text and headings match the Figma. The wordmark itself is the SVG lockup. |
 
-Manrope is loaded from Google Fonts in `index.html`.
+Inter (weights 400, 500, 600, and 700) is loaded from Google Fonts in `index.html`.
 
 ## Deploy on Vercel
 

@@ -35,4 +35,33 @@ it('accepts a gold-on-gray variant and extra class names for the final CTA band'
     'text-charcoal',
     'focus-visible:outline-charcoal',
   )
+  expect(link.querySelector('[aria-hidden="true"]')).toHaveTextContent('↗')
+})
+
+it('hides the arrow from assistive tech and keeps the questionnaire name', () => {
+  const { rerender } = render(<CTAButton />)
+
+  const link = screen.getByRole('link', { name: CTA_NAME })
+  const arrow = link.querySelector('[aria-hidden="true"]')
+
+  expect(link).toHaveAttribute('aria-label', CTA_NAME)
+  expect(link).toHaveTextContent('JOIN THE ROSTR')
+  expect(arrow).toHaveTextContent('↗')
+  expect(arrow).toHaveAttribute('aria-hidden', 'true')
+  expect(link.className).not.toMatch(/justify-between/)
+  expect(link).toHaveClass('gap-2', 'font-bold')
+
+  rerender(<CTAButton size="nav" />)
+  expect(screen.getByRole('link', { name: CTA_NAME })).toHaveClass(
+    'h-[53px]',
+    'min-w-[190px]',
+    'text-[13px]',
+  )
+
+  rerender(<CTAButton size="hero" />)
+  expect(screen.getByRole('link', { name: CTA_NAME })).toHaveClass(
+    'h-[57px]',
+    'w-[260px]',
+    'text-[16px]',
+  )
 })

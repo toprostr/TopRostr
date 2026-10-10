@@ -17,7 +17,8 @@ it('shows the illustrative label and the approved section copy', () => {
 
   expect(screen.getByText('Illustrative product concept')).toBeInTheDocument()
   expect(screen.getByText(eyebrow)).toBeInTheDocument()
-  expect(screen.getByRole('heading', { level: 2, name: headline })).toBeInTheDocument()
+  const headingEl = screen.getByRole('heading', { level: 2, name: headline })
+  expect(headingEl.textContent).toContain('ONE PROGRAM. ONE CONNECTED WORKSPACE.')
   expect(screen.getByText(body)).toBeInTheDocument()
 })
 

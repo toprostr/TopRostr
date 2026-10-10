@@ -5,11 +5,20 @@
 **Owner:** TopRostr founders  
 **Implementation agent:** Cursor
 
+## Changelog
+
+**Oct 10, 2026.** Header, hero, and founders now match the landing Figma (frame `3:2`). The preview heading on the page was updated in code. Section 4.3 of this document is unchanged; PR #61 owns that spec. Decisions applied on the page:
+
+- The shared action is `JOIN THE ROSTR` with an aria-hidden `↗` immediately after the words. The accessible name stays `Join the Rostr — opens coach questionnaire in a new tab`.
+- Founder names and roles stay title case in the source and render uppercase.
+- The footer, the SVG wordmark, and the coaches-wanted eyebrow color `#74561A` stay.
+- Text and headings use Inter.
+
 ## 1. Objective
 
 Build a polished, responsive, single-page pre-launch website that introduces TopRostr, establishes founder credibility, previews the envisioned AI recruiting workspace, and converts visiting coaches into early-community participants through a Google Form.
 
-**Primary conversion:** Click **JOIN THE ROSTR** and submit the external Google Form (email + market-research questions). The website does not collect or store responses itself.
+**Primary conversion:** Click **JOIN THE ROSTR** and submit the external Google Form (email + market-research questions). Every CTA carries an aria-hidden `↗` directly after that label. The website does not collect or store responses itself.
 
 **Research audience:** Initial outreach to roughly 100–200 men's and women's college soccer programs; public marketing/CTA copy should be inclusive of coaches across sports. Avoid asserting that the platform already supports every sport.
 
@@ -42,16 +51,16 @@ Four sections in this order, plus a compact navigation/header and footer:
 ### 4.1 Hero — “Every Advantage Matters”
 
 **Eyebrow:** `TECHNOLOGY BUILT FOR THE SIDELINE.`  
-**Headline:** `EVERY ADVANTAGE MATTERS.`  
+**Headline:** `EVERY ADVANTAGE` / `MATTERS.`  
 **Body:** `Meet TopRostr. An AI-powered recruiting workspace built by former college players to help coaches spend less time managing recruiting and more time building winning programs.`  
-**CTA:** `JOIN THE ROSTR` or a visually coordinated link to the same form. Keep one primary action system throughout the page.
+**CTA:** `JOIN THE ROSTR` with an aria-hidden `↗` on the shared control. Keep one primary action system throughout the page. The accessible name is `Join the Rostr — opens coach questionnaire in a new tab`.
 
 Visual: cinematic, sports-inspired, dark charcoal; bold editorial headline; sparse gold accents; accessible text contrast. Favor a high-quality optimized still image over autoplay video for this release.
 
 ### 4.2 Founders — “We Know the Game. We Know What's Next.”
 
 **Eyebrow:** `02 / THE PLAYERS BEHIND TOPROSTR`  
-**Headline:** `WE KNOW THE GAME. WE KNOW WHAT'S NEXT.`  
+**Headline:** `WE KNOW THE GAME.` / `WE KNOW WHAT'S NEXT.`  
 **Intro:** `We've lived the recruiting process and understand how today's athletes use technology. We're building TopRostr to take work off coaches' plates so they can focus on what matters: winning.`
 
 **Alejandro Suarez — Co-Founder**  
@@ -61,6 +70,8 @@ Visual: cinematic, sports-inspired, dark charcoal; bold editorial headline; spar
 **Jason Wallack — Co-Founder**  
 `Played Division I soccer at Monmouth University before continuing his collegiate career at Colby College in the NESCAC.`  
 `Studied finance and economics at Monmouth and Colby.`
+
+Names and roles stay title case in the markup (`Alejandro Suarez`, `Jason Wallack`, `Co-Founder`) and render uppercase. Portraits render at 250×332.
 
 Visual: clean two-profile composition on desktop; stacked portraits and bios on mobile. Portrait assets may be placeholders until supplied. Keep the section uncluttered, with a single primary headline and intro; do not duplicate the mission paragraph elsewhere in this section.
 
@@ -89,10 +100,10 @@ Use explicitly fictional example data; do not imply it is a functioning product.
 **Eyebrow:** `04 / COACHES WANTED`  
 **Headline:** `THIS TIME, WE'RE RECRUITING YOU.`  
 **Main paragraph:** `Behind every great program are coaches who give everything to their teams. We're bringing those coaches together to help create technology that supports the work they do every day.`  
-**Button:** `JOIN THE ROSTR`  
+**Button:** `JOIN THE ROSTR ↗`  
 **Supporting line (shown exactly once, below CTA):** `Join our early community, share your perspective, and stay connected as we build TopRostr.`
 
-Visual: soft gray section background (`#D9DADD`) and **gold CTA button (`#E8B931`)** with dark text. Ensure the community line is not repeated inside the main paragraph.
+Visual: soft gray section background (`#D9DADD`) and **gold CTA button (`#E8B931`)** with dark text. The eyebrow color is `#74561A`. Ensure the community line is not repeated inside the main paragraph.
 
 **CTA behavior:** Open the configured external Google Form in a new tab with appropriate `target="_blank"` and `rel="noopener noreferrer"`. Be transparent that the link leads to a questionnaire; e.g. accessible label `Join the Rostr — opens coach questionnaire in a new tab`.
 
@@ -111,7 +122,7 @@ Match Figma's visual identity:
 - Gold: `#E8B931`
 - Restrained additional accents only if already present in Figma.
 
-Use a strong modern sans-serif matching approved brand guidance (Manrope wordmark if exact official asset; verify available text fonts). Avoid generic corporate gradients and excessive decorative cards. Preserve deliberate negative space and large, confident typography.
+Text and headings use Inter (weights 400, 500, 600, and 700), loaded with `preconnect` and `display=swap`. The wordmark is the SVG lockup, not live type. Avoid generic corporate gradients and excessive decorative cards. Preserve deliberate negative space and large, confident typography.
 
 **Proposed container/layout defaults:** `max-width: 1280px`; side padding ~20px mobile / 32px tablet / 64px desktop; desktop section padding ~112–144px vertical, mobile ~64–88px. Tune against actual Figma proportions. Use fluid typography (e.g. `clamp`) rather than fixed giant mobile sizes.
 

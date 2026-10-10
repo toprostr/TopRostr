@@ -15,17 +15,21 @@ export default function Preview() {
       className="relative bg-[#292B31] px-5 py-16 md:px-8 md:py-28 lg:px-16 lg:py-36"
     >
       <div className="mx-auto w-full max-w-[1280px]">
-        <p className="flex items-center gap-3 font-heading text-xs font-medium tracking-[0.18em] text-brand-gray">
-          <span className="h-px w-8 bg-gold" aria-hidden="true" />
+        <p className="font-heading text-[17px] font-bold text-gold">
           03 / THE TOPROSTR WORKSPACE
         </p>
         <h2
           id="preview-heading"
-          className="mt-4 max-w-5xl font-heading text-[clamp(1.75rem,4vw_+_1rem,3.25rem)] font-bold leading-[1.05] tracking-tight text-off-white"
+          className="mt-4 max-w-5xl font-heading text-[clamp(1.75rem,4vw_+_1rem,4.125rem)] font-bold leading-[1.05] tracking-tight text-off-white"
         >
-          ONE PROGRAM. ONE CONNECTED WORKSPACE.
+          ONE PROGRAM.
+          {/* Inline display matches the block class so the accessible name keeps its space in jsdom. */}
+          {' '}
+          <span className="block" style={{ display: 'block' }}>
+            ONE CONNECTED WORKSPACE.
+          </span>
         </h2>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-off-white md:text-lg">
+        <p className="mt-4 max-w-3xl text-[21px] leading-relaxed text-[#CFD1D4]">
           {sectionBody}
         </p>
         <p className="mt-6 inline-flex max-w-full items-center gap-2 rounded-full border border-off-white/20 px-3 py-1 text-xs text-brand-gray">
