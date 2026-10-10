@@ -344,3 +344,124 @@ def test_env_example_lists_only_the_openai_key() -> None:
 
     assert assignments == ["OPENAI_API_KEY="]
     assert "DATABASE_URL" not in text
+
+
+def test_env_file_ignores_comments_and_strips_quotes(tmp_path: Path) -> None:
+    path = tmp_path / ".env"
+    path.write_text(
+        "\n# comment\nNOT_A_PAIR\nDATABASE_URL=sqlite:///ignored.db\n"
+        "OPENAI_API_KEY='sk-quoted-key'\n",
+        encoding="utf-8",
+    )
+
+    key = read_openai_api_key(path)
+
+    assert key is not None
+    assert key.get_secret_value() == "sk-quoted-key"
+
+
+def test_blank_or_absent_env_file_key_is_unset(tmp_path: Path) -> None:
+    blank = tmp_path / "blank.env"
+    blank.write_text("OPENAI_API_KEY=\n", encoding="utf-8")
+    unrelated = tmp_path / "other.env"
+    unrelated.write_text("DATABASE_URL=sqlite:///ignored.db\n", encoding="utf-8")
+
+    assert read_openai_api_key(blank) is None
+    assert read_openai_api_key(unrelated) is None
+    assert read_openai_api_key(tmp_path / "missing.env") is None
+
+
+def test_process_environment_key_is_used_when_the_file_has_none(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test-not-a-real-key")
+
+    def explode(*args: object, **kwargs: object) -> None:
+        raise AssertionError("OpenAI client must not be constructed")
+
+    monkeypatch.setattr("extraction.openai_suggester.OpenAI", explode)
+
+    suggester = get_suggester()
+
+    assert isinstance(suggester, OpenAINoteSuggester)
+    assert suggester.model == "gpt-4o-mini"
+
+
+def test_suggest_explains_an_empty_note_and_saves_nothing(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    athlete_id = _add_athlete(session_factory, notes="Keep this")
+    response = client.post(f"/athletes/{athlete_id}/suggestions", data={"notes": "   "})
+
+    assert response.status_code == 200
+    assert "Add a note" in response.text
+    assert "Nothing was saved." in response.text
+    assert _stored(session_factory, athlete_id).notes == "Keep this"
+
+
+def test_suggest_explains_when_the_note_has_no_task(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    athlete_id = _add_athlete(session_factory, notes="Keep this")
+    response = client.post(
+        f"/athletes/{athlete_id}/suggestions",
+        data={"notes": "Tall, left-footed, and composed."},
+    )
+
+    assert response.status_code == 200
+    assert "No suggestions in that note." in response.text
+    stored = _stored(session_factory, athlete_id)
+    assert stored.notes == "Keep this"
+    assert stored.status == "unreviewed"
+    assert stored.engagement is None
+
+
+def test_suggest_rejects_notes_over_the_column_limit(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    athlete_id = _add_athlete(session_factory, notes="Keep this")
+    response = client.post(
+        f"/athletes/{athlete_id}/suggestions", data={"notes": "n" * 2001}
+    )
+
+    assert response.status_code == 200
+    assert "2000 characters" in response.text
+    assert _stored(session_factory, athlete_id).notes == "Keep this"
+
+
+def test_confirm_rejects_notes_over_the_column_limit(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    athlete_id = _add_athlete(session_factory, notes="Keep this")
+    response = client.post(
+        f"/athletes/{athlete_id}/suggestions/confirm",
+        data={"notes": "n" * 2001, "engagement": "Campus visit"},
+    )
+
+    assert response.status_code == 200
+    assert "2000 characters" in response.text
+    assert "Nothing was saved." in response.text
+    stored = _stored(session_factory, athlete_id)
+    assert stored.notes == "Keep this"
+    assert stored.engagement is None
+    assert stored.status == "unreviewed"
+
+
+def test_confirm_ignores_an_interest_outside_the_three_decisions(
+    session_factory: sessionmaker[Session], client: TestClient
+) -> None:
+    athlete_id = _add_athlete(session_factory, notes="Keep this")
+    response = client.post(
+        f"/athletes/{athlete_id}/suggestions/confirm",
+        data={
+            "notes": "Schedule a campus visit.",
+            "apply_interest": "champion",
+            "engagement": "Campus visit",
+        },
+    )
+
+    assert response.status_code == 200
+    stored = _stored(session_factory, athlete_id)
+    assert stored.status == "unreviewed"
+    assert stored.engagement == "Campus visit"
+    assert stored.notes == "Schedule a campus visit."

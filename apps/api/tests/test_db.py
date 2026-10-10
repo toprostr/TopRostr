@@ -1,9 +1,10 @@
 from pathlib import Path
 
+import pytest
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 
-from app.db import Base
+from app.db import Base, get_db
 from app.models.athlete import Athlete
 
 
@@ -38,3 +39,24 @@ def test_athlete_can_be_created_committed_and_retrieved(tmp_path: Path) -> None:
         assert athlete.status == "unreviewed"
 
     engine.dispose()
+
+
+def test_get_db_closes_the_session_when_the_request_fails(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A failed request must not leave the session open."""
+    closed = False
+
+    class DummySession:
+        def close(self) -> None:
+            nonlocal closed
+            closed = True
+
+    monkeypatch.setattr("app.db.SessionLocal", lambda: DummySession())
+    generator = get_db()
+    session = next(generator)
+
+    assert isinstance(session, DummySession)
+    with pytest.raises(RuntimeError, match="request failed"):
+        generator.throw(RuntimeError("request failed"))
+    assert closed

@@ -29,6 +29,9 @@ def test_youtube_embed_url_rejects_missing_and_non_youtube_links() -> None:
     assert youtube_embed_url("") is None
     assert youtube_embed_url("https://example.com/film/maya-ellison") is None
     assert youtube_embed_url("https://www.youtube.com/watch?v=not-an-id") is None
+    assert youtube_embed_url("https://www.youtube.com/channel/UC1234567890") is None
+    assert youtube_embed_url("https://www.youtube.com/shorts/2zmXjwXyNQA") == EMBED
+    assert youtube_embed_url("https://m.youtube.com/live/2zmXjwXyNQA") == EMBED
 
 
 @pytest.fixture
