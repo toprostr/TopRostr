@@ -1,0 +1,27 @@
+/*
+  Static end state for the workspace preview.
+
+  Each [data-preview-step] is already visible. A later change can sequence
+  them with opacity and transform only — no animation library:
+
+    1. workspace
+    2. recruit-highlight
+    3. ai-suggestion
+    4. coach-approval
+
+  Start that sequence when the section is in view, pause it offscreen, and
+  keep the reduced-motion rule below last so the static state always wins.
+*/
+
+.preview-step {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preview-step {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
