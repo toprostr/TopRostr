@@ -57,7 +57,7 @@ cp .env.example .env
 VITE_GOOGLE_FORM_URL=
 ```
 
-Until that variable is a non-empty URL, `site.js` falls back to a labeled placeholder on `example.com`. The button still opens in a new tab, and the page says the questionnaire is not connected. A public Google Form URL is not a secret. Do not put API keys in this variable.
+Until that variable is a non-empty URL, `site.js` falls back to one `example.com` URL whose path contains `PLACEHOLDER`. There is no second fallback. `npm run build` prints `WARNING: VITE_GOOGLE_FORM_URL is not set; CTAs point at the placeholder` and still succeeds. Setting `VITE_GOOGLE_FORM_URL` in Vercel is the only change needed when the real form exists. The button still opens in a new tab, and the page says the questionnaire is not connected. A public Google Form URL is not a secret. Do not put API keys in this variable.
 
 Restart `npm run dev` after changing `.env`. Vite only exposes variables that start with `VITE_`.
 
