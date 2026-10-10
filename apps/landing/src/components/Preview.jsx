@@ -5,8 +5,10 @@ const sectionBody =
   'Your staff\'s recruiting context in one place, with AI working alongside you\u2014not making decisions for you.'
 
 export default function Preview() {
-  const { organization, recruit } = workspaceFixture
-  const previewDescription = `Preview of a fictional program workspace for ${organization.program}. It shows ${recruit.name}'s recruit context, with film and notes, and an AI suggestion. The coach chooses to use the draft or set it aside. Nothing is sent or saved.`
+  const { organization, recruit, assistant, decision } = workspaceFixture
+  const suggestionLabels = assistant.suggestions.map((suggestion) => suggestion.label).join('" and "')
+  const choiceLabels = decision.choices.map((choice) => choice.label).join(' / ')
+  const previewDescription = `Illustrative inbox for ${organization.program}. It shows the recruit ${recruit.name} and a highlight video thumbnail. The AI pane suggests "${suggestionLabels}". The coach's choices are ${choiceLabels}. Nothing is saved until the coach chooses.`
 
   return (
     <section
@@ -20,21 +22,17 @@ export default function Preview() {
         </p>
         <h2
           id="preview-heading"
-          className="mt-4 max-w-5xl font-heading text-[clamp(1.75rem,4vw_+_1rem,4.125rem)] font-bold leading-[1.05] tracking-tight text-off-white"
+          className="mt-4 max-w-5xl font-heading text-[clamp(1.75rem,4vw_+_1rem,2.875rem)] font-bold leading-[1.05] tracking-tight text-balance text-off-white"
         >
           ONE PROGRAM.
           {/* Inline display matches the block class so the accessible name keeps its space in jsdom. */}
           {' '}
-          <span className="block" style={{ display: 'block' }}>
+          <span className="block md:whitespace-nowrap" style={{ display: 'block' }}>
             ONE CONNECTED WORKSPACE.
           </span>
         </h2>
         <p className="mt-4 max-w-3xl text-[21px] leading-relaxed text-[#CFD1D4]">
           {sectionBody}
-        </p>
-        <p className="mt-6 inline-flex max-w-full items-center gap-2 rounded-full border border-off-white/20 px-3 py-1 text-xs text-brand-gray">
-          <span className="size-1.5 shrink-0 rounded-full bg-gold" aria-hidden="true" />
-          Illustrative product concept
         </p>
         <figure className="mt-8 md:mt-12">
           <figcaption className="sr-only">{previewDescription}</figcaption>

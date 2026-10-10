@@ -1,5 +1,5 @@
 /*
-  Static end state for the workspace preview.
+  Static end state for the inbox preview.
 
   Each [data-preview-step] is already visible. A later change can sequence
   them with opacity and transform only — no animation library:
@@ -11,7 +11,14 @@
 
   Start that sequence when the section is in view, pause it offscreen, and
   keep the reduced-motion rule below last so the static state always wins.
+
+  Space Grotesk is only for headings inside this mock. The face is loaded
+  from the preview module (weights 500 and 700, font-display: swap).
 */
+
+.preview-heading {
+  font-family: 'Space Grotesk', sans-serif;
+}
 
 .preview-step {
   opacity: 1;

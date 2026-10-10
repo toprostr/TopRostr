@@ -65,7 +65,7 @@ export default function Founders() {
         <p className="font-heading text-[17px] font-bold text-gold">
           02 / THE PLAYERS BEHIND TOPROSTR
         </p>
-        <h2 className="mt-6 font-heading text-[clamp(1.75rem,4vw+0.6rem,3.8125rem)] leading-[1.05] font-bold text-off-white">
+        <h2 className="mt-6 font-heading text-[clamp(1.75rem,4vw+0.6rem,3.8125rem)] leading-[1.05] font-bold text-balance text-off-white">
           WE KNOW THE GAME.
           {/* Inline display matches the block class so the accessible name keeps its space in jsdom. */}
           {' '}

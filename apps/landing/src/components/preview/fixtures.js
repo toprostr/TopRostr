@@ -1,40 +1,105 @@
 /**
- * Fictional sample for the illustrative workspace.
- * Names, the school, and the club are invented. Nothing here is a real program.
+ * Fictional sample for the illustrative inbox.
+ * The program, the recruit, the club, and the other names are invented.
+ * Nothing here is a real program or a real person.
  */
 export const workspaceFixture = {
   organization: {
-    program: 'Westmere College',
-    team: "Women's Soccer",
-    cycle: 'Fall 2027 cycle',
-    staff: [
-      { name: 'Elena Voss', role: 'Head Coach' },
-      { name: 'Jordan Hale', role: 'Assistant Coach' },
-    ],
+    program: "Westmere Hollow College Women's Soccer",
+    product: 'TopRostr',
+    coachInitials: 'CR',
   },
   navigation: [
     { id: 'inbox', label: 'Inbox', active: true },
-    { id: 'rostr', label: 'Rostr', active: false },
     { id: 'calendar', label: 'Calendar', active: false },
-    { id: 'activity', label: 'Activity', active: false },
+    { id: 'rostr', label: 'Rostr', active: false },
+    { id: 'settings', label: 'Settings', active: false },
   ],
+  inbox: {
+    title: 'Inbox',
+    count: '3 new',
+    messages: [
+      {
+        id: 'tessa',
+        name: 'Tessa Quillfeather',
+        initials: 'TQ',
+        time: '9:12a',
+        preview: 'Highlight reel + transcript',
+        selected: true,
+        recruit: true,
+      },
+      {
+        id: 'rhys',
+        name: 'Rhys Vantwell',
+        initials: 'RV',
+        time: '8:40a',
+        preview: 'Spring schedule',
+        selected: false,
+        recruit: true,
+      },
+      {
+        id: 'nia',
+        name: 'Nia Fernwhistle',
+        initials: 'NF',
+        time: 'Yesterday',
+        preview: 'Question about ID camp',
+        selected: false,
+        recruit: true,
+      },
+      {
+        id: 'kestrelmoor',
+        name: 'Kestrelmoor Cup',
+        initials: 'KC',
+        time: 'Mon',
+        preview: 'Showcase field changes',
+        selected: false,
+        recruit: false,
+      },
+    ],
+  },
   recruit: {
-    name: 'Lila Calder',
+    name: 'Tessa Quillfeather',
+    position: 'Goalkeeper',
     classYear: 'Class of 2027',
-    position: 'Attacking midfielder',
-    school: 'Ridgeline Preparatory',
     club: 'Harbor & Pine FC',
-    source: 'coach@harborandpine.example',
-    film: 'Left-footed combination in the final third. Two clips from a spring friendly.',
-    clips: ['Spring friendly', 'Combination play', 'Final third'],
-    notes:
-      'Club coach asked which weekend camps still have room. No visit is booked.',
+    status: 'Unreviewed',
+    film: {
+      title: 'Fall highlights · GK',
+      duration: '4:12',
+    },
+    stats: [
+      { label: 'GPA', value: '3.8' },
+      { label: 'SAT', value: '1340' },
+      { label: 'ACT', value: '29' },
+      { label: 'Height', value: '5′9″' },
+      { label: 'Weight', value: '150 lb' },
+    ],
+    tabs: [
+      { id: 'film', label: 'Film', active: true },
+      { id: 'academics', label: 'Academics', active: false },
+      { id: 'soccer', label: 'Soccer', active: false },
+      { id: 'contact', label: 'Contact', active: false },
+      { id: 'notes', label: 'Notes', active: false },
+    ],
   },
-  suggestion: {
-    label: 'Suggested reply',
-    intro: 'Proposes a draft. Does not send it.',
-    body: "Ask Harbor & Pine FC for two full-match films and Lila Calder's spring exam dates. Leave any visit plans unwritten so the coach can decide.",
-    cue: "Coach's choice. Nothing is sent or saved in this preview.",
-    choices: ['Use this draft', 'Set aside'],
+  assistant: {
+    name: 'TopRostr AI',
+    message: '3 new recruits today. Tessa’s reel is ready — first save at 1:42.',
+    suggestions: [
+      { label: 'Jump to 1:42', emphasis: true },
+      { label: 'Draft a reply', emphasis: false },
+    ],
+    contextChip: '@Tessa Quillfeather',
+    placeholder: 'Ask anything…',
+    cue: 'YOU REVIEW BEFORE ANY ACTION',
   },
+  decision: {
+    prompt: 'Your call. Nothing saves until you choose.',
+    choices: [
+      { label: 'Pass', tone: 'quiet' },
+      { label: 'Review later', tone: 'outline' },
+      { label: 'Interested', tone: 'solid' },
+    ],
+  },
+  label: 'Illustrative product concept',
 }
