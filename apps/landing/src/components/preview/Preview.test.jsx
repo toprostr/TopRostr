@@ -53,6 +53,13 @@ it.each([
     expect(within(mock).getByText('Google Calendar · Connected')).toBeInTheDocument()
     expect(mock.querySelector('.calendar-event.bg-gold')).toBeTruthy()
   }
+  if (label === 'Settings') {
+    expect(within(mock).getByText('Manage plan')).toBeInTheDocument()
+    expect(within(mock).getByText('Sample plan limits · Monthly usage resets November 1')).toBeInTheDocument()
+    expect(within(mock).getAllByRole('meter', { hidden: true })).toHaveLength(2)
+    expect(within(mock).queryByText('Team & staff')).not.toBeInTheDocument()
+    expect(within(mock).queryByText('Staff seats')).not.toBeInTheDocument()
+  }
   expect(container.querySelector('#preview figcaption').textContent).toMatch(/Illustrative/)
 })
 

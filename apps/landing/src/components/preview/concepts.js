@@ -28,7 +28,7 @@ export const workspaceConcepts = [
   },
   {
     id: 'settings', label: 'Settings',
-    description: 'Illustrative settings for a fictional coach, connected Gmail and calendar, staff access, AI preferences, and notifications. These are visual examples; no accounts are connected and no settings can be changed.',
+    description: 'Illustrative settings for a fictional coach, connected Gmail and calendar, AI preferences, notifications, and sample plan usage. These are visual examples; no accounts are connected and no settings can be changed.',
     assistant: {
       ...assistant,
       message: 'I draft replies and suggest next steps. I never send, save, or change a recruit’s status without you.',
