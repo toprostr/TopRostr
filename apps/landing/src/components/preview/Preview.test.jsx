@@ -1,4 +1,4 @@
-import { cleanup, render, screen, within } from '@testing-library/react'
+import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, expect, it } from 'vitest'
 import Preview from '../Preview.jsx'
 import { workspaceFixture } from './fixtures.js'
@@ -7,67 +7,72 @@ afterEach(() => {
   cleanup()
 })
 
-const eyebrow = '03 / THE TOPROSTR WORKSPACE'
-const headline = 'ONE PROGRAM. ONE CONNECTED WORKSPACE.'
-const body =
-  'Your staff\'s recruiting context in one place, with AI working alongside you\u2014not making decisions for you.'
+const hidden = { hidden: true }
 
-it('shows the illustrative label and the approved section copy', () => {
-  render(<Preview />)
+function renderMock() {
+  const view = render(<Preview />)
+  const mock = view.container.querySelector('[data-preview-step="workspace"]')
 
-  expect(screen.getByText('Illustrative product concept')).toBeInTheDocument()
-  expect(screen.getByText(eyebrow)).toBeInTheDocument()
-  const headingEl = screen.getByRole('heading', { level: 2, name: headline })
-  expect(headingEl.textContent).toContain('ONE PROGRAM. ONE CONNECTED WORKSPACE.')
-  expect(screen.getByText(body)).toBeInTheDocument()
-})
+  expect(mock).toBeTruthy()
+  expect(mock.parentElement).toHaveAttribute('aria-hidden', 'true')
 
-it('renders the fictional fixture names', () => {
-  render(<Preview />)
+  return { ...view, mock }
+}
+
+it('renders the fictional program, recruit, club, and other names', () => {
+  renderMock()
 
   const names = [
     workspaceFixture.organization.program,
-    workspaceFixture.organization.staff[0].name,
-    workspaceFixture.organization.staff[1].name,
     workspaceFixture.recruit.name,
-    workspaceFixture.recruit.school,
     workspaceFixture.recruit.club,
+    ...workspaceFixture.inbox.messages.map((message) => message.name),
     ...workspaceFixture.navigation.map((item) => item.label),
   ]
 
   for (const name of names) {
     expect(name.length).toBeGreaterThan(0)
-    // The mockup is hidden from the accessibility tree. The names are still rendered.
-    expect(screen.getAllByText(name, { hidden: true }).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(name, hidden).length).toBeGreaterThan(0)
   }
 })
 
-it('does not render buttons inside the preview', () => {
-  const { container } = render(<Preview />)
-  const preview = within(container)
+it('shows the illustrative label and the coach-review cue inside the mock', () => {
+  const { mock } = renderMock()
 
-  expect(container.querySelector('button')).toBeNull()
-  expect(container.querySelector('[role="button"]')).toBeNull()
-  expect(container.querySelector('a')).toBeNull()
+  const label = screen.getByText(workspaceFixture.label, hidden)
+  const cue = screen.getByText(workspaceFixture.assistant.cue, hidden)
 
-  for (const choice of workspaceFixture.suggestion.choices) {
-    const matches = preview.getAllByText(choice, { hidden: true })
+  expect(mock).toContainElement(label)
+  expect(mock).toContainElement(cue)
+  expect(cue.closest('[data-preview-step="coach-approval"]')).toBeTruthy()
+})
 
-    expect(matches.length).toBeGreaterThan(0)
+it('does not render buttons, links, or inputs inside the mock', () => {
+  const { mock } = renderMock()
 
-    for (const match of matches) {
-      expect(match.tagName).not.toBe('BUTTON')
-    }
+  expect(mock.querySelector('button, a, input, textarea, select')).toBeNull()
+  expect(mock.querySelector('[role="button"]')).toBeNull()
+  expect(mock.querySelector('[tabindex]')).toBeNull()
+
+  for (const choice of workspaceFixture.decision.choices) {
+    const match = screen.getByText(choice.label, hidden)
+
+    expect(match.tagName).toBe('SPAN')
+    expect(match.closest('button, a')).toBeNull()
   }
 })
 
-it('keeps each animation step as its own visible element', () => {
-  const { container } = render(<Preview />)
+it('keeps four distinct static preview steps', () => {
+  const { mock } = renderMock()
+  const steps = ['workspace', 'recruit-highlight', 'ai-suggestion', 'coach-approval']
+  const root = mock.parentElement
 
-  for (const step of ['workspace', 'recruit-highlight', 'ai-suggestion', 'coach-approval']) {
-    const element = container.querySelector(`[data-preview-step="${step}"]`)
+  for (const step of steps) {
+    const element = root.querySelector(`[data-preview-step="${step}"]`)
 
     expect(element).toBeTruthy()
     expect(element.classList.contains('preview-step')).toBe(true)
   }
+
+  expect(root.querySelectorAll('[data-preview-step]')).toHaveLength(steps.length)
 })

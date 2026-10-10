@@ -1,30 +1,30 @@
-import AIAssistantPanel from './AIAssistantPanel.jsx'
-import OrganizationHeader from './OrganizationHeader.jsx'
-import RecruitPanel from './RecruitPanel.jsx'
-import WorkspaceSidebar from './WorkspaceSidebar.jsx'
+import '@fontsource/space-grotesk/500.css'
+import '@fontsource/space-grotesk/700.css'
+import AiPane from './AiPane.jsx'
+import AthleteDossier from './AthleteDossier.jsx'
+import MessageList from './MessageList.jsx'
+import TopBar from './TopBar.jsx'
 import './preview-steps.css'
 
 export default function WorkspacePreview({ fixture }) {
-  const { organization, navigation, recruit, suggestion } = fixture
+  const { organization, navigation, inbox, recruit, assistant, decision, label } = fixture
 
-  // Mobile stacks the recruit card, then the AI suggestion.
-  // Tablet keeps a narrow sidebar. Desktop places sidebar, recruit, and AI in a row.
   return (
     <div
       data-preview-step="workspace"
-      className="preview-step grid grid-cols-1 overflow-hidden rounded-[10px] bg-[#F2F2F2] shadow-[0_16px_40px_rgba(0,0,0,0.18)] md:grid-cols-[5.5rem_minmax(0,1fr)] lg:grid-cols-[13rem_minmax(0,1fr)_19rem]"
+      className="preview-step w-full min-w-0 overflow-hidden rounded-[10px] bg-[#f4f4f5] text-[#18181b] shadow-[0_16px_40px_rgba(0,0,0,0.18)]"
     >
-      <div className="hidden bg-[#1C1C1E] md:col-span-2 md:block lg:col-span-3">
-        <OrganizationHeader organization={organization} />
+      <TopBar organization={organization} navigation={navigation} />
+      <div className="flex flex-col lg:grid lg:grid-cols-[minmax(210px,400fr)_minmax(232px,280fr)_minmax(0,760fr)]">
+        <AiPane assistant={assistant} />
+        <MessageList inbox={inbox} />
+        <AthleteDossier recruit={recruit} decision={decision} />
       </div>
-      <div className="hidden bg-[#E4E4E7] md:row-span-2 md:block md:border-r md:border-[#D4D4D8] lg:row-span-1">
-        <WorkspaceSidebar navigation={navigation} />
-      </div>
-      <div className="min-w-0 bg-white">
-        <RecruitPanel recruit={recruit} organization={organization} />
-      </div>
-      <div className="min-w-0 border-t border-[#D4D4D8] bg-[#22252B] lg:border-l lg:border-t-0 lg:border-[#22252B]">
-        <AIAssistantPanel suggestion={suggestion} />
+      <div className="flex flex-col gap-1 border-t border-[#d9d9dd] bg-[#ebebed] px-4 py-2.5 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:px-9">
+        <p className="preview-heading text-[10px] font-bold tracking-[0.08em] text-[#18181b]">
+          {organization.program}
+        </p>
+        <p className="text-[10px] font-medium tracking-[0.06em] text-[#5f5f64]">{label}</p>
       </div>
     </div>
   )
