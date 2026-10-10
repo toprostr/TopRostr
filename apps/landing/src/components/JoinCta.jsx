@@ -15,7 +15,7 @@ export default function JoinCta() {
         </p>
         <h2
           id="join-heading"
-          className="mt-10 max-w-[1310px] font-heading text-[clamp(1.75rem,5.9vw,5.3125rem)] font-bold leading-[0.95] tracking-[-0.02em]"
+          className="mt-10 max-w-[1310px] font-heading text-[clamp(1.75rem,5.9vw,5.3125rem)] font-bold"
         >
           THIS TIME, WE'RE{' '}
           <span className="block">RECRUITING YOU.</span>
@@ -25,7 +25,10 @@ export default function JoinCta() {
           teams. We're bringing those coaches together to help create technology
           that supports the work they do every day.
         </p>
-        <CTAButton variant="gold-on-gray" className="mt-10 w-full max-w-[340px]">
+        <CTAButton
+          variant="gold-on-gray"
+          className="mt-10 h-[75px] w-full max-w-[340px] justify-start gap-[1ch] px-7 text-[17px]"
+        >
           JOIN THE ROSTR
         </CTAButton>
         <p className="mt-4 max-w-[1080px] font-body text-sm leading-normal text-[#55575D]">
