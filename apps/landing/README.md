@@ -71,7 +71,7 @@ The logo kit is in `public/brand/` and is served from `/brand/...` (see `public/
 
 The header uses `/brand/svg/lockup-horizontal-toprostr-dark-bg.svg` (off-white artwork for the charcoal page). The footer uses the compact `/brand/svg/mark-offwhite.svg`. The wordmark in those files is outlined artwork. Do not retype it in live text.
 
-No hero photograph has been supplied. The still is a full-width image behind the headline. Swap the single path `HERO_STILL_SRC` in `src/components/Hero.jsx` when the neutral image arrives (LP-06). The current file is `public/images/hero-placeholder.svg`, with width and height set. Do not use video.
+The hero still is a full-width `<picture>` behind the headline: AVIF, then WebP at 1x and 2x, then a JPG fallback. The files live in `public/images/hero/`. The `<img>` is decorative (`alt=""`), 1440×900, and uses `object-position: 75% 50%`. Do not use video.
 
 ## Design tokens
 

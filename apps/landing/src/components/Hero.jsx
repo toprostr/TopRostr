@@ -1,26 +1,31 @@
 import CTAButton from './CTAButton.jsx'
 
-// LP-06: replace this path with the neutral still (WebP or AVIF).
-// Keep the width and height so the box does not shift. Do not use video.
-const HERO_STILL_SRC = '/images/hero-placeholder.svg'
 const HERO_STILL_WIDTH = 1440
 const HERO_STILL_HEIGHT = 900
+const HERO_AVIF = '/images/hero/hero-1440x900.avif'
+const HERO_WEBP_1X = '/images/hero/hero-1440x900.webp'
+const HERO_WEBP_2X = '/images/hero/hero-2880x1800.webp'
+const HERO_JPG = '/images/hero/hero-1440x900.jpg'
 
 export default function Hero() {
   return (
-    <section id="hero" className="relative overflow-hidden bg-charcoal">
-      <img
-        src={HERO_STILL_SRC}
-        alt=""
-        width={HERO_STILL_WIDTH}
-        height={HERO_STILL_HEIGHT}
-        fetchPriority="high"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      {/* Opaque #16171B under the copy, then a fade to the still. */}
+    <section id="hero" className="relative overflow-hidden bg-[#16171B]">
+      <picture className="pointer-events-none absolute inset-0">
+        <source type="image/avif" srcSet={HERO_AVIF} />
+        <source type="image/webp" srcSet={`${HERO_WEBP_1X} 1x, ${HERO_WEBP_2X} 2x`} />
+        <img
+          src={HERO_JPG}
+          alt=""
+          width={HERO_STILL_WIDTH}
+          height={HERO_STILL_HEIGHT}
+          fetchPriority="high"
+          className="absolute inset-0 h-full w-full object-cover object-[75%_50%]"
+        />
+      </picture>
+      {/* Left wash: solid #16171B fading to transparent by about 62% of the width. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#16171B_0%,#16171B_92%,transparent_100%)] lg:bg-[linear-gradient(to_right,#16171B_0%,#16171B_65%,transparent_100%)]"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#16171B_0%,rgba(22,23,27,0.85)_30%,rgba(22,23,27,0)_62%)]"
       />
 
       <div className="relative mx-auto w-full max-w-[1280px] px-5 pt-16 pb-24 md:px-8 md:pt-28 md:pb-28 lg:px-16 lg:pt-32 lg:pb-32">
