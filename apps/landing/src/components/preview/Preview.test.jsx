@@ -1,7 +1,11 @@
-import { render, screen } from '@testing-library/react'
-import { expect, it } from 'vitest'
+import { cleanup, render, screen, within } from '@testing-library/react'
+import { afterEach, expect, it } from 'vitest'
 import Preview from '../Preview.jsx'
 import { workspaceFixture } from './fixtures.js'
+
+afterEach(() => {
+  cleanup()
+})
 
 const eyebrow = '03 / THE TOPROSTR WORKSPACE'
 const headline = 'ONE PROGRAM. ONE CONNECTED WORKSPACE.'
@@ -39,13 +43,20 @@ it('renders the fictional fixture names', () => {
 
 it('does not render buttons inside the preview', () => {
   const { container } = render(<Preview />)
+  const preview = within(container)
 
   expect(container.querySelector('button')).toBeNull()
   expect(container.querySelector('[role="button"]')).toBeNull()
   expect(container.querySelector('a')).toBeNull()
 
   for (const choice of workspaceFixture.suggestion.choices) {
-    expect(screen.getByText(choice, { hidden: true }).tagName).not.toBe('BUTTON')
+    const matches = preview.getAllByText(choice, { hidden: true })
+
+    expect(matches.length).toBeGreaterThan(0)
+
+    for (const match of matches) {
+      expect(match.tagName).not.toBe('BUTTON')
+    }
   }
 })
 
