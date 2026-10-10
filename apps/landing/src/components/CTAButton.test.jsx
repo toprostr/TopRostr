@@ -5,6 +5,18 @@ import { googleFormUrl } from '../config/site.js'
 
 const CTA_NAME = 'Join the Rostr — opens coach questionnaire in a new tab'
 
+it.each([
+  { size: 'nav' },
+  { size: 'hero' },
+  { variant: 'gold-on-gray' },
+  {},
+])('provides hover and keyboard-focus underlines for CTA configuration %j', (props) => {
+  render(<CTAButton {...props} />)
+  expect(screen.getByRole('link', { name: CTA_NAME })).toHaveClass(
+    'hover:underline', 'focus-visible:underline', 'underline-offset-4',
+  )
+})
+
 it('opens the configured form in a new tab with the questionnaire label', () => {
   render(<CTAButton />)
 
