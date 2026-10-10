@@ -8,7 +8,7 @@ export default function Header() {
         height="62"
         className="h-12 w-auto"
       />
-      <p className="mt-4 font-heading text-sm text-gray">TODO #46: Header</p>
+      <p className="mt-4 font-heading text-sm text-brand-gray">TODO #46: Header</p>
     </header>
   )
 }

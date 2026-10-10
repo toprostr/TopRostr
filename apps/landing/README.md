@@ -33,6 +33,7 @@ Vite prints a local URL, usually http://localhost:5173.
 | --- | --- |
 | `npm run dev` | Local dev server |
 | `npm run lint` | ESLint |
+| `npm test` | Vitest once (`vitest run`) |
 | `npm run build` | Production build into `dist/` |
 | `npm run preview` | Serve the production build |
 
@@ -76,7 +77,7 @@ Colors and fonts are in [`tailwind.config.js`](tailwind.config.js):
 | --- | --- | --- |
 | `charcoal` | `#1C1C1E` | Page background, button text |
 | `off-white` | `#F2F2F2` | Text on charcoal |
-| `gray` | `#D9DADD` | Final CTA band |
+| `brand-gray` | `#D9DADD` | Final CTA band. Tailwind's `gray-100`–`gray-900` scale stays available. |
 | `gold` | `#E8B931` | Call-to-action button |
 | `font-heading`, `font-wordmark`, `font-body` | Manrope | The landing PRD names Manrope and no separate body face |
 
@@ -96,4 +97,4 @@ Set `VITE_GOOGLE_FORM_URL` in the Vercel project for both Preview and Production
 
 ## Continuous integration
 
-[`.github/workflows/landing-ci.yml`](../../.github/workflows/landing-ci.yml) runs on pull requests and pushes that change `apps/landing/**` or the workflow file. The job is named `landing-ci`. It runs `npm ci`, `npm run lint`, and `npm run build` in this directory.
+[`.github/workflows/landing-ci.yml`](../../.github/workflows/landing-ci.yml) runs on pull requests and pushes that change `apps/landing/**` or the workflow file. The job is named `landing-ci`. It runs `npm ci`, `npm run lint`, `npm test`, and `npm run build` in this directory.

@@ -34,6 +34,10 @@ jobs:
         working-directory: apps/landing
         run: npm run lint
 
+      - name: Test
+        working-directory: apps/landing
+        run: npm test
+
       - name: Build
         working-directory: apps/landing
         run: npm run build

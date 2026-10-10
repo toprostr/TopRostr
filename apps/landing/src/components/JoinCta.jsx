@@ -2,7 +2,7 @@ import { googleFormUrl, isGoogleFormPlaceholder } from '../config/site.js'
 
 export default function JoinCta() {
   return (
-    <section id="join" className="bg-gray px-5 py-16 text-charcoal">
+    <section id="join" className="bg-brand-gray px-5 py-16 text-charcoal">
       <p className="font-heading text-sm">TODO #49: Join the Rostr</p>
       <a
         href={googleFormUrl}
