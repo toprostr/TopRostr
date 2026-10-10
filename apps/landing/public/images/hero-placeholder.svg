@@ -1,0 +1,8 @@
+<!-- TODO: Replace this placeholder with the supplied hero still (WebP or AVIF). Keep the width and height. Do not use video. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <rect width="1440" height="900" fill="#1C1C1E"/>
+  <rect x="48" y="48" width="1344" height="804" fill="none" stroke="#E8B931" stroke-width="2"/>
+  <line x1="96" y1="430" x2="280" y2="430" stroke="#E8B931" stroke-width="3"/>
+  <text x="96" y="390" fill="#D9DADD" font-family="Manrope, sans-serif" font-size="28" font-weight="600" letter-spacing="4">HERO STILL PLACEHOLDER</text>
+  <text x="96" y="490" fill="#F2F2F2" font-family="Manrope, sans-serif" font-size="22">Replace this image before launch. No photograph has been supplied.</text>
+</svg>

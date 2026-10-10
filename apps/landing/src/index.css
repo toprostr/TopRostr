@@ -1,6 +1,17 @@
 @import 'tailwindcss';
 @config '../tailwind.config.js';
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
+  background: #1c1c1e;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

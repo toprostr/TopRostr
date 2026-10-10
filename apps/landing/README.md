@@ -4,7 +4,7 @@ Pre-launch marketing site for TopRostr. It lives in `apps/landing` and does not 
 
 Product requirements: [`docs/landing/PRD.md`](../../docs/landing/PRD.md).
 
-This package is the LP-01 scaffold. Later tickets fill in one component file each, in this order on the page:
+Header, Hero, Footer, and the shared `CTAButton` are in place (LP-02, #46). Founders, the product preview, and the final call to action are still later tickets. `App.jsx` renders the sections in this order, with `<main>` between the header and the footer:
 
 | Component | File | Ticket |
 | --- | --- | --- |
@@ -15,11 +15,13 @@ This package is the LP-01 scaffold. Later tickets fill in one component file eac
 | Final call to action | `src/components/JoinCta.jsx` | #49 |
 | Footer | `src/components/Footer.jsx` | #46 |
 
-`App.jsx` only renders those components in that order. Section ids reserved for later anchor links: `hero`, `founders`, `preview`, and `join`.
+Section ids: `hero`, `founders`, `preview`, and `join`. The header links Mission to `#founders` and Platform to `#preview`.
+
+Every **Join the Rostr** control should use `src/components/CTAButton.jsx`. It reads the form URL from `src/config/site.js`. Pass `variant="gold-on-gray"` on the gray final band (LP-05). The join section still has the LP-01 anchor until that ticket lands.
 
 ## Run locally
 
-Node.js 22.
+Node.js 22 (`.nvmrc`). `package.json` requires `>=22.22.2` because jsdom does.
 
 ```bash
 cd apps/landing
@@ -33,7 +35,7 @@ Vite prints a local URL, usually http://localhost:5173.
 | --- | --- |
 | `npm run dev` | Local dev server |
 | `npm run lint` | ESLint |
-| `npm test` | Vitest once (`vitest run`) |
+| `npm test` | Vitest once, with an 80% line-coverage threshold |
 | `npm run build` | Production build into `dist/` |
 | `npm run preview` | Serve the production build |
 
@@ -67,7 +69,9 @@ The logo kit is in `public/brand/` and is served from `/brand/...` (see `public/
 - `/brand/favicon.svg`
 - `/brand/png/app-icon-180.png` (apple touch icon)
 
-The header placeholder uses `/brand/svg/lockup-horizontal-toprostr-dark-bg.svg` (off-white artwork for the charcoal page). The wordmark in that file is outlined artwork. Do not retype it in live text.
+The header uses `/brand/svg/lockup-horizontal-toprostr-dark-bg.svg` (off-white artwork for the charcoal page). The footer uses the compact `/brand/svg/mark-offwhite.svg`. The wordmark in those files is outlined artwork. Do not retype it in live text.
+
+No hero photograph has been supplied. `public/images/hero-placeholder.svg` is a marked stand-in with explicit width and height. Replace it with a WebP or AVIF still before launch. Do not use video.
 
 ## Design tokens
 
@@ -97,4 +101,4 @@ Set `VITE_GOOGLE_FORM_URL` in the Vercel project for both Preview and Production
 
 ## Continuous integration
 
-[`.github/workflows/landing-ci.yml`](../../.github/workflows/landing-ci.yml) runs on pull requests and pushes that change `apps/landing/**` or the workflow file. The job is named `landing-ci`. It runs `npm ci`, `npm run lint`, `npm test`, and `npm run build` in this directory.
+[`.github/workflows/landing-ci.yml`](../../.github/workflows/landing-ci.yml) runs on pull requests and pushes that change `apps/landing/**` or the workflow file. The job is named `landing-ci`. It runs `npm ci`, `npm run lint`, `npm test`, and `npm run build` in this directory. `npm test` fails if line coverage drops below 80%. The workflow pins Node 22.
