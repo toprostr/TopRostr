@@ -22,10 +22,12 @@ it('renders concise hero copy over a decorative full-bleed still', () => {
   const sources = picture.querySelectorAll('source')
   const still = picture.querySelector('img')
 
-  expect(sources[0]).toHaveAttribute('type', 'image/avif')
-  expect(sources[0]).toHaveAttribute('srcset', '/images/hero/hero-ball-right-1440x900.avif')
-  expect(sources[1]).toHaveAttribute('type', 'image/webp')
-  expect(sources[1]).toHaveAttribute(
+  expect(sources[0]).toHaveAttribute('media', '(max-width: 1279px)')
+  expect(sources[0]).toHaveAttribute('srcset', '/images/hero/hero-field-only-1440x900.webp')
+  expect(sources[1]).toHaveAttribute('type', 'image/avif')
+  expect(sources[1]).toHaveAttribute('srcset', '/images/hero/hero-ball-right-1440x900.avif')
+  expect(sources[2]).toHaveAttribute('type', 'image/webp')
+  expect(sources[2]).toHaveAttribute(
     'srcset',
     '/images/hero/hero-ball-right-1440x900.webp 1x, /images/hero/hero-ball-right-2880x1800.webp 2x',
   )
@@ -34,7 +36,7 @@ it('renders concise hero copy over a decorative full-bleed still', () => {
   expect(still).toHaveAttribute('width', '1440')
   expect(still).toHaveAttribute('height', '900')
   expect(still).toHaveAttribute('fetchpriority', 'high')
-  expect(still).toHaveClass('absolute', 'object-cover', 'object-[75%_50%]')
+  expect(still).toHaveClass('absolute', 'object-cover', 'object-right', 'lg:object-[75%_50%]')
   expect(still.className).not.toContain('border')
   expect(container.querySelector('#hero')).toHaveClass('bg-[#16171B]')
   expect(container.querySelector('[aria-hidden="true"].absolute').className).toContain('62%')

@@ -7,6 +7,10 @@ import rostr from './icons/rostr.svg'
 import settings from './icons/settings.svg'
 import sparkles from './icons/sparkles.svg'
 import statusDot from './icons/status-dot.svg'
+import arrowLeft from './icons/arrow-left.svg'
+import arrowRight from './icons/arrow-right.svg'
+import toggleOn from './icons/toggle-on.svg'
+import aiDot from './icons/ai-dot.svg'
 
 const ICONS = {
   'arrow-up': { src: arrowUp, width: 9.84375, height: 9.84375 },
@@ -18,6 +22,10 @@ const ICONS = {
   settings: { src: settings, width: 13.5938, height: 13.5938 },
   sparkles: { src: sparkles, width: 9.61458, height: 8.53125 },
   'status-dot': { src: statusDot, width: 6, height: 6 },
+  'arrow-left': { src: arrowLeft, width: 5.16667, height: 9.16667 },
+  'arrow-right': { src: arrowRight, width: 5.16667, height: 9.16667 },
+  'toggle-on': { src: toggleOn, width: 36, height: 20 },
+  'ai-dot': { src: aiDot, width: 5, height: 5 },
 }
 
 export default function PreviewIcon({ name }) {

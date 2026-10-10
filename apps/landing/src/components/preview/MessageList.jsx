@@ -1,6 +1,6 @@
 export default function MessageList({ inbox }) {
   return (
-    <div className="hidden min-h-0 min-w-0 flex-col border-[#d9d9dd] bg-[#f4f4f5] lg:flex lg:border-r">
+    <div className="hidden min-h-0 min-w-0 flex-col border-[#d9d9dd] bg-[#f4f4f5] @min-[1024px]:flex @min-[1024px]:border-r">
       <div className="flex h-[52px] items-center gap-2 pr-4 pl-[18px]">
         <p className="preview-heading text-[16px] font-bold text-[#18181b]">{inbox.title}</p>
         <p className="ml-auto text-[12px] text-[#6b6b70]">{inbox.count}</p>

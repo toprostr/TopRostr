@@ -18,7 +18,7 @@ export default function AthleteDossier({ recruit, decision }) {
     <div className="flex min-w-0 flex-col bg-[#f4f4f5]">
       <div
         data-preview-step="recruit-highlight"
-        className="preview-step flex flex-col gap-4 px-4 pt-5 sm:gap-[22px] sm:pt-7 lg:px-9"
+        className="preview-step flex flex-col gap-4 px-4 pt-5 sm:gap-[22px] sm:pt-7 @min-[1024px]:px-9"
       >
         <div className="flex flex-wrap items-end gap-3">
           <div className="min-w-0">
@@ -105,7 +105,7 @@ export default function AthleteDossier({ recruit, decision }) {
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-[#d9d9dd] bg-[#ebebed] px-4 py-3 lg:mt-[22px] lg:min-h-16 lg:px-9">
+      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-[#d9d9dd] bg-[#ebebed] px-4 py-3 @min-[1024px]:mt-auto @min-[1024px]:min-h-16 @min-[1024px]:px-9">
         <p className="min-w-0 flex-1 basis-full text-[13px] text-[#5f5f64] sm:basis-auto">
           {decision.prompt}
         </p>

@@ -18,7 +18,7 @@ export default function TopBar({ organization, navigation }) {
           {organization.product}
         </span>
       </div>
-      <div data-preview-nav className="hidden items-center gap-0.5 md:flex">
+      <div data-preview-nav className="hidden items-center gap-0.5 @min-[768px]:flex">
         {navigation.map((item) => (
           <span
             key={item.id}
