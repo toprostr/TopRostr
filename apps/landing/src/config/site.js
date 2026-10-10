@@ -6,8 +6,11 @@
 const GOOGLE_FORM_PLACEHOLDER_URL =
   'https://example.com/toprostr-join-the-rostr-placeholder'
 
-function readGoogleFormUrl() {
-  const configured = import.meta.env.VITE_GOOGLE_FORM_URL
+// Exported so tests can exercise both branches. Vite reads the variable once
+// at module load; passing an env object covers the configured-URL path
+// without restarting the dev server.
+export function readGoogleFormUrl(env = import.meta.env) {
+  const configured = env?.VITE_GOOGLE_FORM_URL
 
   if (typeof configured === 'string' && configured.trim() !== '') {
     return configured.trim()
