@@ -12,12 +12,11 @@ const jasonToday = 'Studied finance and economics at Monmouth and Colby.'
 it('renders the PRD headline, both founders, and sized portraits', () => {
   render(<Founders />)
 
-  expect(
-    screen.getByRole('heading', {
-      level: 2,
-      name: "WE KNOW THE GAME. WE KNOW WHAT'S NEXT.",
-    }),
-  ).toBeInTheDocument()
+  const foundersHeading = screen.getByRole('heading', {
+    level: 2,
+    name: "WE KNOW THE GAME. WE KNOW WHAT'S NEXT.",
+  })
+  expect(foundersHeading.textContent).toContain("WE KNOW THE GAME. WE KNOW WHAT'S NEXT.")
 
   const alejandro = screen.getByRole('heading', { level: 3, name: 'Alejandro Suarez' })
   expect(alejandro).toHaveTextContent('Alejandro Suarez')

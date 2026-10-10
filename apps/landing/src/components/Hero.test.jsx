@@ -13,6 +13,7 @@ it('renders the PRD hero copy over a decorative full-bleed still', () => {
   const heading = screen.getByRole('heading', { level: 1, name: 'EVERY ADVANTAGE MATTERS.' })
   expect(heading).toHaveClass('text-[clamp(2.25rem,7.2vw,6.5rem)]', 'max-w-full')
   expect(heading.querySelector('span.block')).toHaveTextContent('MATTERS.')
+  expect(heading.textContent).toContain('EVERY ADVANTAGE MATTERS.')
   expect(
     screen.getByText(
       'Meet TopRostr. An AI-powered recruiting workspace built by former college players to help coaches spend less time managing recruiting and more time building winning programs.',

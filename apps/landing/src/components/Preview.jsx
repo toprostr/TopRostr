@@ -24,6 +24,7 @@ export default function Preview() {
         >
           ONE PROGRAM.
           {/* Inline display matches the block class so the accessible name keeps its space in jsdom. */}
+          {' '}
           <span className="block" style={{ display: 'block' }}>
             ONE CONNECTED WORKSPACE.
           </span>

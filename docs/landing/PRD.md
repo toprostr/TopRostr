@@ -18,7 +18,7 @@
 
 Build a polished, responsive, single-page pre-launch website that introduces TopRostr, establishes founder credibility, previews the envisioned AI recruiting workspace, and converts visiting coaches into early-community participants through a Google Form.
 
-**Primary conversion:** Click **JOIN THE ROSTR** and submit the external Google Form (email + market-research questions). The header and hero controls show an aria-hidden `↗` directly after that label. The website does not collect or store responses itself.
+**Primary conversion:** Click **JOIN THE ROSTR** and submit the external Google Form (email + market-research questions). Every CTA carries an aria-hidden `↗` directly after that label. The website does not collect or store responses itself.
 
 **Research audience:** Initial outreach to roughly 100–200 men's and women's college soccer programs; public marketing/CTA copy should be inclusive of coaches across sports. Avoid asserting that the platform already supports every sport.
 
@@ -100,7 +100,7 @@ Use explicitly fictional example data; do not imply it is a functioning product.
 **Eyebrow:** `04 / COACHES WANTED`  
 **Headline:** `THIS TIME, WE'RE RECRUITING YOU.`  
 **Main paragraph:** `Behind every great program are coaches who give everything to their teams. We're bringing those coaches together to help create technology that supports the work they do every day.`  
-**Button:** `JOIN THE ROSTR`  
+**Button:** `JOIN THE ROSTR ↗`  
 **Supporting line (shown exactly once, below CTA):** `Join our early community, share your perspective, and stay connected as we build TopRostr.`
 
 Visual: soft gray section background (`#D9DADD`) and **gold CTA button (`#E8B931`)** with dark text. The eyebrow color is `#74561A`. Ensure the community line is not repeated inside the main paragraph.

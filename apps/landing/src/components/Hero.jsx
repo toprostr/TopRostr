@@ -36,6 +36,7 @@ export default function Hero() {
           <h1 className="mt-6 max-w-full font-heading text-[clamp(2.25rem,7.2vw,6.5rem)] font-bold leading-[0.92] tracking-tight text-balance text-off-white">
             EVERY ADVANTAGE
             {/* Inline display matches the block class so the accessible name keeps its space in jsdom. */}
+            {' '}
             <span className="block" style={{ display: 'block' }}>
               MATTERS.
             </span>

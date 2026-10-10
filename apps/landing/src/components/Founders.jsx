@@ -68,6 +68,7 @@ export default function Founders() {
         <h2 className="mt-6 font-heading text-[clamp(1.75rem,4vw+0.6rem,3.8125rem)] leading-[1.05] font-bold text-off-white">
           WE KNOW THE GAME.
           {/* Inline display matches the block class so the accessible name keeps its space in jsdom. */}
+          {' '}
           <span className="block" style={{ display: 'block' }}>
             WE KNOW WHAT'S NEXT.
           </span>
