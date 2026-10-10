@@ -22,7 +22,7 @@ const permissions = [
 
 export default function SettingsConcept() {
   return (
-    <div className="min-w-0 bg-[#f4f4f5] px-4 pt-7 pb-10 sm:px-6 @min-[1024px]:px-14">
+    <div className="settings-panel min-w-0 overflow-y-auto bg-[#f4f4f5] px-4 pt-7 pb-10 sm:px-6 @min-[1024px]:h-[844px] @min-[1024px]:px-14">
       <p className="preview-heading mb-5 text-[28px] font-bold tracking-tight">Settings</p>
       <div className="mb-6 overflow-hidden rounded-xl border border-[#d9d9dd] bg-white">
         <p className="preview-heading px-5 pt-5 pb-2 text-[18px] font-bold">Permissions</p>

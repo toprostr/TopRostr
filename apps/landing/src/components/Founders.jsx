@@ -60,22 +60,20 @@ function FounderProfile({ founder }) {
 
 export default function Founders() {
   return (
-    <section id="founders" className="bg-[#14151A] text-off-white">
+    <section id="founders" aria-label="Our Rostr" className="flex min-h-svh items-center bg-[#14151A] text-off-white">
       <div className="mx-auto w-full max-w-[1280px] px-5 py-16 sm:px-8 sm:py-20 lg:px-16 lg:py-32">
-        <p className="font-heading text-[17px] font-bold text-gold">
-          03 / THE PLAYERS BEHIND TOPROSTR
-        </p>
-        <h2 className="mt-6 font-heading text-[clamp(1.75rem,4vw+0.6rem,3.8125rem)] leading-[1.05] font-bold text-balance text-off-white">
-          WE KNOW THE GAME.
-          {/* Inline display matches the block class so the accessible name keeps its space in jsdom. */}
-          {' '}
-          <span className="block" style={{ display: 'block' }}>
-            WE KNOW WHAT'S NEXT.
-          </span>
-        </h2>
-        <p className="mt-8 max-w-3xl font-body text-xl leading-normal text-[#CFD1D4]">
-          We've lived the recruiting process and understand how today's athletes use technology. We're building TopRostr to take work off coaches' plates so they can focus on what matters: winning.
-        </p>
+        <div className="flex flex-col gap-8 md:flex-row md:items-center md:gap-12">
+          <img
+          src="/brand/svg/mark-offwhite.svg"
+          alt="TopRostr"
+          width={194}
+          height={100}
+          className="h-12 w-auto self-start shrink-0 md:h-16 md:self-auto"
+        />
+          <p className="max-w-3xl font-body text-xl leading-normal text-[#CFD1D4]">
+            We've lived the game and the recruiting process. We're building TopRostr to give coaches <span className="text-gold">more time</span> to develop their players, prepare their teams, and focus on <span className="text-gold">winning</span>.
+          </p>
+        </div>
         <div className="mt-14 grid grid-cols-1 gap-14 lg:mt-20 lg:grid-cols-2 lg:gap-x-12 lg:gap-y-16">
           {founders.map((founder) => (
             <FounderProfile key={founder.name} founder={founder} />

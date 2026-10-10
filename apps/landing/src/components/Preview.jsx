@@ -45,6 +45,10 @@ export default function Preview() {
         <p className="mb-5 text-center text-sm tracking-wide text-off-white/60">Workspace concepts</p>
         <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">{concept.label}, slide {slideIndex + 1} of {workspaceConcepts.length}</p>
         <div role="group" aria-label="Choose a workspace view" onKeyDown={onControlKeyDown}>
+          <div className="concept-controls">
+            <button type="button" aria-label="Previous workspace view" aria-controls={slideId} onClick={() => moveSlide(-1)} className="concept-arrow">←</button>
+            <button type="button" aria-label="Next workspace view" aria-controls={slideId} onClick={() => moveSlide(1)} className="concept-arrow">→</button>
+          </div>
           <div ref={stageRef} className="concept-carousel" style={{ '--concept-scale': scale }}>
           {[-1, 1].map(direction => {
             const neighbor = workspaceConcepts[(slideIndex + direction + workspaceConcepts.length) % workspaceConcepts.length]
@@ -57,10 +61,7 @@ export default function Preview() {
             <div aria-hidden="true" className="concept-canvas"><WorkspacePreview fixture={workspaceFixture} view={concept.id} /></div>
           </figure>
           </div>
-          <div className="concept-controls">
-            <button type="button" aria-label="Previous workspace view" aria-controls={slideId} onClick={() => moveSlide(-1)} className="concept-arrow">←</button>
-            <button type="button" aria-label="Next workspace view" aria-controls={slideId} onClick={() => moveSlide(1)} className="concept-arrow">→</button>
-          </div>
+
         </div>
       </div>
     </section>

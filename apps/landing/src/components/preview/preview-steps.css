@@ -65,6 +65,7 @@
 .concept-card { position: absolute; top: 50%; width: 84%; aspect-ratio: 1440 / 936; margin: 0; transform: translateY(-50%); pointer-events: none; }
 .concept-canvas { position: absolute; width: 1440px; container-type: inline-size; transform: scale(var(--concept-scale)); transform-origin: top left; }
 .concept-card--active { left: 8%; z-index: 2; }
+.concept-card--active .settings-panel { pointer-events: auto; }
 .concept-card--active [data-preview-step="workspace"] {
   box-shadow: 0 32px 80px #0009, 0 8px 24px #0006, 0 0 0 1px #ffffff30;
 }
@@ -75,7 +76,7 @@
   transform: translateY(-50%) scale(0.55);
   filter: brightness(0.65);
 }
-.concept-controls { display: flex; justify-content: center; gap: 16px; margin-top: 16px; }
+.concept-controls { display: flex; justify-content: center; gap: 16px; margin-bottom: 16px; }
 .concept-arrow { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #f4f4f540; border-radius: 50%; background: #292b31e6; color: #f4f4f5; cursor: pointer; }
 .concept-arrow:hover { color: var(--color-gold); border-color: var(--color-gold); }
 .concept-arrow:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 4px; }
