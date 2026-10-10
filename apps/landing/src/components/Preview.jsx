@@ -16,10 +16,9 @@ export default function Preview() {
     return () => observer.disconnect()
   }, [])
   const concept = workspaceConcepts[slideIndex]
-  const { organization, recruit, assistant, decision } = workspaceFixture
-  const suggestionLabels = assistant.suggestions.map((suggestion) => suggestion.label).join('" and "')
+  const { organization, recruit, decision } = workspaceFixture
   const choiceLabels = decision.choices.map((choice) => choice.label).join(' / ')
-  const previewDescription = `Illustrative inbox for ${organization.program}. It shows the recruit ${recruit.name} and a highlight video thumbnail. The AI pane suggests "${suggestionLabels}". The coach's choices are ${choiceLabels}. Nothing is saved until the coach chooses.`
+  const previewDescription = `Illustrative inbox for ${organization.program}. It shows the recruit ${recruit.name} and a highlight video thumbnail. The AI pane summarizes the player. The coach's choices are ${choiceLabels}. Nothing is saved until the coach chooses.`
 
   function moveSlide(direction) {
     setSlideIndex(current => (current + direction + workspaceConcepts.length) % workspaceConcepts.length)

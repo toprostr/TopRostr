@@ -2,9 +2,18 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import { afterEach, expect, it } from 'vitest'
 import Preview from '../Preview.jsx'
 import { workspaceFixture } from './fixtures.js'
+import WorkspacePreview from './WorkspacePreview.jsx'
 
 afterEach(() => {
   cleanup()
+})
+
+it.each(['inbox', 'calendar', 'rostr', 'settings'])('places the AI chat after the main content in the %s view', (view) => {
+  const { container } = render(<WorkspacePreview fixture={workspaceFixture} view={view} />)
+  const ai = container.querySelector('[data-preview-pane="ai"]')
+  expect(ai.parentElement.lastElementChild).toBe(ai)
+  expect(ai.previousElementSibling).toBeTruthy()
+  expect(within(ai).getByText(view === 'inbox' ? '@RostrAI' : 'TopRostr AI')).toBeInTheDocument()
 })
 
 it('starts on Inbox and cycles through all four concepts with wraparound', () => {
@@ -24,7 +33,7 @@ it('starts on Inbox and cycles through all four concepts with wraparound', () =>
 
 it.each([
   ['Calendar', 'October 5 – 11', 'Suggested · not added'],
-  ['Rostr', '6 active', 'Filter to 2027 GKs'],
+  ['Rostr', '6 active', 'Filter to 2027 recruits'],
   ['Settings', 'Connected inbox', 'AI drafts replies — never sends'],
 ])('selects %s and renders its concept content without working product controls', (label, title, detail) => {
   const { container } = render(<Preview />)
@@ -98,7 +107,6 @@ it('shows the illustrative label and the coach-review cue inside the mock', () =
   const caption = document.querySelector('#preview figcaption')
 
   const label = within(mock).getByText('Illustrative product concept', hidden)
-  const cue = screen.getByText(workspaceFixture.assistant.cue, hidden)
 
   const labels = screen.getAllByText('Illustrative product concept', hidden)
   const outsideTheCard = [...document.querySelectorAll('#preview *')].filter(
@@ -111,30 +119,33 @@ it('shows the illustrative label and the coach-review cue inside the mock', () =
   expect(mock).toContainElement(label)
   expect(outsideTheCard).toHaveLength(0)
   expect(screen.queryByText(/Coach-approved actions/i, hidden)).not.toBeInTheDocument()
-  expect(mock).toContainElement(cue)
-  expect(cue.closest('[data-preview-step="coach-approval"]')).toBeTruthy()
-  expect(caption).toHaveTextContent('Tessa Quillfeather')
+  expect(mock.querySelector('[data-preview-step="coach-approval"]')).toHaveTextContent('Invite to camp')
+  expect(caption).toHaveTextContent('Alex Miller')
   expect(caption).toHaveTextContent('a highlight video thumbnail')
-  expect(caption).toHaveTextContent('Jump to 1:42')
-  expect(caption).toHaveTextContent('Draft a reply')
   expect(caption).toHaveTextContent('Pass / Review later / Interested')
   expect(caption).toHaveTextContent('Nothing is saved until the coach chooses')
 })
 
 it('uses TopRostr, the charcoal mark, and title-case fixtures', () => {
   const { mock } = renderMock()
-  const nav = mock.querySelector('[data-preview-nav]')
+  const topBar = mock.firstElementChild
 
   expect(within(mock).getByText('TopRostr', hidden)).toBeInTheDocument()
-  expect(within(mock).getByText('TopRostr AI', hidden)).toBeInTheDocument()
-  expect(screen.getByText(/first save at 1:42/i, hidden)).toBeInTheDocument()
-  expect(mock.textContent).not.toMatch(/RostrAI/)
+  expect(within(mock).getByText('RostrAI', hidden)).toBeInTheDocument()
+  expect(within(mock).getByText(workspaceFixture.assistant.detail, hidden)).toBeInTheDocument()
+  for (const section of workspaceFixture.assistant.summarySections) {
+    expect(within(mock).getByText(section.title, hidden)).toBeInTheDocument()
+    expect(within(mock).getByText(section.body, hidden)).toBeInTheDocument()
+  }
+  expect(within(mock).getByText('@RostrAI', hidden)).toHaveClass('bg-gold')
   expect(mock.textContent).not.toMatch(/saves start/)
   expect(mock.textContent).not.toMatch(/TESSA QUILLFEATHER|HARBOR & PINE FC/)
-  expect(mock.querySelector('img[src="/brand/svg/mark-charcoal.svg"]')).toBeTruthy()
+  expect(topBar.querySelector('img[src="/brand/svg/mark-charcoal.svg"]')).toBeNull()
   expect(mock.querySelector('.opacity-50')).toBeNull()
-  expect(nav.className).toContain('hidden')
-  expect(nav.className).toContain('@min-[768px]:flex')
+  expect(topBar).toHaveTextContent('TopRostr')
+  expect(topBar.querySelector('[data-preview-nav]')).toHaveTextContent('InboxCalendarRostrSettings')
+  expect(topBar.lastElementChild).toHaveClass('justify-end')
+  expect(within(topBar.lastElementChild).getByLabelText('Coach profile')).toHaveTextContent(workspaceFixture.organization.coachInitials)
 })
 
 it('does not render buttons, links, or inputs inside the mock', () => {
@@ -149,6 +160,7 @@ it('does not render buttons, links, or inputs inside the mock', () => {
 
     expect(match.tagName).toBe('SPAN')
     expect(match.closest('button, a')).toBeNull()
+    expect(match.closest('[data-preview-pane="ai"]')).toBeTruthy()
   }
 })
 
@@ -165,9 +177,9 @@ it('renders a static highlight thumbnail and no video-service reference', () => 
   expect(still).toHaveAttribute('decoding', 'async')
   expect(still.className).toContain('object-cover')
   expect(still.closest('a, video, iframe')).toBeNull()
-  expect(screen.getByText('Fall highlights · GK', hidden)).toBeInTheDocument()
+  expect(screen.getByText('Fall highlights · DEF', hidden)).toBeInTheDocument()
   expect(screen.getByText('4:12', hidden)).toBeInTheDocument()
-  expect(screen.getByText('Jump to 1:42', hidden)).toBeInTheDocument()
+  expect(within(mock).queryByText('Jump to 1:42', hidden)).not.toBeInTheDocument()
   expect(preview.innerHTML.toLowerCase()).not.toContain('youtube')
   expect(preview.innerHTML.toLowerCase()).not.toContain('youtu.be')
 })

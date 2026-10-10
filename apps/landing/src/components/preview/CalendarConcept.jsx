@@ -27,13 +27,13 @@ export default function CalendarConcept() {
             {days.map((day, index) => <div key={day} className={`border-l border-[#d9d9dd] ${index === 3 ? 'bg-white/60' : ''}`} />)}
             <div className="absolute top-1.5 left-1 h-[22px] w-[calc(42.857%-8px)] rounded-[5px] bg-[#e2e2e5] pl-2 text-[11px] leading-[22px] text-[#6b6b70]">NCAA quiet period</div>
             <div className="calendar-event top-[477px] left-[calc(42.857%+4px)] h-[49px] border border-[#d9d9dd] bg-white">
-              <p className="text-xs font-semibold">Rhys’s coach</p><p className="text-[11px] text-[#6b6b70]">Call · 4:00 pm</p>
+              <p className="text-xs font-semibold">Ben’s coach</p><p className="text-[11px] text-[#6b6b70]">Call · 4:00 pm</p>
             </div>
             <div className="calendar-event top-[367px] left-[calc(71.429%+4px)] h-[104px] bg-[#0a0a0a] text-white">
-              <p className="text-xs font-semibold">Harbor &amp; Pine FC vs Pacific Elite</p><p className="text-[11px] text-[#b4b4ba]">2:00 pm · Watch Tessa</p>
+              <p className="text-xs font-semibold">Harbor &amp; Pine FC vs Pacific Elite</p><p className="text-[11px] text-[#b4b4ba]">2:00 pm · Watch Alex</p>
             </div>
             <div className="calendar-event top-[312px] left-[calc(85.714%+4px)] h-[104px] border border-dashed border-[#9c9ca3] text-[#6b6b70]">
-              <p className="text-xs font-semibold">Nia’s match?</p><p className="text-[11px]">Suggested · not added</p>
+              <p className="text-xs font-semibold">Chris’s match?</p><p className="text-[11px]">Suggested · not added</p>
             </div>
           </div>
         </div>

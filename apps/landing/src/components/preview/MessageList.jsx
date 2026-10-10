@@ -14,7 +14,7 @@ export default function MessageList({ inbox }) {
             }`}
           >
             <span
-              className={`preview-heading flex size-7 shrink-0 items-center justify-center rounded-full border border-[#d9d9dd] bg-[#e2e2e5] text-[10px] font-bold ${
+              className={`preview-heading flex size-7 shrink-0 items-center justify-center rounded-full border border-gold bg-gold text-[10px] font-bold ${
                 message.recruit ? 'text-[#18181b]' : 'text-[#3a3a3d]'
               }`}
             >

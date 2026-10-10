@@ -28,7 +28,7 @@ const ICONS = {
   'ai-dot': { src: aiDot, width: 5, height: 5 },
 }
 
-export default function PreviewIcon({ name }) {
+export default function PreviewIcon({ name, scale = 1 }) {
   const icon = ICONS[name]
 
   return (
@@ -39,7 +39,7 @@ export default function PreviewIcon({ name }) {
       height={icon.height}
       draggable="false"
       className="block shrink-0 max-w-none"
-      style={{ width: icon.width, height: icon.height }}
+      style={{ width: icon.width * scale, height: icon.height * scale }}
     />
   )
 }

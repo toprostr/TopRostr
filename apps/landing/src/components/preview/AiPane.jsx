@@ -1,25 +1,31 @@
 import PreviewIcon from './PreviewIcon.jsx'
 
-export default function AiPane({ assistant }) {
+export default function AiPane({ assistant, decision }) {
   return (
-    <div className="order-2 flex min-w-0 flex-col border-t border-[#d9d9dd] bg-[#ebebed] @min-[1024px]:order-none @min-[1024px]:h-full @min-[1024px]:border-t-0 @min-[1024px]:border-r">
-      <div className="flex h-[52px] items-center pr-[18px] pl-6">
+    <div data-preview-pane="ai" className="order-2 flex min-w-0 flex-col border-t border-[#d9d9dd] bg-[#ebebed] @min-[1024px]:order-none @min-[1024px]:h-full @min-[1024px]:border-t-0 @min-[1024px]:border-l">
+      {decision ? null : <div className="flex h-[52px] items-center pr-[18px] pl-6">
         <p className="preview-heading text-[15px] font-bold text-[#18181b]">AI</p>
         <span className="ml-auto">
           <PreviewIcon name="plus" />
         </span>
-      </div>
-      <div className="flex flex-1 flex-col px-5 pt-3 @min-[1024px]:px-6">
+      </div>}
+      <div className={`flex flex-1 flex-col px-5 @min-[1024px]:px-6 ${decision ? 'pt-7' : 'pt-3'}`}>
         <div data-preview-step="ai-suggestion" className="preview-step">
           <p className="flex items-center gap-1.5 text-[12px] font-medium text-[#5f5f64]">
             <PreviewIcon name="sparkles" />
-            {assistant.name}
+            {decision ? 'RostrAI' : assistant.name}
           </p>
-          <p className="mt-2.5 text-[15px] leading-[22px] text-[#18181b]">{assistant.message}</p>
+          {decision ? null : <p className="mt-2.5 text-[15px] leading-[22px] text-[#18181b]">{assistant.message}</p>}
           {assistant.detail ? <p className="mt-2.5 text-[15px] leading-[22px] text-[#18181b]">{assistant.detail}</p> : null}
+          {decision ? assistant.summarySections?.map(section => (
+            <div key={section.title} className="mt-5">
+              <p className="preview-heading text-[14px] font-bold text-[#18181b]">{section.title}</p>
+              <p className="mt-1 text-[14px] leading-[21px] text-[#5f5f64]">{section.body}</p>
+            </div>
+          )) : null}
           {assistant.recruits?.map((recruit) => (
             <div key={recruit.name} className="mt-4 flex items-center gap-2.5">
-              <span className="preview-heading flex size-7 shrink-0 items-center justify-center rounded-full bg-[#e2e2e5] text-[10px] font-bold">{recruit.initials}</span>
+              <span className="preview-heading flex size-7 shrink-0 items-center justify-center rounded-full bg-gold text-[10px] font-bold">{recruit.initials}</span>
               <div className="min-w-0 flex-1 text-[14px]">
                 <p>{recruit.name}</p>
                 <p className="text-[12px] text-[#6b6b70]">{recruit.detail}</p>
@@ -42,19 +48,14 @@ export default function AiPane({ assistant }) {
             ))}
           </div>
         </div>
-        {assistant.cue ? <div
-          data-preview-step="coach-approval"
-          className="preview-step mt-4 rounded-[8px] border border-[#d9d9dd] bg-white px-3 py-2.5"
-        >
-          <p className="preview-heading text-[11px] font-bold tracking-[0.12em] text-[#18181b]">
-            {assistant.cue}
-          </p>
+        {decision ? <div data-preview-step="coach-approval" className="preview-step mt-5 grid grid-cols-2 gap-2">
+          {decision.choices.map(choice => <span key={choice.label} className={`preview-heading flex min-h-11 items-center justify-center rounded-lg border px-2 py-2 text-[14px] font-medium ${choice.tone === 'solid' ? 'border-gold bg-gold text-charcoal' : 'border-[#d9d9dd] bg-[#f4f4f5] text-[#18181b]'}`}>{choice.label}</span>)}
         </div> : null}
       </div>
       <div className="px-5 pt-2 pb-5">
         <div className="flex min-h-[52px] items-center gap-2 rounded-[10px] border border-[#d9d9dd] bg-white py-2 pr-2 pl-3">
           <span className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
-            <span className="shrink-0 rounded-[6px] border border-[#d9d9dd] bg-[#e2e2e5] px-2 py-1 text-[12px] font-medium text-[#18181b]">
+            <span className={`shrink-0 rounded-[6px] border px-2 py-1 text-[12px] font-medium text-[#18181b] ${assistant.contextChip === '@RostrAI' ? 'border-gold bg-gold' : 'border-[#d9d9dd] bg-[#e2e2e5]'}`}>
               {assistant.contextChip}
             </span>
             <span className="text-[15px] text-[#6b6b70]">{assistant.placeholder}</span>
