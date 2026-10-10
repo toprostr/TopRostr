@@ -22,12 +22,12 @@ export default function Preview() {
         </p>
         <h2
           id="preview-heading"
-          className="mt-4 max-w-5xl font-heading text-[clamp(1.75rem,4vw_+_1rem,4.125rem)] font-bold leading-[1.05] tracking-tight text-off-white"
+          className="mt-4 max-w-5xl font-heading text-[clamp(1.75rem,4vw_+_1rem,2.875rem)] font-bold leading-[1.05] tracking-tight text-balance text-off-white"
         >
           ONE PROGRAM.
           {/* Inline display matches the block class so the accessible name keeps its space in jsdom. */}
           {' '}
-          <span className="block" style={{ display: 'block' }}>
+          <span className="block md:whitespace-nowrap" style={{ display: 'block' }}>
             ONE CONNECTED WORKSPACE.
           </span>
         </h2>

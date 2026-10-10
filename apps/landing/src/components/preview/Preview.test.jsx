@@ -36,6 +36,17 @@ it('renders the fictional program, recruit, club, and other names', () => {
   }
 })
 
+it('shows the approved preview eyebrow and headline', () => {
+  render(<Preview />)
+
+  expect(screen.getByText('03 / THE TOPROSTR WORKSPACE')).toBeInTheDocument()
+  const headingEl = screen.getByRole('heading', {
+    level: 2,
+    name: 'ONE PROGRAM. ONE CONNECTED WORKSPACE.',
+  })
+  expect(headingEl.textContent).toContain('ONE PROGRAM. ONE CONNECTED WORKSPACE.')
+})
+
 it('shows the illustrative label and the coach-review cue inside the mock', () => {
   const { mock } = renderMock()
   const caption = document.querySelector('#preview figcaption')

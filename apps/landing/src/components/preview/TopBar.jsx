@@ -5,7 +5,7 @@ const MARK_SRC = '/brand/svg/mark-charcoal.svg'
 export default function TopBar({ organization, navigation }) {
   return (
     <div className="flex h-14 items-center border-b border-[#d9d9dd] bg-[#dedee1] pr-4 pl-[18px]">
-      <div className="flex min-w-0 flex-1 items-center gap-3">
+      <div className="flex min-w-0 flex-1 items-center gap-[6px]">
         <img
           src={MARK_SRC}
           alt=""

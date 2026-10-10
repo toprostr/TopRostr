@@ -39,8 +39,8 @@ export const workspaceFixture = {
       },
       {
         id: 'nia',
-        name: 'Nia Oakhollow',
-        initials: 'NO',
+        name: 'Nia Fernwhistle',
+        initials: 'NF',
         time: 'Yesterday',
         preview: 'Question about ID camp',
         selected: false,
@@ -48,8 +48,8 @@ export const workspaceFixture = {
       },
       {
         id: 'kestrelmoor',
-        name: 'Kestrelmoor Showcase',
-        initials: 'KS',
+        name: 'Kestrelmoor Cup',
+        initials: 'KC',
         time: 'Mon',
         preview: 'Showcase field changes',
         selected: false,

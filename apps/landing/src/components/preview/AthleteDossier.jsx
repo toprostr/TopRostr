@@ -76,7 +76,7 @@ export default function AthleteDossier({ recruit, decision }) {
         </ul>
 
         <div>
-          <div className="relative aspect-video w-full overflow-hidden rounded-[12px] bg-[#2e2f33]">
+          <div className="relative aspect-video w-full overflow-hidden rounded-[14px] bg-[#2e2f33]">
             <picture className="absolute inset-0 block h-full w-full">
               <source type="image/avif" srcSet={HERO_AVIF} />
               <source type="image/webp" srcSet={`${HERO_WEBP_1X} 1x, ${HERO_WEBP_2X} 2x`} />
@@ -90,9 +90,9 @@ export default function AthleteDossier({ recruit, decision }) {
                 className="h-full w-full object-cover"
               />
             </picture>
-            <span className="absolute top-1/2 left-1/2 flex h-12 w-[68px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[12px] bg-[#ff0000]">
+            <span className="absolute top-1/2 left-1/2 flex h-12 w-[68px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[12px] bg-[#E8B931]">
               <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-                <path d="M6.2 3.4v11.2L15 9 6.2 3.4z" fill="#ffffff" />
+                <path d="M6.2 3.4v11.2L15 9 6.2 3.4z" fill="#2A2D33" />
               </svg>
             </span>
             <span className="absolute right-2 bottom-2 rounded-[4px] bg-[#18181b] px-1.5 py-1 text-[12px] font-medium leading-none text-white">
