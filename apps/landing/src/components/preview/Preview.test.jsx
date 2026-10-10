@@ -56,7 +56,8 @@ it('shows the illustrative label and the coach-review cue inside the mock', () =
   expect(screen.queryByText(/Coach-approved actions/i, hidden)).not.toBeInTheDocument()
   expect(mock).toContainElement(cue)
   expect(cue.closest('[data-preview-step="coach-approval"]')).toBeTruthy()
-  expect(caption).toHaveTextContent('Lila Calder')
+  expect(caption).toHaveTextContent('Tessa Quillfeather')
+  expect(caption).toHaveTextContent('a highlight video thumbnail')
   expect(caption).toHaveTextContent('Jump to 1:42')
   expect(caption).toHaveTextContent('Draft a reply')
   expect(caption).toHaveTextContent('Pass / Review later / Interested')
@@ -72,7 +73,7 @@ it('uses TopRostr, the charcoal mark, and title-case fixtures', () => {
   expect(screen.getByText(/first save at 1:42/i, hidden)).toBeInTheDocument()
   expect(mock.textContent).not.toMatch(/RostrAI/)
   expect(mock.textContent).not.toMatch(/saves start/)
-  expect(mock.textContent).not.toMatch(/LILA CALDER|HARBOR & PINE FC/)
+  expect(mock.textContent).not.toMatch(/TESSA QUILLFEATHER|HARBOR & PINE FC/)
   expect(mock.querySelector('img[src="/brand/svg/mark-charcoal.svg"]')).toBeTruthy()
   expect(mock.querySelector('.opacity-50')).toBeNull()
   expect(nav.className).toContain('hidden')
@@ -82,7 +83,7 @@ it('uses TopRostr, the charcoal mark, and title-case fixtures', () => {
 it('does not render buttons, links, or inputs inside the mock', () => {
   const { mock } = renderMock()
 
-  expect(mock.querySelector('button, a, input, textarea, select')).toBeNull()
+  expect(mock.querySelector('button, a, video, iframe, input, textarea, select')).toBeNull()
   expect(mock.querySelector('[role="button"]')).toBeNull()
   expect(mock.querySelector('[tabindex]')).toBeNull()
 
@@ -92,6 +93,26 @@ it('does not render buttons, links, or inputs inside the mock', () => {
     expect(match.tagName).toBe('SPAN')
     expect(match.closest('button, a')).toBeNull()
   }
+})
+
+it('renders a static highlight thumbnail and no video-service reference', () => {
+  const { mock } = renderMock()
+  const preview = mock.closest('#preview')
+  const still = mock.querySelector('img[src="/images/hero/hero-1440x900.jpg"]')
+
+  expect(still).toHaveAttribute('src', '/images/hero/hero-1440x900.jpg')
+  expect(still).toHaveAttribute('alt', '')
+  expect(still).toHaveAttribute('width', '1440')
+  expect(still).toHaveAttribute('height', '900')
+  expect(still).toHaveAttribute('loading', 'lazy')
+  expect(still).toHaveAttribute('decoding', 'async')
+  expect(still.className).toContain('object-cover')
+  expect(still.closest('a, video, iframe')).toBeNull()
+  expect(screen.getByText('Fall highlights · GK', hidden)).toBeInTheDocument()
+  expect(screen.getByText('4:12', hidden)).toBeInTheDocument()
+  expect(screen.getByText('Jump to 1:42', hidden)).toBeInTheDocument()
+  expect(preview.innerHTML.toLowerCase()).not.toContain('youtube')
+  expect(preview.innerHTML.toLowerCase()).not.toContain('youtu.be')
 })
 
 it('keeps four distinct static preview steps', () => {

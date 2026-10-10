@@ -1,5 +1,12 @@
 import PreviewIcon from './PreviewIcon.jsx'
 
+const HERO_STILL_WIDTH = 1440
+const HERO_STILL_HEIGHT = 900
+const HERO_AVIF = '/images/hero/hero-1440x900.avif'
+const HERO_WEBP_1X = '/images/hero/hero-1440x900.webp'
+const HERO_WEBP_2X = '/images/hero/hero-2880x1800.webp'
+const HERO_JPG = '/images/hero/hero-1440x900.jpg'
+
 const choiceClass = {
   quiet: 'font-medium text-[#5f5f64]',
   outline: 'border border-[#d9d9dd] font-bold text-[#3a3a3d]',
@@ -68,16 +75,33 @@ export default function AthleteDossier({ recruit, decision }) {
           ))}
         </ul>
 
-        <div className="flex aspect-video w-full flex-col justify-between rounded-[14px] bg-[#2e2f33] px-[18px] py-4 lg:aspect-[688/490]">
-          <p className="preview-heading text-[13px] font-medium text-[#f2f2f2]">{recruit.film}</p>
-          <div className="flex items-center justify-center">
-            <span className="flex size-[54px] cursor-default items-center justify-center rounded-full bg-white">
-              <PreviewIcon name="play" />
+        <div>
+          <div className="relative aspect-video w-full overflow-hidden rounded-[12px] bg-[#2e2f33]">
+            <picture className="absolute inset-0 block h-full w-full">
+              <source type="image/avif" srcSet={HERO_AVIF} />
+              <source type="image/webp" srcSet={`${HERO_WEBP_1X} 1x, ${HERO_WEBP_2X} 2x`} />
+              <img
+                src={HERO_JPG}
+                alt=""
+                width={HERO_STILL_WIDTH}
+                height={HERO_STILL_HEIGHT}
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+            </picture>
+            <span className="absolute top-1/2 left-1/2 flex h-12 w-[68px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[12px] bg-[#ff0000]">
+              <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                <path d="M6.2 3.4v11.2L15 9 6.2 3.4z" fill="#ffffff" />
+              </svg>
+            </span>
+            <span className="absolute right-2 bottom-2 rounded-[4px] bg-[#18181b] px-1.5 py-1 text-[12px] font-medium leading-none text-white">
+              {recruit.film.duration}
             </span>
           </div>
-          <div className="h-[3px] overflow-hidden rounded-[2px] bg-white/20">
-            <div className="h-[3px] w-[24.5%] rounded-[2px] bg-white" />
-          </div>
+          <p className="preview-heading mt-2 text-[14px] font-medium text-[#18181b]">
+            {recruit.film.title}
+          </p>
         </div>
       </div>
 

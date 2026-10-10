@@ -7,12 +7,14 @@
 
 ## Changelog
 
-**Oct 10, 2026.** Header, hero, and founders now match the landing Figma (frame `3:2`). The preview heading on the page was updated in code. Section 4.3 of this document is unchanged; PR #61 owns that spec. Decisions applied on the page:
+**Oct 10, 2026.** Header, hero, and founders now match the landing Figma (frame `3:2`). The preview heading on the page was updated in code. Section 4.3 now describes the approved static 06 · Inbox preview. Decisions applied on the page:
 
 - The shared action is `JOIN THE ROSTR` with an aria-hidden `↗` immediately after the words. The accessible name stays `Join the Rostr — opens coach questionnaire in a new tab`.
 - Founder names and roles stay title case in the source and render uppercase.
 - The footer, the SVG wordmark, and the coaches-wanted eyebrow color `#74561A` stay.
 - Text and headings use Inter.
+
+- **Oct 10, 2026:** Section 4.3 now describes the approved static 06 · Inbox preview (TopRostr Soft cut mark, fictional fixtures, footer label), and the file list names `src/components/preview/`.
 
 ## 1. Objective
 
@@ -85,8 +87,9 @@ The product preview is a full-width illustrative React mock of RostrAI 1.0 **06 
 
 - The AI pane is on the left and always open. It only proposes. In the sample it suggests `Jump to 1:42` and `Draft a reply`, and the message says the first save is at 1:42. Those two suggestions are the only AI proposals; stats do not carry an AI marker.
 - The top nav is Inbox / Calendar / Rostr / Settings, centered, with a profile bubble on the right. The bar reads **TopRostr** beside the Soft cut logo mark (`public/brand/svg/mark-charcoal.svg`, charcoal on the light-gray bar). The assistant label is `TopRostr AI`. Do not use the name RostrAI or a typed letter in place of the mark.
-- The palette is monochrome gray. Space Grotesk is for headings in the mock only.
-- Fixtures are fictional only, stored in normal case: Westmere College Women's Soccer, Lila Calder, Harbor & Pine FC, and Northline Desk in place of ECNL. No real programs or leagues. Names are not stored in uppercase.
+- The palette is monochrome gray. Mock headings use Space Grotesk 500/700, scoped to the preview.
+- Fixtures are fictional only, stored in normal case: Westmere Hollow College Women's Soccer, Tessa Quillfeather, Rhys Vantwell, Nia Fernwhistle, Harbor & Pine FC, and Kestrelmoor Cup. No real programs or leagues. Names are not stored in uppercase.
+- The film area is a static highlight thumbnail, styled after a video player in brand colors. It is a 16:9 crop of the hero still already in `public/images/hero/`, with a gold rounded play button, a dark `4:12` duration badge, and the title `Fall highlights · GK` underneath. It is not a video, an iframe, or a link, and it has no video-service logo, wordmark, or URL.
 - There is no navigation sidebar and no staff list. Navigation is the centered top nav only.
 - The card footer reads `Illustrative product concept`. There is no second concept pill above the card.
 - Nothing in the mock is interactive. The coach-decides cue (`YOU REVIEW BEFORE ANY ACTION`) stays. The coach's choices are Pass / Review later / Interested, and nothing is saved until the coach chooses.
@@ -122,7 +125,7 @@ Match Figma's visual identity:
 - Gold: `#E8B931`
 - Restrained additional accents only if already present in Figma.
 
-Text and headings use Inter (weights 400, 500, 600, and 700), loaded with `preconnect` and `display=swap`. The wordmark is the SVG lockup, not live type. Avoid generic corporate gradients and excessive decorative cards. Preserve deliberate negative space and large, confident typography.
+Text and headings use Inter (weights 400, 500, 600, and 700), loaded with `preconnect` and `display=swap`. The wordmark is the SVG lockup, not live type. Mock headings use Space Grotesk 500/700, scoped to the preview. Avoid generic corporate gradients and excessive decorative cards. Preserve deliberate negative space and large, confident typography.
 
 **Proposed container/layout defaults:** `max-width: 1280px`; side padding ~20px mobile / 32px tablet / 64px desktop; desktop section padding ~112–144px vertical, mobile ~64–88px. Tune against actual Figma proportions. Use fluid typography (e.g. `clamp`) rather than fixed giant mobile sizes.
 
@@ -237,7 +240,3 @@ The product preview can use local mock fixtures. Keep structure readable; do not
 6. Summarize files changed, commands to run, any missing assets or configuration, and test results. Never claim the Google Form is connected unless a real URL is supplied and checked.
 
 **Do not implement the TopRostr product itself. This task is solely the pre-launch marketing/validation landing page.**
-
-## Changelog
-
-- **Oct 10, 2026:** Section 4.3 now describes the approved static 06 · Inbox preview (TopRostr Soft cut mark, fictional fixtures, footer label), and the file list names `src/components/preview/`.

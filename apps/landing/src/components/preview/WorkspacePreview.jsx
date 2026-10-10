@@ -21,7 +21,7 @@ export default function WorkspacePreview({ fixture }) {
         <AthleteDossier recruit={recruit} decision={decision} />
       </div>
       <div className="flex flex-col gap-1 border-t border-[#d9d9dd] bg-[#ebebed] px-4 py-2.5 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:px-9">
-        <p className="preview-heading text-[10px] font-bold tracking-[0.08em] text-[#18181b]">
+        <p className="preview-heading text-[10px] font-bold text-[#18181b]">
           {organization.program}
         </p>
         <p className="text-[10px] font-medium tracking-[0.06em] text-[#5f5f64]">{label}</p>

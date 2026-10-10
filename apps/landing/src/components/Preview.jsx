@@ -8,7 +8,7 @@ export default function Preview() {
   const { organization, recruit, assistant, decision } = workspaceFixture
   const suggestionLabels = assistant.suggestions.map((suggestion) => suggestion.label).join('" and "')
   const choiceLabels = decision.choices.map((choice) => choice.label).join(' / ')
-  const previewDescription = `Illustrative inbox for ${organization.program}. It shows the recruit ${recruit.name}. The AI pane suggests "${suggestionLabels}". The coach's choices are ${choiceLabels}. Nothing is saved until the coach chooses.`
+  const previewDescription = `Illustrative inbox for ${organization.program}. It shows the recruit ${recruit.name} and a highlight video thumbnail. The AI pane suggests "${suggestionLabels}". The coach's choices are ${choiceLabels}. Nothing is saved until the coach chooses.`
 
   return (
     <section
