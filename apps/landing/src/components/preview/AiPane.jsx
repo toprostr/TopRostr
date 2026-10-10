@@ -11,7 +11,7 @@ export default function AiPane({ assistant }) {
       </div>
       <div className="flex flex-1 flex-col px-5 pt-3 lg:px-6">
         <div data-preview-step="ai-suggestion" className="preview-step">
-          <p className="flex items-center gap-1.5 text-[12px] font-medium text-[#6b6b70]">
+          <p className="flex items-center gap-1.5 text-[12px] font-medium text-[#5f5f64]">
             <PreviewIcon name="sparkles" />
             {assistant.name}
           </p>
@@ -46,7 +46,7 @@ export default function AiPane({ assistant }) {
             <span className="shrink-0 rounded-[6px] border border-[#d9d9dd] bg-[#e2e2e5] px-2 py-1 text-[12px] font-medium text-[#18181b]">
               {assistant.contextChip}
             </span>
-            <span className="text-[15px] text-[#9c9ca3]">{assistant.placeholder}</span>
+            <span className="text-[15px] text-[#6b6b70]">{assistant.placeholder}</span>
           </span>
           <span className="flex size-8 shrink-0 cursor-default items-center justify-center rounded-[8px] bg-[#0a0a0a]">
             <PreviewIcon name="arrow-up" />

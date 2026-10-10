@@ -43,10 +43,7 @@ export default function AthleteDossier({ recruit, decision }) {
                 />
               ) : null}
               <span>
-                <span className="flex items-center gap-[5px] text-[12px] text-[#6b6b70]">
-                  {stat.label}
-                  {stat.ai ? <PreviewIcon name="ai-dot" /> : null}
-                </span>
+                <span className="text-[12px] text-[#6b6b70]">{stat.label}</span>
                 <span className="preview-heading mt-1 block text-[24px] font-medium leading-none text-[#18181b]">
                   {stat.value}
                 </span>
@@ -85,7 +82,7 @@ export default function AthleteDossier({ recruit, decision }) {
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-[#d9d9dd] bg-[#ebebed] px-4 py-3 lg:mt-[22px] lg:min-h-16 lg:px-9">
-        <p className="min-w-0 flex-1 basis-full text-[13px] text-[#6b6b70] sm:basis-auto">
+        <p className="min-w-0 flex-1 basis-full text-[13px] text-[#5f5f64] sm:basis-auto">
           {decision.prompt}
         </p>
         <div className="ml-auto flex flex-wrap items-center gap-2">

@@ -1,4 +1,3 @@
-import aiDot from './icons/ai-dot.svg'
 import arrowUp from './icons/arrow-up.svg'
 import calendar from './icons/calendar.svg'
 import chevron from './icons/chevron.svg'
@@ -11,7 +10,6 @@ import sparkles from './icons/sparkles.svg'
 import statusDot from './icons/status-dot.svg'
 
 const ICONS = {
-  'ai-dot': { src: aiDot, width: 5, height: 5 },
   'arrow-up': { src: arrowUp, width: 9.84375, height: 9.84375 },
   calendar: { src: calendar, width: 12.3438, height: 13.5938 },
   chevron: { src: chevron, width: 6.875, height: 3.875 },

@@ -11,23 +11,31 @@ export default function MessageList({ inbox }) {
             key={message.id}
             className={`flex h-16 items-center gap-2.5 border-b border-[#d9d9dd] px-4 ${
               message.selected ? 'bg-white' : ''
-            } ${message.recruit ? '' : 'opacity-50'}`}
+            }`}
           >
-            <span className="preview-heading flex size-7 shrink-0 items-center justify-center rounded-full border border-[#d9d9dd] bg-[#e2e2e5] text-[10px] font-bold text-[#18181b]">
+            <span
+              className={`preview-heading flex size-7 shrink-0 items-center justify-center rounded-full border border-[#d9d9dd] bg-[#e2e2e5] text-[10px] font-bold ${
+                message.recruit ? 'text-[#18181b]' : 'text-[#3a3a3d]'
+              }`}
+            >
               {message.initials}
             </span>
             <span className="min-w-0 flex-1">
               <span className="flex items-baseline gap-2">
                 <span
-                  className={`truncate text-[14px] text-[#18181b] ${
-                    message.selected ? 'font-semibold' : 'font-medium'
-                  }`}
+                  className={`truncate text-[14px] ${
+                    message.recruit ? 'text-[#18181b]' : 'text-[#3a3a3d]'
+                  } ${message.selected ? 'font-semibold' : 'font-medium'}`}
                 >
                   {message.name}
                 </span>
-                <span className="ml-auto shrink-0 text-[11px] text-[#9c9ca3]">{message.time}</span>
+                <span className="ml-auto shrink-0 text-[11px] text-[#6b6b70]">{message.time}</span>
               </span>
-              <span className="mt-0.5 block truncate text-[12px] text-[#6b6b70]">
+              <span
+                className={`mt-0.5 block truncate text-[12px] ${
+                  message.recruit ? 'text-[#6b6b70]' : 'text-[#5f5f64]'
+                }`}
+              >
                 {message.preview}
               </span>
             </span>

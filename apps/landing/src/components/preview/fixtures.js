@@ -5,9 +5,8 @@
  */
 export const workspaceFixture = {
   organization: {
-    program: "WESTMERE COLLEGE WOMEN'S SOCCER",
-    product: 'RostrAI',
-    mark: 'R',
+    program: "Westmere College Women's Soccer",
+    product: 'TopRostr',
     coachInitials: 'CR',
   },
   navigation: [
@@ -22,7 +21,7 @@ export const workspaceFixture = {
     messages: [
       {
         id: 'lila',
-        name: 'LILA CALDER',
+        name: 'Lila Calder',
         initials: 'LC',
         time: '9:12a',
         preview: 'Highlight reel + transcript',
@@ -59,18 +58,18 @@ export const workspaceFixture = {
     ],
   },
   recruit: {
-    name: 'LILA CALDER',
+    name: 'Lila Calder',
     position: 'Goalkeeper',
     classYear: 'Class of 2027',
-    club: 'HARBOR & PINE FC',
+    club: 'Harbor & Pine FC',
     status: 'Unreviewed',
     film: 'Highlight reel · 4:12',
     stats: [
-      { label: 'GPA', value: '3.8', ai: true },
-      { label: 'SAT', value: '1340', ai: false },
-      { label: 'ACT', value: '29', ai: false },
-      { label: 'Height', value: '5′9″', ai: false },
-      { label: 'Weight', value: '150 lb', ai: false },
+      { label: 'GPA', value: '3.8' },
+      { label: 'SAT', value: '1340' },
+      { label: 'ACT', value: '29' },
+      { label: 'Height', value: '5′9″' },
+      { label: 'Weight', value: '150 lb' },
     ],
     tabs: [
       { id: 'film', label: 'Film', active: true },
@@ -81,13 +80,13 @@ export const workspaceFixture = {
     ],
   },
   assistant: {
-    name: 'RostrAI',
-    message: '3 new recruits today. Lila’s reel is ready — saves start at 1:42.',
+    name: 'TopRostr AI',
+    message: '3 new recruits today. Lila’s reel is ready — first save at 1:42.',
     suggestions: [
       { label: 'Jump to 1:42', emphasis: true },
       { label: 'Draft a reply', emphasis: false },
     ],
-    contextChip: '@LILA CALDER',
+    contextChip: '@Lila Calder',
     placeholder: 'Ask anything…',
     cue: 'YOU REVIEW BEFORE ANY ACTION',
   },
@@ -99,5 +98,5 @@ export const workspaceFixture = {
       { label: 'Interested', tone: 'solid' },
     ],
   },
-  label: 'ILLUSTRATIVE PRODUCT CONCEPT / COACH-APPROVED ACTIONS',
+  label: 'Illustrative product concept',
 }
