@@ -3,7 +3,7 @@ import { googleFormUrl } from '../config/site.js'
 const JOIN_LABEL = 'Join the Rostr — opens coach questionnaire in a new tab'
 
 const BASE_CLASS =
-  'inline-flex min-h-12 items-center justify-center rounded px-6 font-heading text-sm font-semibold tracking-wide focus-visible:outline-2 focus-visible:outline-offset-2'
+  'inline-flex min-h-12 items-center justify-center rounded-[4px] px-6 font-heading text-sm font-semibold tracking-wide focus-visible:outline-2 focus-visible:outline-offset-2'
 
 // "gold-on-gray" is the final CTA band (#D9DADD): same gold button, with a
 // charcoal focus ring that stays visible on that lighter background.

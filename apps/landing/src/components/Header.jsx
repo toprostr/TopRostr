@@ -67,8 +67,8 @@ export default function Header() {
     return () => media.removeEventListener('change', closeOnDesktop)
   }, [])
 
-  // Dialog pattern: move focus in when the menu opens, cycle Tab inside it,
-  // and return focus to the toggle when Escape closes it.
+  // Dialog pattern: the Close control lives in the dialog, so Tab cycles
+  // through it. Escape and Close both return focus to the menu toggle.
   useEffect(() => {
     if (!menuOpen) {
       return undefined
@@ -110,8 +110,11 @@ export default function Header() {
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [menuOpen])
 
-  function closeMenu() {
+  function closeMenu(restoreFocus) {
     setMenuOpen(false)
+    if (restoreFocus) {
+      toggleRef.current?.focus()
+    }
   }
 
   return (
@@ -145,10 +148,10 @@ export default function Header() {
           className="inline-flex h-11 w-11 items-center justify-center text-off-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold md:hidden"
           aria-expanded={menuOpen}
           aria-controls={menuId}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-label="Open menu"
           onClick={() => setMenuOpen((open) => !open)}
         >
-          <MenuIcon open={menuOpen} />
+          <MenuIcon open={false} />
         </button>
       </div>
 
@@ -161,18 +164,28 @@ export default function Header() {
           aria-label="Menu"
           className="border-t border-off-white/20 px-5 py-6 md:hidden"
         >
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="inline-flex h-11 w-11 items-center justify-center text-off-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+              aria-label="Close menu"
+              onClick={() => closeMenu(true)}
+            >
+              <MenuIcon open />
+            </button>
+          </div>
           <nav aria-label="Mobile">
             <ul className="flex flex-col">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className={MOBILE_LINK_CLASS} onClick={closeMenu}>
+                  <a href={link.href} className={MOBILE_LINK_CLASS} onClick={() => closeMenu(false)}>
                     {link.label}
                   </a>
                 </li>
               ))}
             </ul>
           </nav>
-          <CTAButton className="mt-6 w-full" onClick={closeMenu} />
+          <CTAButton className="mt-6 w-full" onClick={() => closeMenu(false)} />
         </div>
       ) : null}
     </header>

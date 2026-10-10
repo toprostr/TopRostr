@@ -33,7 +33,7 @@ it('links Mission and Platform to the scaffold sections and shows the wordmark',
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
 })
 
-it('opens the mobile menu, traps focus, and closes on Escape back to the toggle', () => {
+it('traps focus inside the dialog, including Close, and returns focus to the toggle', () => {
   render(<Header />)
 
   const toggle = screen.getByRole('button', { name: 'Open menu' })
@@ -42,22 +42,24 @@ it('opens the mobile menu, traps focus, and closes on Escape back to the toggle'
 
   const dialog = screen.getByRole('dialog', { name: 'Menu' })
   const menu = within(dialog)
+  const close = menu.getByRole('button', { name: 'Close menu' })
   const mission = menu.getByRole('link', { name: 'Mission' })
   const platform = menu.getByRole('link', { name: 'Platform' })
   const cta = menu.getByRole('link', { name: CTA_NAME })
 
+  expect(dialog).toHaveAttribute('aria-modal', 'true')
   expect(toggle).toHaveAttribute('aria-expanded', 'true')
   expect(mission).toHaveAttribute('href', '#founders')
   expect(platform).toHaveAttribute('href', '#preview')
-  expect(mission).toHaveFocus()
-  expect(mission).toHaveClass('focus-visible:outline-gold')
+  expect(close).toHaveFocus()
+  expect(close).toHaveClass('focus-visible:outline-gold')
 
   fireEvent.keyDown(document, { key: 'a' })
   expect(dialog).toBeInTheDocument()
 
   cta.focus()
   fireEvent.keyDown(document, { key: 'Tab' })
-  expect(mission).toHaveFocus()
+  expect(close).toHaveFocus()
 
   fireEvent.keyDown(document, { key: 'Tab', shiftKey: true })
   expect(cta).toHaveFocus()
@@ -67,6 +69,15 @@ it('opens the mobile menu, traps focus, and closes on Escape back to the toggle'
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   expect(toggle).toHaveFocus()
   expect(toggle).toHaveAttribute('aria-expanded', 'false')
+
+  fireEvent.click(toggle)
+  const closeAgain = within(screen.getByRole('dialog', { name: 'Menu' })).getByRole('button', {
+    name: 'Close menu',
+  })
+  fireEvent.click(closeAgain)
+
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  expect(toggle).toHaveFocus()
   expect(screen.getByRole('button', { name: 'Open menu' })).toBe(toggle)
 })
 

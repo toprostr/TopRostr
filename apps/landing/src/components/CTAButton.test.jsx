@@ -15,7 +15,12 @@ it('opens the configured form in a new tab with the questionnaire label', () => 
   expect(link).toHaveAttribute('rel', 'noopener noreferrer')
   expect(link).toHaveAttribute('data-cta', 'join')
   expect(link).toHaveTextContent('JOIN THE ROSTR')
-  expect(link).toHaveClass('bg-gold', 'focus-visible:outline-off-white', 'focus-visible:outline-2')
+  expect(link).toHaveClass(
+    'bg-gold',
+    'rounded-[4px]',
+    'focus-visible:outline-off-white',
+    'focus-visible:outline-2',
+  )
 })
 
 it('accepts a gold-on-gray variant and extra class names for the final CTA band', () => {
