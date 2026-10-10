@@ -63,7 +63,7 @@ export default function Founders() {
     <section id="founders" className="bg-[#14151A] text-off-white">
       <div className="mx-auto w-full max-w-[1280px] px-5 py-16 sm:px-8 sm:py-20 lg:px-16 lg:py-32">
         <p className="font-heading text-[17px] font-bold text-gold">
-          02 / THE PLAYERS BEHIND TOPROSTR
+          03 / THE PLAYERS BEHIND TOPROSTR
         </p>
         <h2 className="mt-6 font-heading text-[clamp(1.75rem,4vw+0.6rem,3.8125rem)] leading-[1.05] font-bold text-balance text-off-white">
           WE KNOW THE GAME.

@@ -39,7 +39,7 @@ it('renders the fictional program, recruit, club, and other names', () => {
 it('shows the approved preview eyebrow and headline', () => {
   render(<Preview />)
 
-  expect(screen.getByText('03 / THE TOPROSTR WORKSPACE')).toBeInTheDocument()
+  expect(screen.getByText('02 / THE TOPROSTR WORKSPACE')).toBeInTheDocument()
   const headingEl = screen.getByRole('heading', {
     level: 2,
     name: 'ONE PROGRAM. ONE CONNECTED WORKSPACE.',

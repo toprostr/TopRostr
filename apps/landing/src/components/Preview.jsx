@@ -18,7 +18,7 @@ export default function Preview() {
     >
       <div className="mx-auto w-full max-w-[1280px]">
         <p className="font-heading text-[17px] font-bold text-gold">
-          03 / THE TOPROSTR WORKSPACE
+          02 / THE TOPROSTR WORKSPACE
         </p>
         <h2
           id="preview-heading"

@@ -11,8 +11,8 @@ export default function App() {
       <Header />
       <main>
         <Hero />
-        <Founders />
         <Preview />
+        <Founders />
         <JoinCta />
       </main>
       <Footer />
