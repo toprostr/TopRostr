@@ -30,7 +30,7 @@ it('renders the section, its heading, and the shared join CTA', () => {
 
   expect(section).toBeInTheDocument()
   expect(section).toHaveClass('bg-brand-gray')
-  expect(screen.getByText(eyebrow)).toBeInTheDocument()
+  expect(screen.queryByText(eyebrow)).not.toBeInTheDocument()
   expect(
     screen.getByRole('heading', { level: 2, name: headline }),
   ).toBeInTheDocument()
@@ -46,10 +46,11 @@ it('renders the section, its heading, and the shared join CTA', () => {
     'bg-gold',
     'text-charcoal',
     'focus-visible:outline-charcoal',
-    'h-[75px]',
-    'max-w-[340px]',
-    'justify-start',
-    'gap-[1ch]',
+    'h-[64px]',
+    'max-w-[300px]',
+    'justify-center',
+    'mx-auto',
+    'gap-3',
     'text-[17px]',
     'rounded-[4px]',
     'font-bold',
