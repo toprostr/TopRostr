@@ -40,7 +40,7 @@ function FounderPortrait({ name, fileBase }) {
 
 function FounderProfile({ founder }) {
   return (
-    <article className="grid min-w-0 grid-cols-1 items-start gap-6 xl:grid-cols-[minmax(0,250px)_minmax(0,1fr)] xl:gap-8">
+    <article className="grid min-w-0 grid-cols-1 items-start gap-6 sm:grid-cols-[minmax(0,140px)_minmax(0,1fr)] xl:grid-cols-[minmax(0,250px)_minmax(0,1fr)] xl:gap-8">
       <FounderPortrait name={founder.name} fileBase={founder.fileBase} />
       <div className="min-w-0">
         <h3 className="font-heading text-[1.5625rem] font-bold uppercase leading-tight text-off-white">

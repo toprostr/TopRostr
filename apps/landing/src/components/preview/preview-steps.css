@@ -80,3 +80,23 @@
 .concept-arrow { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #f4f4f540; border-radius: 50%; background: #292b31e6; color: #f4f4f5; cursor: pointer; }
 .concept-arrow:hover { color: var(--color-gold); border-color: var(--color-gold); }
 .concept-arrow:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 4px; }
+
+/* Reflow concepts on phones and tablets instead of shrinking desktop text. */
+@media (max-width: 1279px) {
+  .concept-carousel { aspect-ratio: auto; }
+  .concept-card--previous, .concept-card--next { display: none; }
+  .concept-card--active {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    aspect-ratio: auto;
+    transform: none;
+  }
+  .concept-card--active .concept-canvas {
+    position: relative;
+    width: 100%;
+    transform: none;
+    pointer-events: auto;
+  }
+}
