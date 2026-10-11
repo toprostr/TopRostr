@@ -11,7 +11,7 @@ export default function Preview() {
 
   useLayoutEffect(() => {
     if (typeof ResizeObserver === 'undefined') return
-    const observer = new ResizeObserver(([entry]) => setScale(entry.contentRect.width * 0.84 / 1440))
+    const observer = new ResizeObserver(([entry]) => setScale(entry.contentRect.width * 0.76 / 1440))
     observer.observe(stageRef.current)
     return () => observer.disconnect()
   }, [])
@@ -39,14 +39,14 @@ export default function Preview() {
       id="preview"
       aria-label="TopRostr workspace preview"
       aria-roledescription="carousel"
-      className="relative overflow-hidden bg-[#292B31] py-12 md:py-16 lg:py-20"
+      className="relative flex min-h-svh items-center overflow-hidden bg-[#292B31] py-12 md:py-16 lg:py-20"
     >
       <div className="mx-auto w-full max-w-[1240px] px-4 md:px-6 lg:px-8">
-        <p className="mb-5 text-center text-sm tracking-wide text-off-white/60">Workspace concepts</p>
         <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">{concept.label}, slide {slideIndex + 1} of {workspaceConcepts.length}</p>
         <div role="group" aria-label="Choose a workspace view" onKeyDown={onControlKeyDown}>
           <div className="concept-controls">
             <button type="button" aria-label="Previous workspace view" aria-controls={slideId} onClick={() => moveSlide(-1)} className="concept-arrow">←</button>
+            <p className="min-w-[130px] text-center text-base font-medium text-off-white">{concept.label} view</p>
             <button type="button" aria-label="Next workspace view" aria-controls={slideId} onClick={() => moveSlide(1)} className="concept-arrow">→</button>
           </div>
           <div ref={stageRef} className="concept-carousel" style={{ '--concept-scale': scale }}>
@@ -61,7 +61,7 @@ export default function Preview() {
             <div aria-hidden="true" className="concept-canvas"><WorkspacePreview fixture={workspaceFixture} view={concept.id} /></div>
           </figure>
           </div>
-
+          <p className="mt-5 text-center text-sm tracking-wide text-off-white/60">Workspace concept</p>
         </div>
       </div>
     </section>
