@@ -1,3 +1,5 @@
+import CTAButton from './CTAButton.jsx'
+
 const HERO_STILL_WIDTH = 1440
 const HERO_STILL_HEIGHT = 900
 const HERO_AVIF = '/images/hero/hero-ball-right-1440x900.avif'
@@ -40,6 +42,9 @@ export default function Hero() {
           <p className="mt-8 max-w-[680px] text-lg leading-relaxed text-gold md:text-[1.375rem] md:leading-normal">
             An AI-powered recruiting workspace that gives coaches more time to focus on winning.
           </p>
+          <div className="mt-10">
+            <CTAButton size="hero" location="hero" />
+          </div>
         </div>
       </div>
     </section>
