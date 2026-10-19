@@ -10,6 +10,12 @@ body {
   background: #1c1c1e;
 }
 
+@media (max-height: 500px) {
+  #hero .hero-content {
+    padding-block: 24px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

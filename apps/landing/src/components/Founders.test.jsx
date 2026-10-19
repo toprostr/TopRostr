@@ -12,11 +12,8 @@ const jasonToday = 'Studied finance and economics at Monmouth and Colby.'
 it('renders the PRD headline, both founders, and sized portraits', () => {
   render(<Founders />)
 
-  const foundersHeading = screen.getByRole('heading', {
-    level: 2,
-    name: "WE KNOW THE GAME. WE KNOW WHAT'S NEXT.",
-  })
-  expect(foundersHeading.textContent).toContain("WE KNOW THE GAME. WE KNOW WHAT'S NEXT.")
+  expect(screen.getByRole('region', { name: 'Our Rostr' })).toBeInTheDocument()
+  expect(screen.getByRole('img', { name: 'TopRostr' })).toHaveAttribute('src', '/brand/svg/mark-offwhite.svg')
 
   const alejandro = screen.getByRole('heading', { level: 3, name: 'Alejandro Suarez' })
   expect(alejandro).toHaveTextContent('Alejandro Suarez')
@@ -41,7 +38,7 @@ it('renders the PRD headline, both founders, and sized portraits', () => {
 
   expect(screen.queryByText('Founders')).not.toBeInTheDocument()
 
-  expect(screen.getAllByText(/We've lived the recruiting process/)).toHaveLength(1)
+  expect(screen.getAllByText(/We've lived the game and the recruiting process/)).toHaveLength(1)
 
   for (const name of ['Alejandro Suarez', 'Jason Wallack']) {
     const portrait = screen.getByRole('img', { name: `${name}, co-founder` })

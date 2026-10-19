@@ -10,7 +10,7 @@ export default function Footer() {
           alt="TopRostr"
           width="194"
           height="100"
-          className="h-10 w-auto"
+          className="h-10 w-auto self-start shrink-0"
         />
         <p className="max-w-xl text-sm leading-relaxed text-brand-gray">{DISCLAIMER}</p>
         <p className="text-sm text-off-white">© 2026 TopRostr</p>

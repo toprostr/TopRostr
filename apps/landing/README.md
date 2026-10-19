@@ -71,7 +71,7 @@ The logo kit is in `public/brand/` and is served from `/brand/...` (see `public/
 - `/brand/favicon.svg`
 - `/brand/png/app-icon-180.png` (apple touch icon)
 
-The header uses `/brand/svg/lockup-horizontal-toprostr-dark-bg.svg` (off-white artwork for the charcoal page). The footer uses the compact `/brand/svg/mark-offwhite.svg`. The wordmark in those files is outlined artwork. Do not retype it in live text.
+The header and footer use the final `/brand/svg/mark-offwhite.svg` artwork on its own. The header image retains the accessible name TopRostr. The existing outlined lockup assets are retained as the original brand references.
 
 The hero still is a full-width `<picture>` behind the headline: AVIF, then WebP at 1x and 2x, then a JPG fallback. The files live in `public/images/hero/`. The `<img>` is decorative (`alt=""`), 1440×900, and uses `object-position: 75% 50%`. Do not use video.
 

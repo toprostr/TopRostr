@@ -25,10 +25,78 @@
   transform: none;
 }
 
+.calendar-event {
+  position: absolute;
+  width: calc(14.2857% - 8px);
+  overflow: hidden;
+  border-radius: 6px;
+  padding: 6px 6px 0 8px;
+  line-height: 15px;
+}
+
+.roster-row {
+  display: grid;
+  grid-template-columns: minmax(190px, 250fr) 70fr 70fr 190fr 70fr minmax(100px, 1fr);
+  align-items: center;
+  padding-inline: 12px;
+}
+
+.workspace-slide {
+  animation: workspace-reveal 180ms ease-out;
+}
+
+@keyframes workspace-reveal {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .workspace-slide {
+    animation: none;
+  }
   .preview-step {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+}
+
+.concept-carousel { position: relative; aspect-ratio: 1440 / 800; isolation: isolate; }
+.concept-card { position: absolute; top: 50%; width: 76%; aspect-ratio: 1440 / 936; margin: 0; transform: translateY(-50%); pointer-events: none; }
+.concept-canvas { position: absolute; width: 1440px; container-type: inline-size; transform: scale(var(--concept-scale)); transform-origin: top left; }
+.concept-card--active { left: 12%; z-index: 2; }
+.concept-card--active .settings-panel { pointer-events: auto; }
+.concept-card--active [data-preview-step="workspace"] {
+  box-shadow: 0 32px 80px #0009, 0 8px 24px #0006, 0 0 0 1px #ffffff30;
+}
+.concept-card--previous { left: -50%; }
+.concept-card--next { left: 66%; }
+.concept-card--previous, .concept-card--next {
+  opacity: 0.18;
+  transform: translateY(-50%) scale(0.55);
+  filter: brightness(0.65);
+}
+.concept-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 16px; }
+.concept-arrow { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #f4f4f540; border-radius: 50%; background: #292b31e6; color: #f4f4f5; cursor: pointer; }
+.concept-arrow:hover { color: var(--color-gold); border-color: var(--color-gold); }
+.concept-arrow:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 4px; }
+
+/* Reflow concepts on phones and tablets instead of shrinking desktop text. */
+@media (max-width: 1279px) {
+  .concept-carousel { aspect-ratio: auto; }
+  .concept-card--previous, .concept-card--next { display: none; }
+  .concept-card--active {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    aspect-ratio: auto;
+    transform: none;
+  }
+  .concept-card--active .concept-canvas {
+    position: relative;
+    width: 100%;
+    transform: none;
+    pointer-events: auto;
   }
 }

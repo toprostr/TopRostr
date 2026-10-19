@@ -7,10 +7,10 @@ const NAV_LINKS = [
 ]
 
 const DESKTOP_LINK_CLASS =
-  'font-heading text-[13px] font-semibold uppercase tracking-[0.16em] text-off-white underline-offset-4 hover:underline hover:decoration-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold'
+  'font-heading text-[13px] font-semibold uppercase tracking-[0.16em] text-off-white underline-offset-4 hover:underline hover:decoration-gold focus-visible:underline focus-visible:decoration-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold'
 
 const MOBILE_LINK_CLASS =
-  'block py-3 font-heading text-sm font-semibold uppercase tracking-[0.16em] text-off-white underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold'
+  'block py-3 font-heading text-sm font-semibold uppercase tracking-[0.16em] text-off-white underline-offset-4 hover:underline hover:decoration-gold focus-visible:underline focus-visible:decoration-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold'
 
 function MenuIcon({ open }) {
   return (
@@ -119,17 +119,17 @@ export default function Header() {
 
   return (
     <header className="border-b border-off-white/20 bg-charcoal">
-      <div className="mx-auto flex w-full max-w-[1280px] items-center justify-between gap-3 px-5 py-3 md:px-8 md:py-5 lg:px-16">
+      <div className="mx-auto flex w-full max-w-[1280px] items-center justify-between gap-3 px-5 py-3 md:justify-center md:gap-8 md:px-8 md:py-5 lg:px-16">
         <a
           href="#hero"
-          className="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+          className="relative inline-flex shrink-0 items-center rounded-sm after:absolute after:-bottom-2 after:left-0 after:h-px after:w-full after:bg-gold after:opacity-0 hover:after:opacity-100 focus-visible:after:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
         >
           <img
-            src="/brand/svg/lockup-horizontal-toprostr-dark-bg.svg"
+            src="/brand/svg/mark-offwhite.svg"
             alt="TopRostr"
-            width="675"
-            height="124"
-            className="h-8 w-auto sm:h-10 md:h-12"
+            width="194"
+            height="100"
+            className="h-6 w-auto sm:h-7 md:h-8"
           />
         </a>
 

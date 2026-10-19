@@ -6,7 +6,7 @@ import { googleFormUrl } from './config/site.js'
 const CTA_NAME = 'Join the Rostr — opens coach questionnaire in a new tab'
 
 // Scaffold section ids. Header, main, and footer are landmarks and have no id.
-const SECTION_IDS = ['hero', 'founders', 'preview', 'join']
+const SECTION_IDS = ['hero', 'preview', 'founders', 'join']
 
 it('renders the six sections by id or landmark and points only join CTAs at the form', () => {
   render(<App />)
@@ -14,6 +14,8 @@ it('renders the six sections by id or landmark and points only join CTAs at the 
   const header = screen.getByRole('banner')
   const main = screen.getByRole('main')
   const footer = screen.getByRole('contentinfo')
+
+  expect([...main.children].map((section) => section.id)).toEqual(SECTION_IDS)
 
   expect(main).not.toContainElement(header)
   expect(main).not.toContainElement(footer)

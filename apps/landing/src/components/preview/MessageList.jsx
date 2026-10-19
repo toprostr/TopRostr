@@ -1,7 +1,7 @@
 export default function MessageList({ inbox }) {
   return (
-    <div className="hidden min-h-0 min-w-0 flex-col border-[#d9d9dd] bg-[#f4f4f5] lg:flex lg:border-r">
-      <div className="flex h-[52px] items-center gap-2 pr-4 pl-[18px]">
+    <div className="flex max-h-[244px] min-h-0 min-w-0 flex-col overflow-y-auto border-[#d9d9dd] bg-[#f4f4f5] @min-[1024px]:max-h-none @min-[1024px]:border-r">
+      <div className="flex h-[52px] shrink-0 items-center gap-2 pr-4 pl-[18px]">
         <p className="preview-heading text-[16px] font-bold text-[#18181b]">{inbox.title}</p>
         <p className="ml-auto text-[12px] text-[#6b6b70]">{inbox.count}</p>
       </div>
@@ -14,7 +14,7 @@ export default function MessageList({ inbox }) {
             }`}
           >
             <span
-              className={`preview-heading flex size-7 shrink-0 items-center justify-center rounded-full border border-[#d9d9dd] bg-[#e2e2e5] text-[10px] font-bold ${
+              className={`preview-heading flex size-7 shrink-0 items-center justify-center rounded-full border border-gold bg-gold text-[10px] font-bold ${
                 message.recruit ? 'text-[#18181b]' : 'text-[#3a3a3d]'
               }`}
             >

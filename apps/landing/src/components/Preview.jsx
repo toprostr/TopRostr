@@ -1,45 +1,68 @@
 import WorkspacePreview from './preview/WorkspacePreview.jsx'
 import { workspaceFixture } from './preview/fixtures.js'
-
-const sectionBody =
-  'Your staff\'s recruiting context in one place, with AI working alongside you\u2014not making decisions for you.'
+import { useId, useLayoutEffect, useRef, useState } from 'react'
+import { workspaceConcepts } from './preview/concepts.js'
 
 export default function Preview() {
-  const { organization, recruit, assistant, decision } = workspaceFixture
-  const suggestionLabels = assistant.suggestions.map((suggestion) => suggestion.label).join('" and "')
+  const [slideIndex, setSlideIndex] = useState(0)
+  const slideId = useId()
+  const stageRef = useRef(null)
+  const [scale, setScale] = useState(0.6)
+
+  useLayoutEffect(() => {
+    if (typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(([entry]) => setScale(entry.contentRect.width * 0.76 / 1440))
+    observer.observe(stageRef.current)
+    return () => observer.disconnect()
+  }, [])
+  const concept = workspaceConcepts[slideIndex]
+  const { organization, recruit, decision } = workspaceFixture
   const choiceLabels = decision.choices.map((choice) => choice.label).join(' / ')
-  const previewDescription = `Illustrative inbox for ${organization.program}. It shows the recruit ${recruit.name} and a highlight video thumbnail. The AI pane suggests "${suggestionLabels}". The coach's choices are ${choiceLabels}. Nothing is saved until the coach chooses.`
+  const previewDescription = `Illustrative inbox for ${organization.program}. It shows the recruit ${recruit.name} and a highlight video thumbnail. The AI pane summarizes the player. The coach's choices are ${choiceLabels}. Nothing is saved until the coach chooses.`
+
+  function moveSlide(direction) {
+    setSlideIndex(current => (current + direction + workspaceConcepts.length) % workspaceConcepts.length)
+  }
+
+  function onControlKeyDown(event) {
+    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+      event.preventDefault()
+      moveSlide(event.key === 'ArrowRight' ? 1 : -1)
+    } else if (event.key === 'Home' || event.key === 'End') {
+      event.preventDefault()
+      setSlideIndex(event.key === 'Home' ? 0 : workspaceConcepts.length - 1)
+    }
+  }
 
   return (
     <section
       id="preview"
-      aria-labelledby="preview-heading"
-      className="relative bg-[#292B31] px-5 py-16 md:px-8 md:py-28 lg:px-16 lg:py-36"
+      aria-label="TopRostr workspace preview"
+      aria-roledescription="carousel"
+      className="relative flex min-h-svh items-center overflow-hidden bg-[#292B31] py-12 md:py-16 lg:py-20"
     >
-      <div className="mx-auto w-full max-w-[1280px]">
-        <p className="font-heading text-[17px] font-bold text-gold">
-          03 / THE TOPROSTR WORKSPACE
-        </p>
-        <h2
-          id="preview-heading"
-          className="mt-4 max-w-5xl font-heading text-[clamp(1.75rem,4vw_+_1rem,2.875rem)] font-bold leading-[1.05] tracking-tight text-balance text-off-white"
-        >
-          ONE PROGRAM.
-          {/* Inline display matches the block class so the accessible name keeps its space in jsdom. */}
-          {' '}
-          <span className="block lg:whitespace-nowrap" style={{ display: 'block' }}>
-            ONE CONNECTED WORKSPACE.
-          </span>
-        </h2>
-        <p className="mt-4 max-w-3xl text-[21px] leading-relaxed text-[#CFD1D4]">
-          {sectionBody}
-        </p>
-        <figure className="mt-8 md:mt-12">
-          <figcaption className="sr-only">{previewDescription}</figcaption>
-          <div aria-hidden="true">
-            <WorkspacePreview fixture={workspaceFixture} />
+      <div className="mx-auto w-full max-w-[1240px] px-4 md:px-6 lg:px-8">
+        <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">{concept.label}, slide {slideIndex + 1} of {workspaceConcepts.length}</p>
+        <div role="group" aria-label="Choose a workspace view" onKeyDown={onControlKeyDown}>
+          <div className="concept-controls">
+            <button type="button" aria-label="Previous workspace view" aria-controls={slideId} onClick={() => moveSlide(-1)} className="concept-arrow">←</button>
+            <p className="min-w-[130px] text-center text-base font-medium text-off-white">{concept.label} view</p>
+            <button type="button" aria-label="Next workspace view" aria-controls={slideId} onClick={() => moveSlide(1)} className="concept-arrow">→</button>
           </div>
-        </figure>
+          <div ref={stageRef} className="concept-carousel" style={{ '--concept-scale': scale }}>
+          {[-1, 1].map(direction => {
+            const neighbor = workspaceConcepts[(slideIndex + direction + workspaceConcepts.length) % workspaceConcepts.length]
+            return <div key={direction} aria-hidden="true" className={`concept-card concept-card--${direction === -1 ? 'previous' : 'next'}`}>
+              <div className="concept-canvas"><WorkspacePreview fixture={workspaceFixture} view={neighbor.id} /></div>
+            </div>
+          })}
+          <figure id={slideId} role="group" aria-roledescription="slide" aria-label={`${concept.label}, ${slideIndex + 1} of ${workspaceConcepts.length}`} className="concept-card concept-card--active workspace-slide" key={concept.id}>
+            <figcaption className="sr-only">{concept.description ?? previewDescription}</figcaption>
+            <div aria-hidden="true" className="concept-canvas"><WorkspacePreview fixture={workspaceFixture} view={concept.id} /></div>
+          </figure>
+          </div>
+          <p className="mt-5 text-center text-sm tracking-wide text-off-white/60">Workspace concept</p>
+        </div>
       </div>
     </section>
   )

@@ -8,7 +8,7 @@ afterEach(() => {
 
 const CTA_NAME = 'Join the Rostr — opens coach questionnaire in a new tab'
 
-it('links Mission and Platform to the scaffold sections and shows the wordmark', () => {
+it('links Mission and Platform to the scaffold sections and shows the final TR mark', () => {
   render(<Header />)
 
   expect(screen.getByRole('link', { name: 'Mission' })).toHaveAttribute('href', '#founders')
@@ -16,9 +16,9 @@ it('links Mission and Platform to the scaffold sections and shows the wordmark',
   expect(screen.getByRole('link', { name: 'Mission' })).toHaveClass('focus-visible:outline-gold')
 
   const wordmark = screen.getByRole('img', { name: 'TopRostr' })
-  expect(wordmark).toHaveAttribute('src', '/brand/svg/lockup-horizontal-toprostr-dark-bg.svg')
-  expect(wordmark).toHaveAttribute('width', '675')
-  expect(wordmark).toHaveAttribute('height', '124')
+  expect(wordmark).toHaveAttribute('src', '/brand/svg/mark-offwhite.svg')
+  expect(wordmark).toHaveAttribute('width', '194')
+  expect(wordmark).toHaveAttribute('height', '100')
   expect(wordmark.closest('a')).toHaveAttribute('href', '#hero')
   expect(wordmark.closest('a')).toHaveClass('focus-visible:outline-gold')
 
@@ -31,6 +31,23 @@ it('links Mission and Platform to the scaffold sections and shows the wordmark',
   expect(toggle).toHaveAttribute('aria-expanded', 'false')
   expect(toggle).toHaveClass('focus-visible:outline-gold')
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+})
+
+it('centers the desktop brand and navigation and provides hover and focus underlines', () => {
+  render(<Header />)
+
+  const logo = screen.getByRole('link', { name: 'TopRostr' })
+  expect(logo.parentElement).toHaveClass('md:justify-center')
+  expect(logo).toHaveClass('hover:after:opacity-100', 'focus-visible:after:opacity-100', 'after:bg-gold')
+  for (const name of ['Mission', 'Platform']) {
+    expect(screen.getByRole('link', { name })).toHaveClass('hover:underline', 'focus-visible:underline')
+  }
+
+  fireEvent.click(screen.getByRole('button', { name: 'Open menu' }))
+  const mobile = within(screen.getByRole('navigation', { name: 'Mobile' }))
+  for (const name of ['Mission', 'Platform']) {
+    expect(mobile.getByRole('link', { name })).toHaveClass('hover:underline', 'focus-visible:underline')
+  }
 })
 
 it('traps focus inside the dialog, including Close, and returns focus to the toggle', () => {

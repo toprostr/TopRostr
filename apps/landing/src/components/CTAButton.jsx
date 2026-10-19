@@ -4,7 +4,7 @@ const JOIN_LABEL = 'Join the Rostr — opens coach questionnaire in a new tab'
 
 // The arrow sits in the label group (justify-center + gap), not at the far edge.
 const BASE_CLASS =
-  'inline-flex items-center justify-center gap-2 rounded-[4px] font-heading font-bold focus-visible:outline-2 focus-visible:outline-offset-2'
+  'inline-flex items-center justify-center gap-2 rounded-[4px] font-heading font-bold underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-2'
 
 // Figma frame: nav control 190×53 / 13px, hero control 260×57 / 16px.
 // No size: the caller sets the box (the final band passes its own classes).

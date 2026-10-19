@@ -7,18 +7,12 @@ const HERO_WEBP_1X = '/images/hero/hero-1440x900.webp'
 const HERO_WEBP_2X = '/images/hero/hero-2880x1800.webp'
 const HERO_JPG = '/images/hero/hero-1440x900.jpg'
 
-const choiceClass = {
-  quiet: 'font-medium text-[#5f5f64]',
-  outline: 'border border-[#d9d9dd] font-bold text-[#3a3a3d]',
-  solid: 'bg-[#0b0b0b] font-bold text-[#fafafa]',
-}
-
-export default function AthleteDossier({ recruit, decision }) {
+export default function AthleteDossier({ recruit }) {
   return (
     <div className="flex min-w-0 flex-col bg-[#f4f4f5]">
       <div
         data-preview-step="recruit-highlight"
-        className="preview-step flex flex-col gap-4 px-4 pt-5 sm:gap-[22px] sm:pt-7 lg:px-9"
+        className="preview-step flex flex-col gap-4 px-4 pt-5 sm:gap-[22px] sm:pt-7 @min-[1024px]:px-9"
       >
         <div className="flex flex-wrap items-end gap-3">
           <div className="min-w-0">
@@ -105,21 +99,7 @@ export default function AthleteDossier({ recruit, decision }) {
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-[#d9d9dd] bg-[#ebebed] px-4 py-3 lg:mt-[22px] lg:min-h-16 lg:px-9">
-        <p className="min-w-0 flex-1 basis-full text-[13px] text-[#5f5f64] sm:basis-auto">
-          {decision.prompt}
-        </p>
-        <div className="ml-auto flex flex-wrap items-center gap-2">
-          {decision.choices.map((choice) => (
-            <span
-              key={choice.label}
-              className={`preview-heading flex h-9 cursor-default items-center rounded-[8px] px-3 text-[14px] ${choiceClass[choice.tone]}`}
-            >
-              {choice.label}
-            </span>
-          ))}
-        </div>
-      </div>
+
     </div>
   )
 }
