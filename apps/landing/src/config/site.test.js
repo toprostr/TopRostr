@@ -52,7 +52,7 @@ it('accepts only https form URLs and falls back otherwise', () => {
   )
 })
 
-it('fails a production build when the form URL is blank and exits 0 otherwise', () => {
+it('fails a production build unless the form URL is https, and exits 0 otherwise', () => {
   const production = googleFormBuildGuard({ VERCEL_ENV: 'production' })
   const productionBlank = googleFormBuildGuard({
     VERCEL_ENV: 'production',
@@ -83,7 +83,23 @@ it('fails a production build when the form URL is blank and exits 0 otherwise', 
       VERCEL_ENV: 'production',
       VITE_GOOGLE_FORM_URL: 'http://example.com/form',
     }).exitCode,
-  ).toBe(0)
+  ).not.toBe(0)
+  expect(
+    googleFormBuildGuard({
+      VERCEL_ENV: 'production',
+      VITE_GOOGLE_FORM_URL: 'javascript:alert(1)',
+    }).message,
+  ).toBe(GOOGLE_FORM_URL_PRODUCTION_ERROR)
+})
+
+it('returns no href instead of the placeholder when VITE_VERCEL_ENV is production', () => {
+  vi.stubEnv('VITE_VERCEL_ENV', 'production')
+
+  expect(readGoogleFormUrl({})).toBe('')
+  expect(readGoogleFormUrl({ VITE_GOOGLE_FORM_URL: 'https://forms.gle/example' })).toBe(
+    'https://forms.gle/example',
+  )
+  expect(readGoogleFormUrl({})).not.toContain('PLACEHOLDER')
 })
 
 it('uses VITE_GOOGLE_FORM_URL when it is set', async () => {

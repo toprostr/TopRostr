@@ -1,9 +1,9 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, expect, it, vi } from 'vitest'
-import { track } from '@vercel/analytics'
 import Header from './Header.jsx'
 
 afterEach(() => {
+  delete window.va
   vi.unstubAllGlobals()
 })
 
@@ -148,7 +148,8 @@ it('closes the open mobile menu when the viewport crosses the desktop breakpoint
 })
 
 it('gives every mobile menu control a 44px target, tracks the header CTA, and opens the form in a new tab', () => {
-  track.mockClear()
+  const va = vi.fn()
+  window.va = va
   render(<Header />)
 
   const toggle = screen.getByRole('button', { name: 'Open menu' })
@@ -184,5 +185,5 @@ it('gives every mobile menu control a 44px target, tracks the header CTA, and op
   expect(cta).toHaveAttribute('rel', 'noopener noreferrer')
 
   fireEvent.click(cta)
-  expect(track).toHaveBeenCalledWith('cta_click', { location: 'header' })
+  expect(va).toHaveBeenCalledWith('event', { name: 'cta_click', data: { location: 'header' } })
 })
