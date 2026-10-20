@@ -92,8 +92,9 @@ export default function Preview() {
           <div className="concept-carousel" style={{ '--concept-scale': thumbnailScale }}>
           {[-1, 1].map(direction => {
             const neighbor = workspaceConcepts[(slideIndex + direction + workspaceConcepts.length) % workspaceConcepts.length]
-            return <div key={direction} aria-hidden="true" className={`concept-card concept-card--${direction === -1 ? 'previous' : 'next'}`}>
-              <div className="concept-canvas"><WorkspacePreview fixture={workspaceFixture} view={neighbor.id} /></div>
+            // Decorative copies: painted like the active card, but not readable text.
+            return <div key={direction} inert={true} aria-hidden="true" className={`concept-card concept-card--${direction === -1 ? 'previous' : 'next'}`}>
+              <div aria-hidden="true" className="concept-canvas"><WorkspacePreview fixture={workspaceFixture} view={neighbor.id} /></div>
             </div>
           })}
           <figure ref={cardRef} id={slideId} role="group" aria-roledescription="slide" aria-label={`${concept.label}, ${slideIndex + 1} of ${workspaceConcepts.length}`} className="concept-card concept-card--active workspace-slide" key={concept.id}>

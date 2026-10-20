@@ -279,6 +279,37 @@ it('scales a workspace thumbnail from the measured card width', () => {
   document.body.style.overflow = ''
 })
 
+function exposedText(element) {
+  if (!(element instanceof Element)) {
+    return ''
+  }
+  if (element.hasAttribute('inert') || element.getAttribute('aria-hidden') === 'true') {
+    return ''
+  }
+
+  let text = ''
+  for (const node of element.childNodes) {
+    text += node.nodeType === Node.TEXT_NODE ? node.textContent : exposedText(node)
+  }
+  return text.replace(/\s+/g, ' ').trim()
+}
+
+it('renders the dimmed side cards as decorative, with no readable text exposed', () => {
+  const { container } = render(<Preview />)
+  const sides = [...container.querySelectorAll('.concept-card--previous, .concept-card--next')]
+
+  expect(sides).toHaveLength(2)
+  for (const card of sides) {
+    expect(card).toHaveAttribute('aria-hidden', 'true')
+    expect(card.hasAttribute('inert')).toBe(true)
+    expect(exposedText(card)).toBe('')
+    expect(card.querySelector('[data-preview-view]')).toBeTruthy()
+  }
+
+  expect(container.querySelector('.concept-card--active').hasAttribute('inert')).toBe(false)
+  expect(screen.getAllByText('October 5 – 11').every((node) => node.closest('[inert]'))).toBe(true)
+})
+
 it('keeps four distinct static preview steps', () => {
   const { mock } = renderMock()
   const steps = ['workspace', 'recruit-highlight', 'ai-suggestion', 'coach-approval']

@@ -48,7 +48,7 @@ function FounderProfile({ founder }) {
         <h3 className="font-heading text-[1.75rem] font-bold uppercase leading-tight text-charcoal md:text-[2rem]">
           {founder.name}
         </h3>
-        <p className="mt-3 font-heading text-base font-bold uppercase tracking-wide text-gold">
+        <p className="mt-3 font-heading text-base font-bold uppercase tracking-wide text-gold-on-light">
           Co-Founder
         </p>
         <div className="mt-5 space-y-5 font-body text-lg leading-relaxed text-[#55565B]">
