@@ -20,8 +20,13 @@ it('sends a strict policy on every route and immutable caching for hashed assets
   const csp = documentHeaders['Content-Security-Policy']
 
   expect(csp).toContain("default-src 'self'")
+  // Production Web Analytics loads /_vercel/insights/script.js and posts to
+  // /_vercel/insights. Both are same-origin, so 'self' is enough.
+  // va.vercel-scripts.com is only the local debug script.
   expect(csp).toContain("script-src 'self'")
+  expect(csp).toContain("connect-src 'self'")
   expect(csp).not.toContain('va.vercel-scripts.com')
+  expect(csp).not.toContain('vercel.live')
   expect(csp).toContain("script-src-attr 'none'")
   expect(csp).toContain("style-src-attr 'unsafe-inline'")
   expect(csp).not.toMatch(/script-src\s[^;]*unsafe-inline/)

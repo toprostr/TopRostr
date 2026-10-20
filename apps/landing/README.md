@@ -101,7 +101,7 @@ The root directory is a Vercel project setting. `vercel.json` does not move the 
 
 Set `VITE_GOOGLE_FORM_URL` in the Vercel project for both Preview and Production. The site is a static Vite build and does not need a server runtime.
 
-`vercel.json` sends the security headers on every route: Content-Security-Policy, HSTS (`max-age=63072000; includeSubDomains`), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, and a restrictive Permissions-Policy. Hashed files under `/assets/` are cached as `public, max-age=31536000, immutable`. The CSP allows this page's own assets, Google Fonts (Inter), self-hosted Space Grotesk, `data:` SVG icons in the preview, and Vercel Speed Insights. Script sources do not include `unsafe-inline` or `va.vercel-scripts.com`.
+`vercel.json` sends the security headers on every route: Content-Security-Policy, HSTS (`max-age=63072000; includeSubDomains`), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, and a restrictive Permissions-Policy. Hashed files under `/assets/` are cached as `public, max-age=31536000, immutable`. The CSP allows this page's own assets, Google Fonts (Inter), self-hosted Space Grotesk, `data:` SVG icons in the preview, Vercel Speed Insights, and Web Analytics. The production analytics script is same-origin (`/_vercel/insights/script.js`) and its beacons go to `/_vercel/insights`, both covered by `'self'`. `va.vercel-scripts.com` is the local debug script only and is not allowed. Script sources do not include `unsafe-inline`.
 
 `public/404.html` is copied to the build output. Vercel serves it with HTTP 404 for unknown URLs.
 

@@ -15,6 +15,8 @@ const SECTION_IDS = ['hero', 'preview', 'founders', 'join']
 it('renders the six sections by id or landmark and points only join CTAs at the form', () => {
   render(<App />)
 
+  expect(screen.getByTestId('vercel-analytics')).toBeInTheDocument()
+
   const header = screen.getByRole('banner')
   const main = screen.getByRole('main')
   const footer = screen.getByRole('contentinfo')

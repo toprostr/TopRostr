@@ -1,5 +1,5 @@
-// Web Analytics is not enabled, so the insights script is not loaded and
-// window.va is usually missing. Clicks still report when a queue is present.
+// <Analytics/> installs window.va (a queue until /_vercel/insights/script.js
+// loads). A missing or throwing queue must not block the questionnaire link.
 export function trackCtaClick(location) {
   try {
     const va = window.va
