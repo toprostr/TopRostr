@@ -1,10 +1,13 @@
 import { fireEvent, render, screen, within } from '@testing-library/react'
-import { expect, it } from 'vitest'
-import { track } from '@vercel/analytics'
+import { afterEach, expect, it, vi } from 'vitest'
 import App from './App.jsx'
 import { googleFormUrl } from './config/site.js'
 
 const CTA_NAME = 'Join the Rostr — opens coach questionnaire in a new tab'
+
+afterEach(() => {
+  delete window.va
+})
 
 // Scaffold section ids. Header, main, and footer are landmarks and have no id.
 const SECTION_IDS = ['hero', 'preview', 'founders', 'join']
@@ -68,7 +71,8 @@ it('opens the header, join, and mobile menu CTAs in a new tab', () => {
 })
 
 it('tracks each Join the Rostr click with its location and still opens the form', () => {
-  track.mockClear()
+  const va = vi.fn()
+  window.va = va
   render(<App />)
 
   const headerCta = within(screen.getByRole('banner')).getByRole('link', { name: CTA_NAME })
@@ -79,8 +83,8 @@ it('tracks each Join the Rostr click with its location and still opens the form'
   fireEvent.click(headerCta)
   fireEvent.click(joinCta)
 
-  expect(track).toHaveBeenNthCalledWith(1, 'cta_click', { location: 'header' })
-  expect(track).toHaveBeenNthCalledWith(2, 'cta_click', { location: 'join' })
+  expect(va).toHaveBeenNthCalledWith(1, 'event', { name: 'cta_click', data: { location: 'header' } })
+  expect(va).toHaveBeenNthCalledWith(2, 'event', { name: 'cta_click', data: { location: 'join' } })
 
   for (const link of [headerCta, joinCta]) {
     expect(link).toHaveAttribute('href', googleFormUrl)
@@ -96,5 +100,5 @@ it('tracks each Join the Rostr click with its location and still opens the form'
   expect(mobileCta).toHaveAttribute('href', googleFormUrl)
   expect(mobileCta).toHaveAttribute('target', '_blank')
   fireEvent.click(mobileCta)
-  expect(track).toHaveBeenNthCalledWith(3, 'cta_click', { location: 'header' })
+  expect(va).toHaveBeenNthCalledWith(3, 'event', { name: 'cta_click', data: { location: 'header' } })
 })

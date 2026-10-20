@@ -63,6 +63,7 @@ function FounderProfile({ founder }) {
 export default function Founders() {
   return (
     <section id="founders" aria-label="Our Rostr" className="flex min-h-svh items-center bg-[#14151A] text-off-white">
+      <h2 className="sr-only">Our Rostr</h2>
       <div className="mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 sm:py-20 lg:px-16 lg:py-32">
         <div className="flex flex-col gap-8 md:flex-row md:items-center md:gap-12">
           <img

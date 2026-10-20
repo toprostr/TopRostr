@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { expect, it } from 'vitest'
 import tailwindConfig from '../../tailwind.config.js'
 import Founders from './Founders.jsx'
@@ -34,7 +34,8 @@ const jasonToday = 'Studied finance and economics at Monmouth and Colby.'
 it('renders the PRD headline, both founders, and sized portraits', () => {
   render(<Founders />)
 
-  expect(screen.getByRole('region', { name: 'Our Rostr' })).toBeInTheDocument()
+  const section = screen.getByRole('region', { name: 'Our Rostr' })
+  expect(within(section).getByRole('heading', { level: 2, name: 'Our Rostr' })).toHaveClass('sr-only')
   expect(screen.getByRole('img', { name: 'TopRostr' })).toHaveAttribute('src', '/brand/svg/mark-offwhite.svg')
 
   const alejandro = screen.getByRole('heading', { level: 3, name: 'Alejandro Suarez' })

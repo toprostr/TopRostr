@@ -1,4 +1,4 @@
-import { track } from '@vercel/analytics'
+import { trackCtaClick } from '../analytics.js'
 import { googleFormUrl } from '../config/site.js'
 
 const JOIN_LABEL = 'Join the Rostr — opens coach questionnaire in a new tab'
@@ -35,7 +35,7 @@ export default function CTAButton({
   const sizeClass = SIZE_CLASS[size] ?? UNSIZED_CLASS
 
   function handleClick(event) {
-    track('cta_click', { location })
+    trackCtaClick(location)
     onClick?.(event)
   }
 

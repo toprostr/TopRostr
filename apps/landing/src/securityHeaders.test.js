@@ -20,7 +20,8 @@ it('sends a strict policy on every route and immutable caching for hashed assets
   const csp = documentHeaders['Content-Security-Policy']
 
   expect(csp).toContain("default-src 'self'")
-  expect(csp).toContain("script-src 'self' https://va.vercel-scripts.com")
+  expect(csp).toContain("script-src 'self'")
+  expect(csp).not.toContain('va.vercel-scripts.com')
   expect(csp).toContain("script-src-attr 'none'")
   expect(csp).toContain("style-src-attr 'unsafe-inline'")
   expect(csp).not.toMatch(/script-src\s[^;]*unsafe-inline/)

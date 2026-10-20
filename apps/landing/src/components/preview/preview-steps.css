@@ -20,6 +20,11 @@
   font-family: 'Space Grotesk', sans-serif;
 }
 
+/* Explicit rgba. Tailwind's /60 opacity modifier emits oklab(), which axe cannot parse. */
+.preview-enlarge-caption {
+  color: rgba(242, 242, 242, 0.6);
+}
+
 .preview-step {
   opacity: 1;
   transform: none;
