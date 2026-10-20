@@ -1,5 +1,6 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { expect, it } from 'vitest'
+import { track } from '@vercel/analytics'
 import CTAButton from './CTAButton.jsx'
 import { googleFormUrl } from '../config/site.js'
 
@@ -15,6 +16,15 @@ it.each([
   expect(screen.getByRole('link', { name: CTA_NAME })).toHaveClass(
     'hover:underline', 'focus-visible:underline', 'underline-offset-4',
   )
+})
+
+it('tracks an unknown location when the prop is omitted', () => {
+  track.mockClear()
+  render(<CTAButton />)
+
+  fireEvent.click(screen.getByRole('link', { name: CTA_NAME }))
+
+  expect(track).toHaveBeenCalledWith('cta_click', { location: 'unknown' })
 })
 
 it('opens the configured form in a new tab with the questionnaire label', () => {

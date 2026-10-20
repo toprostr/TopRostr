@@ -139,7 +139,7 @@ export default function Header() {
               {link.label}
             </a>
           ))}
-          <CTAButton size="nav" />
+          <CTAButton size="nav" location="header" />
         </nav>
 
         <button
@@ -185,7 +185,12 @@ export default function Header() {
               ))}
             </ul>
           </nav>
-          <CTAButton size="nav" className="mt-6 w-full" onClick={() => closeMenu(false)} />
+          <CTAButton
+            size="nav"
+            className="mt-6 w-full"
+            location="header"
+            onClick={() => closeMenu(false)}
+          />
         </div>
       ) : null}
     </header>
