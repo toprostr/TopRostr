@@ -1,5 +1,5 @@
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
-import { afterEach, expect, it } from 'vitest'
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import { afterEach, expect, it, vi } from 'vitest'
 import Preview from '../Preview.jsx'
 import { workspaceFixture } from './fixtures.js'
 import WorkspacePreview from './WorkspacePreview.jsx'
@@ -197,6 +197,86 @@ it('renders a static highlight thumbnail and no video-service reference', () => 
   expect(within(mock).queryByText('Jump to 1:42', hidden)).not.toBeInTheDocument()
   expect(preview.innerHTML.toLowerCase()).not.toContain('youtube')
   expect(preview.innerHTML.toLowerCase()).not.toContain('youtu.be')
+})
+
+it('opens the active workspace image in a lightbox and returns focus to that image', () => {
+  document.body.style.overflow = 'scroll'
+  render(<Preview />)
+
+  const inbox = screen.getByRole('button', { name: 'Enlarge Inbox workspace' })
+  expect(inbox).toHaveAttribute('aria-haspopup', 'dialog')
+  expect(inbox).toHaveAttribute('aria-expanded', 'false')
+  inbox.focus()
+  fireEvent.click(inbox)
+
+  const dialog = screen.getByRole('dialog', { name: 'Inbox workspace' })
+  expect(dialog).toHaveAttribute('aria-modal', 'true')
+  expect(inbox).toHaveAttribute('aria-expanded', 'true')
+  expect(document.body.style.overflow).toBe('hidden')
+
+  const close = within(dialog).getByRole('button', { name: 'Close' })
+  expect(close).toHaveFocus()
+  fireEvent.keyDown(document, { key: 'Tab' })
+  expect(close).toHaveFocus()
+  fireEvent.keyDown(document, { key: 'Tab', shiftKey: true })
+  expect(close).toHaveFocus()
+
+  fireEvent.click(close)
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  expect(inbox).toHaveFocus()
+  expect(inbox).toHaveAttribute('aria-expanded', 'false')
+  expect(document.body.style.overflow).toBe('scroll')
+
+  fireEvent.click(screen.getByRole('button', { name: 'Next workspace view' }))
+  const calendar = screen.getByRole('button', { name: 'Enlarge Calendar workspace' })
+  calendar.focus()
+  fireEvent.click(calendar)
+  expect(screen.getByRole('dialog', { name: 'Calendar workspace' })).toBeInTheDocument()
+  fireEvent.keyDown(document, { key: 'Escape' })
+  expect(calendar).toHaveFocus()
+  expect(document.body.style.overflow).toBe('scroll')
+
+  calendar.focus()
+  fireEvent.click(calendar)
+  fireEvent.click(screen.getByTestId('lightbox-backdrop'))
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  expect(calendar).toHaveFocus()
+  document.body.style.overflow = ''
+})
+
+it('scales a workspace thumbnail from the measured card width', () => {
+  const observers = []
+  class FakeResizeObserver {
+    constructor(callback) {
+      observers.push(callback)
+    }
+    observe() {}
+    disconnect() {}
+  }
+  vi.stubGlobal('ResizeObserver', FakeResizeObserver)
+
+  render(<Preview />)
+  expect(observers.length).toBeGreaterThan(0)
+
+  act(() => {
+    observers[0]([{ contentRect: { width: 720 } }])
+  })
+  expect(document.querySelector('.concept-carousel').style.getPropertyValue('--concept-scale')).toBe(
+    String(720 / 1440),
+  )
+
+  fireEvent.click(screen.getByRole('button', { name: 'Enlarge Inbox workspace' }))
+  const frameObserver = observers.at(-1)
+  act(() => {
+    frameObserver([{ contentRect: { width: 0 } }])
+    frameObserver([{ contentRect: { width: 1080 } }])
+  })
+  expect(document.querySelector('.lightbox-frame').style.getPropertyValue('--lightbox-scale')).toBe(
+    String(1080 / 1440),
+  )
+
+  vi.unstubAllGlobals()
+  document.body.style.overflow = ''
 })
 
 it('keeps four distinct static preview steps', () => {

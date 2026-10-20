@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, expect, it, vi } from 'vitest'
+import { track } from '@vercel/analytics'
 import Header from './Header.jsx'
 
 afterEach(() => {
@@ -68,18 +69,21 @@ it('traps focus inside the dialog, including Close, and returns focus to the tog
   expect(toggle).toHaveAttribute('aria-expanded', 'true')
   expect(mission).toHaveAttribute('href', '#founders')
   expect(platform).toHaveAttribute('href', '#preview')
-  expect(close).toHaveFocus()
+  expect(cta).toHaveFocus()
   expect(close).toHaveClass('focus-visible:outline-gold')
+  expect(cta.compareDocumentPosition(mission) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  expect(mission.compareDocumentPosition(platform) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  expect(platform.compareDocumentPosition(close) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
 
   fireEvent.keyDown(document, { key: 'a' })
   expect(dialog).toBeInTheDocument()
 
-  cta.focus()
+  close.focus()
   fireEvent.keyDown(document, { key: 'Tab' })
-  expect(close).toHaveFocus()
+  expect(cta).toHaveFocus()
 
   fireEvent.keyDown(document, { key: 'Tab', shiftKey: true })
-  expect(cta).toHaveFocus()
+  expect(close).toHaveFocus()
 
   fireEvent.keyDown(document, { key: 'Escape' })
 
@@ -141,4 +145,44 @@ it('closes the open mobile menu when the viewport crosses the desktop breakpoint
     onChange()
   })
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+})
+
+it('gives every mobile menu control a 44px target, tracks the header CTA, and opens the form in a new tab', () => {
+  track.mockClear()
+  render(<Header />)
+
+  const toggle = screen.getByRole('button', { name: 'Open menu' })
+  expect(toggle).toHaveClass('h-11', 'w-11')
+  expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  expect(toggle).toHaveAttribute('aria-controls', expect.any(String))
+  expect(toggle).toHaveAttribute('aria-label', 'Open menu')
+
+  fireEvent.click(toggle)
+
+  const dialog = screen.getByRole('dialog', { name: 'Menu' })
+  expect(toggle).toHaveAttribute('aria-expanded', 'true')
+  expect(toggle).toHaveAttribute('aria-controls', dialog.id)
+  expect(dialog.firstElementChild).toHaveClass('mx-auto', 'items-center', 'gap-3')
+  expect(within(dialog).getByRole('button', { name: 'Close menu' })).toHaveClass('h-11', 'w-11')
+
+  const links = within(dialog).getAllByRole('link')
+  expect(links.map((link) => link.getAttribute('aria-label') ?? link.textContent)).toEqual([
+    CTA_NAME,
+    'Mission',
+    'Platform',
+  ])
+
+  for (const name of ['Mission', 'Platform']) {
+    const link = within(dialog).getByRole('link', { name })
+    expect(link).toHaveClass('min-h-11', 'w-full', 'justify-center')
+  }
+
+  const cta = links[0]
+  expect(cta.compareDocumentPosition(links[1]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  expect(cta).toHaveClass('min-h-11', 'h-[53px]', 'w-full')
+  expect(cta).toHaveAttribute('target', '_blank')
+  expect(cta).toHaveAttribute('rel', 'noopener noreferrer')
+
+  fireEvent.click(cta)
+  expect(track).toHaveBeenCalledWith('cta_click', { location: 'header' })
 })
