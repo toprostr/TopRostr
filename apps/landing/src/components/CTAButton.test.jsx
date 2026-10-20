@@ -1,10 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { expect, it } from 'vitest'
-import { track } from '@vercel/analytics'
+import { afterEach, expect, it, vi } from 'vitest'
 import CTAButton from './CTAButton.jsx'
 import { googleFormUrl } from '../config/site.js'
 
 const CTA_NAME = 'Join the Rostr — opens coach questionnaire in a new tab'
+
+afterEach(() => {
+  delete window.va
+})
 
 it.each([
   { size: 'nav' },
@@ -19,12 +22,25 @@ it.each([
 })
 
 it('tracks an unknown location when the prop is omitted', () => {
-  track.mockClear()
+  const va = vi.fn()
+  window.va = va
   render(<CTAButton />)
 
   fireEvent.click(screen.getByRole('link', { name: CTA_NAME }))
 
-  expect(track).toHaveBeenCalledWith('cta_click', { location: 'unknown' })
+  expect(va).toHaveBeenCalledWith('event', { name: 'cta_click', data: { location: 'unknown' } })
+})
+
+it('does not throw when analytics is missing or the queue throws', () => {
+  render(<CTAButton location="hero" />)
+  const link = screen.getByRole('link', { name: CTA_NAME })
+
+  expect(() => fireEvent.click(link)).not.toThrow()
+
+  window.va = () => {
+    throw new Error('analytics failed')
+  }
+  expect(() => fireEvent.click(link)).not.toThrow()
 })
 
 it('opens the configured form in a new tab with the questionnaire label', () => {

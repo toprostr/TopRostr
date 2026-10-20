@@ -112,7 +112,7 @@ export default function Preview() {
             </button>
           </figure>
           </div>
-          <p className="mt-5 text-center text-sm tracking-wide text-off-white/60">Workspace concept · tap to enlarge</p>
+          <p className="preview-enlarge-caption mt-5 text-center text-sm tracking-wide">Workspace concept · tap to enlarge</p>
         </div>
       </div>
       <ImageLightbox

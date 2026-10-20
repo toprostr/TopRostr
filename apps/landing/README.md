@@ -51,15 +51,15 @@ That module reads `import.meta.env.VITE_GOOGLE_FORM_URL`. When the real question
 cp .env.example .env
 ```
 
-`.env.example` contains only:
+`.env.example` contains the public form URL:
 
 ```
-VITE_GOOGLE_FORM_URL=
+VITE_GOOGLE_FORM_URL=https://forms.gle/98Y3rQkUhqRDdYZk8
 ```
 
 Until that variable is a non-empty `https:` URL, `site.js` falls back to one `example.com` URL whose path contains `PLACEHOLDER`. Any other value (`http:`, a blank string, or a non-URL) uses that same fallback. There is no second fallback.
 
-`npm run build` prints `WARNING: VITE_GOOGLE_FORM_URL is not set; CTAs point at the placeholder` and exits 0 when the variable is unset or blank. That includes local builds, Vercel preview, and Vercel development (the `develop` branch that serves dev.toprostr.com). When `VERCEL_ENV` is `production` and the variable is unset or blank, the build fails with a non-zero exit and `ERROR: VITE_GOOGLE_FORM_URL is not set; refusing a production build while CTAs would point at the placeholder`. Setting `VITE_GOOGLE_FORM_URL` in Vercel is the only change needed when the real form exists. The button still opens in a new tab, and the page says the questionnaire is not connected. A public Google Form URL is not a secret. Do not put API keys in this variable.
+`npm run build` prints `WARNING: VITE_GOOGLE_FORM_URL is not set; CTAs point at the placeholder` and exits 0 when the variable is unset or blank. That includes local builds, Vercel preview, and Vercel development (the `develop` branch that serves dev.toprostr.com). When `VERCEL_ENV` is `production`, the build fails unless the variable is an `https:` URL, so a blank or non-https value cannot ship the placeholder as the CTA. That production client bundle also omits the placeholder string. The client inlines `VITE_GOOGLE_FORM_URL` and a production flag derived from `VERCEL_ENV`. It does not inline other environment variables. Setting `VITE_GOOGLE_FORM_URL` in Vercel is the only change needed when the real form exists. The button still opens in a new tab. A public Google Form URL is not a secret. Do not put API keys in this variable.
 
 Restart `npm run dev` after changing `.env`. Vite only exposes variables that start with `VITE_`.
 
@@ -100,6 +100,10 @@ Set the Vercel project **root directory** to `apps/landing`. `vercel.json` in th
 The root directory is a Vercel project setting. `vercel.json` does not move the root for you.
 
 Set `VITE_GOOGLE_FORM_URL` in the Vercel project for both Preview and Production. The site is a static Vite build and does not need a server runtime.
+
+`vercel.json` sends the security headers on every route: Content-Security-Policy, HSTS (`max-age=63072000; includeSubDomains`), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, and a restrictive Permissions-Policy. Hashed files under `/assets/` are cached as `public, max-age=31536000, immutable`. The CSP allows this page's own assets, Google Fonts (Inter), self-hosted Space Grotesk, `data:` SVG icons in the preview, Vercel Speed Insights, and Web Analytics. The production analytics script is same-origin (`/_vercel/insights/script.js`) and its beacons go to `/_vercel/insights`, both covered by `'self'`. `va.vercel-scripts.com` is the local debug script only and is not allowed. Script sources do not include `unsafe-inline`.
+
+`public/404.html` is copied to the build output. Vercel serves it with HTTP 404 for unknown URLs.
 
 ## Continuous integration
 
