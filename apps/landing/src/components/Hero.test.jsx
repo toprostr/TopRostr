@@ -43,11 +43,7 @@ it('renders concise hero copy over a decorative full-bleed still', () => {
   expect(screen.queryByRole('img')).not.toBeInTheDocument()
   expect(container.innerHTML).not.toContain('hero-placeholder')
 
-  const cta = screen.getByRole('link', {
-    name: 'Join the Rostr — opens coach questionnaire in a new tab',
-  })
-  expect(cta).toHaveAttribute('target', '_blank')
-  expect(cta).toHaveAttribute('rel', 'noopener noreferrer')
+  expect(screen.queryByRole('link')).not.toBeInTheDocument()
   expect(screen.queryByRole('button')).not.toBeInTheDocument()
 
   expect(container.querySelector('video')).not.toBeInTheDocument()

@@ -46,12 +46,11 @@ it('renders the six sections by id or landmark and points only join CTAs at the 
   }
 })
 
-it('opens the header, hero, join, and mobile menu CTAs in a new tab', () => {
+it('opens the header, join, and mobile menu CTAs in a new tab', () => {
   render(<App />)
 
   const links = [
     within(screen.getByRole('banner')).getByRole('link', { name: CTA_NAME }),
-    within(document.getElementById('hero')).getByRole('link', { name: CTA_NAME }),
     within(document.getElementById('join')).getByRole('link', { name: CTA_NAME }),
   ]
 
@@ -60,7 +59,7 @@ it('opens the header, hero, join, and mobile menu CTAs in a new tab', () => {
     within(screen.getByRole('dialog', { name: 'Menu' })).getByRole('link', { name: CTA_NAME }),
   )
 
-  expect(links).toHaveLength(4)
+  expect(links).toHaveLength(3)
 
   for (const link of links) {
     expect(link).toHaveAttribute('target', '_blank')
@@ -73,18 +72,17 @@ it('tracks each Join the Rostr click with its location and still opens the form'
   render(<App />)
 
   const headerCta = within(screen.getByRole('banner')).getByRole('link', { name: CTA_NAME })
-  const heroCta = within(document.getElementById('hero')).getByRole('link', { name: CTA_NAME })
   const joinCta = within(document.getElementById('join')).getByRole('link', { name: CTA_NAME })
 
+  expect(within(document.getElementById('hero')).queryByRole('link', { name: CTA_NAME })).not.toBeInTheDocument()
+
   fireEvent.click(headerCta)
-  fireEvent.click(heroCta)
   fireEvent.click(joinCta)
 
   expect(track).toHaveBeenNthCalledWith(1, 'cta_click', { location: 'header' })
-  expect(track).toHaveBeenNthCalledWith(2, 'cta_click', { location: 'hero' })
-  expect(track).toHaveBeenNthCalledWith(3, 'cta_click', { location: 'join' })
+  expect(track).toHaveBeenNthCalledWith(2, 'cta_click', { location: 'join' })
 
-  for (const link of [headerCta, heroCta, joinCta]) {
+  for (const link of [headerCta, joinCta]) {
     expect(link).toHaveAttribute('href', googleFormUrl)
     expect(link).toHaveAttribute('target', '_blank')
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')
@@ -98,5 +96,5 @@ it('tracks each Join the Rostr click with its location and still opens the form'
   expect(mobileCta).toHaveAttribute('href', googleFormUrl)
   expect(mobileCta).toHaveAttribute('target', '_blank')
   fireEvent.click(mobileCta)
-  expect(track).toHaveBeenNthCalledWith(4, 'cta_click', { location: 'header' })
+  expect(track).toHaveBeenNthCalledWith(3, 'cta_click', { location: 'header' })
 })
