@@ -1,14 +1,19 @@
 name: Landing CI
 
+# landing-ci is a required check on main and develop. A paths filter on
+# pull_request never reports a status when those paths are untouched, so
+# the pull request stays blocked. Always run this job for those branches.
+# Push keeps the filter: unrelated branch pushes do not need a landing build.
 on:
   pull_request:
-    paths:
-      - "apps/landing/**"
-      - ".github/workflows/landing-ci.yml"
+    branches: [main, develop]
   push:
     paths:
       - "apps/landing/**"
       - ".github/workflows/landing-ci.yml"
+
+permissions:
+  contents: read
 
 jobs:
   landing-ci:
