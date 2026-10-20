@@ -10,7 +10,7 @@ const DESKTOP_LINK_CLASS =
   'font-heading text-[13px] font-semibold uppercase tracking-[0.16em] text-off-white underline-offset-4 hover:underline hover:decoration-gold focus-visible:underline focus-visible:decoration-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold'
 
 const MOBILE_LINK_CLASS =
-  'block py-3 font-heading text-sm font-semibold uppercase tracking-[0.16em] text-off-white underline-offset-4 hover:underline hover:decoration-gold focus-visible:underline focus-visible:decoration-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold'
+  'flex min-h-11 w-full items-center font-heading text-base font-semibold uppercase tracking-[0.14em] text-off-white underline-offset-4 hover:underline hover:decoration-gold focus-visible:underline focus-visible:decoration-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold'
 
 function MenuIcon({ open }) {
   return (
@@ -162,7 +162,7 @@ export default function Header() {
           role="dialog"
           aria-modal="true"
           aria-label="Menu"
-          className="border-t border-off-white/20 px-5 py-6 md:hidden"
+          className="border-t border-off-white/15 px-5 pt-2 pb-5 md:hidden"
         >
           <div className="flex justify-end">
             <button
@@ -174,8 +174,8 @@ export default function Header() {
               <MenuIcon open />
             </button>
           </div>
-          <nav aria-label="Mobile">
-            <ul className="flex flex-col">
+          <nav aria-label="Mobile" className="mt-1">
+            <ul className="flex flex-col gap-1">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
                   <a href={link.href} className={MOBILE_LINK_CLASS} onClick={() => closeMenu(false)}>
@@ -185,12 +185,14 @@ export default function Header() {
               ))}
             </ul>
           </nav>
-          <CTAButton
-            size="nav"
-            className="mt-6 w-full"
-            location="header"
-            onClick={() => closeMenu(false)}
-          />
+          <div className="mt-4 border-t border-off-white/15 pt-4">
+            <CTAButton
+              size="nav"
+              className="min-h-11 w-full"
+              location="header"
+              onClick={() => closeMenu(false)}
+            />
+          </div>
         </div>
       ) : null}
     </header>

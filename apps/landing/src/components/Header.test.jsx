@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, expect, it, vi } from 'vitest'
+import { track } from '@vercel/analytics'
 import Header from './Header.jsx'
 
 afterEach(() => {
@@ -141,4 +142,35 @@ it('closes the open mobile menu when the viewport crosses the desktop breakpoint
     onChange()
   })
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+})
+
+it('gives every mobile menu control a 44px target, tracks the header CTA, and opens the form in a new tab', () => {
+  track.mockClear()
+  render(<Header />)
+
+  const toggle = screen.getByRole('button', { name: 'Open menu' })
+  expect(toggle).toHaveClass('h-11', 'w-11')
+  expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  expect(toggle).toHaveAttribute('aria-controls', expect.any(String))
+  expect(toggle).toHaveAttribute('aria-label', 'Open menu')
+
+  fireEvent.click(toggle)
+
+  const dialog = screen.getByRole('dialog', { name: 'Menu' })
+  expect(toggle).toHaveAttribute('aria-expanded', 'true')
+  expect(toggle).toHaveAttribute('aria-controls', dialog.id)
+  expect(within(dialog).getByRole('button', { name: 'Close menu' })).toHaveClass('h-11', 'w-11')
+
+  for (const name of ['Mission', 'Platform']) {
+    const link = within(dialog).getByRole('link', { name })
+    expect(link).toHaveClass('min-h-11', 'w-full')
+  }
+
+  const cta = within(dialog).getByRole('link', { name: CTA_NAME })
+  expect(cta).toHaveClass('min-h-11', 'h-[53px]')
+  expect(cta).toHaveAttribute('target', '_blank')
+  expect(cta).toHaveAttribute('rel', 'noopener noreferrer')
+
+  fireEvent.click(cta)
+  expect(track).toHaveBeenCalledWith('cta_click', { location: 'header' })
 })
