@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv } from 'vite'
-import { googleFormBuildGuard } from './src/config/site.js'
+import { googleFormBuildGuard } from './src/config/form-url.js'
 
 const appRoot = fileURLToPath(new URL('.', import.meta.url))
 
@@ -43,7 +43,15 @@ function warnIfGoogleFormUrlMissing() {
   }
 }
 
+// Inlined into the client as import.meta.env.VITE_VERCEL_ENV. Vercel sets
+// VERCEL_ENV, which is not exposed to the browser on its own. A production
+// value lets the bundler drop the example.com form placeholder.
+const clientVercelEnv = process.env.VERCEL_ENV ?? ''
+
 // https://vite.dev/config/
 export default defineConfig({
+  define: {
+    'import.meta.env.VITE_VERCEL_ENV': JSON.stringify(clientVercelEnv),
+  },
   plugins: [react(), tailwindcss(), warnIfGoogleFormUrlMissing()],
 })
