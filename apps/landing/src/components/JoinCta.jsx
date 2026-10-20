@@ -22,6 +22,7 @@ export default function JoinCta() {
         </p>
         <CTAButton
           variant="gold-on-gray"
+          location="join"
           className="mx-auto mt-10 flex h-[64px] w-full max-w-[300px] gap-3 px-6 text-[17px]"
         >
           JOIN THE ROSTR

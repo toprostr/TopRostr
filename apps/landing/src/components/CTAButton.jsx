@@ -1,3 +1,4 @@
+import { track } from '@vercel/analytics'
 import { googleFormUrl } from '../config/site.js'
 
 const JOIN_LABEL = 'Join the Rostr — opens coach questionnaire in a new tab'
@@ -27,10 +28,16 @@ export default function CTAButton({
   variant = 'default',
   size,
   children = 'JOIN THE ROSTR',
+  location = 'unknown',
   onClick,
 }) {
   const variantClass = VARIANT_CLASS[variant] ?? VARIANT_CLASS.default
   const sizeClass = SIZE_CLASS[size] ?? UNSIZED_CLASS
+
+  function handleClick(event) {
+    track('cta_click', { location })
+    onClick?.(event)
+  }
 
   return (
     <a
@@ -39,7 +46,7 @@ export default function CTAButton({
       rel="noopener noreferrer"
       aria-label={JOIN_LABEL}
       data-cta="join"
-      onClick={onClick}
+      onClick={handleClick}
       className={`${BASE_CLASS} ${sizeClass} ${variantClass} ${className}`.trim()}
     >
       {children}
